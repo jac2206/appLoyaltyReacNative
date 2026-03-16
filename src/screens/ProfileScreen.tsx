@@ -10,20 +10,23 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../types/navigation';
 import { useAuth } from '../context/AuthContext';
+import { useBalance } from '../hooks/useBalance';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
 
-export function ProfileScreen({ route, navigation }: Props) {
+export function ProfileScreen({ navigation }: Props) {
 
   const { user, logout } = useAuth();
+  const { balance } = useBalance();
 
   const userName = user?.userName ?? '';
   const userEmail = user?.userEmail ?? '';
-
-  const { totalPoints } = route.params;
+  const userPhone = user?.phone ?? '';
+  const documentType = user?.documentType ?? '';
+  const documentNumber = user?.documentNumber ?? '';
 
   const goalPoints = 2000;
-  const progressPercentage = (totalPoints / goalPoints) * 100;
+  const progressPercentage = (balance / goalPoints) * 100;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -34,27 +37,44 @@ export function ProfileScreen({ route, navigation }: Props) {
       />
 
       <Text style={styles.name}>{userName}</Text>
+
       <Text style={styles.email}>{userEmail}</Text>
 
+      <View style={styles.infoContainer}>
+
+        <Text style={styles.infoLabel}>Teléfono</Text>
+        <Text style={styles.infoValue}>{userPhone}</Text>
+
+        <Text style={styles.infoLabel}>Documento</Text>
+        <Text style={styles.infoValue}>
+          {documentType} {documentNumber}
+        </Text>
+
+      </View>
+
       <View style={styles.card}>
+
         <Text style={styles.cardTitle}>Puntos acumulados</Text>
 
         <Text style={styles.points}>
-          {totalPoints.toString()} pts
+          {balance} pts
         </Text>
 
         <View style={styles.progressBar}>
+
           <View
             style={[
               styles.progressFill,
               { width: `${progressPercentage}%` },
             ]}
           />
+
         </View>
 
         <Text style={styles.goalText}>
-          Meta: {goalPoints.toString()} pts
+          Meta: {goalPoints} pts
         </Text>
+
       </View>
 
       <Pressable
@@ -76,6 +96,7 @@ export function ProfileScreen({ route, navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flexGrow: 1,
     backgroundColor: '#EFF6FF',
@@ -99,7 +120,23 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 14,
     color: '#64748B',
+    marginBottom: 20,
+  },
+
+  infoContainer: {
+    width: '100%',
     marginBottom: 25,
+  },
+
+  infoLabel: {
+    fontSize: 12,
+    color: '#64748B',
+    marginTop: 10,
+  },
+
+  infoValue: {
+    fontSize: 16,
+    color: '#1E293B',
   },
 
   card: {
@@ -158,4 +195,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
+
 });
