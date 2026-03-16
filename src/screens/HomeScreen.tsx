@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
 
 export function HomeScreen({ navigation }: Props) {
 
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   const userName = user?.userName ?? '';
   const userEmail = user?.userEmail ?? '';
@@ -76,11 +76,11 @@ export function HomeScreen({ navigation }: Props) {
 
       <ActivityChart data={weeklyPoints} />
 
-      <Pressable onPress={logout}>
+      {/* <Pressable onPress={logout}>
         <Text style={{ textAlign: 'center', marginTop: 20, color: 'red' }}>
           Cerrar sesión
         </Text>
-      </Pressable>
+      </Pressable> */}
 
     </ScrollView>
   );
