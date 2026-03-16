@@ -5,5 +5,5 @@ export type AuthStackParamList = {
 
 export type MainStackParamList = {
   Home: undefined;
-   Profile: { totalPoints: number };
+  Profile: undefined;
 };

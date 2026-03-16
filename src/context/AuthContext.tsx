@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { AuthContextType, User } from '../types/user'
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { AuthContextType, User } from "../types/user";
+import { loginRequest, getMeRequest } from "../services/authService";
+import { setAuthToken } from "../services/api";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -7,15 +9,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [user, setUser] = useState<User | null>(null);
 
-  const login = (email: string) => {
-    setUser({
-      userName: 'admin',
-      userEmail: email,
-    });
+  const login = async (email: string, password: string) => {
+
+    try {
+
+      const loginData = await loginRequest(email, password);
+
+      const token = loginData.token;
+
+      setAuthToken(token);
+
+      const userData = await getMeRequest(token);
+
+      setUser({
+        userName: userData.fullName,
+        userEmail: userData.email,
+        documentType: userData.documentType,
+        documentNumber: userData.documentNumber,
+        phone: userData.phone,
+      });
+
+    } catch (error) {
+
+      console.log("Error login:", error);
+      throw error;
+    }
   };
 
   const logout = () => {
+
     setUser(null);
+
+    setAuthToken("");
   };
 
   return (
@@ -26,9 +51,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
+
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error('useAuth debe usarse dentro de AuthProvider');
+    throw new Error("useAuth debe usarse dentro de AuthProvider");
   }
+
   return context;
 }
