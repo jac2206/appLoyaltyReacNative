@@ -8,16 +8,16 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export function MainNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen 
         name="Home" 
         component={HomeScreen}
-        options={{ title: 'Inicio' }}
+        // options={{ title: 'Inicio' }}
       />
       <Stack.Screen 
         name="Profile" 
         component={ProfileScreen}
-        options={{ title: 'Perfil' }}
+        // options={{ title: 'Perfil' }}
       />
     </Stack.Navigator>
   );

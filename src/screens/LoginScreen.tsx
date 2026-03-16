@@ -23,12 +23,19 @@ export function LoginScreen({ navigation }: Props) {
 
   const { login } = useAuth();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    console.log("inicio sesion");
     const isValid = validate();
 
     if (!isValid) return;
 
-    login(userEmail); 
+    try {
+
+      await login(userEmail, password);
+
+    } catch (error) {
+      console.log("Error autenticando");
+    }
   };
 
   return (

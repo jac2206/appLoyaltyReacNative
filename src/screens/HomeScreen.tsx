@@ -11,24 +11,25 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../types/navigation';
 import { ActivityChart } from '../components/ActivityChart';
 import { useAuth } from '../context/AuthContext';
+import { useBalance } from '../hooks/useBalance';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
 
 export function HomeScreen({ navigation }: Props) {
 
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { balance } = useBalance();
 
   const userName = user?.userName ?? '';
   const userEmail = user?.userEmail ?? '';
 
   const weeklyPoints = [40, 80, 60, 100, 50, 90, 70];
-  const totalPoints = 1250;
   const goalPoints = 2000;
 
-  const progressPercentage = (totalPoints / goalPoints) * 100;
+  const progressPercentage = (balance / goalPoints) * 100;
 
   function handleOpenProfile() {
-    navigation.navigate('Profile', {totalPoints: totalPoints});
+    navigation.navigate('Profile');
   }
 
   return (
@@ -56,8 +57,9 @@ export function HomeScreen({ navigation }: Props) {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Tus Puntos</Text>
+
         <Text style={styles.points}>
-          {totalPoints.toString()} pts
+          {balance.toString()} pts
         </Text>
 
         <View style={styles.progressBar}>
@@ -75,12 +77,6 @@ export function HomeScreen({ navigation }: Props) {
       </View>
 
       <ActivityChart data={weeklyPoints} />
-
-      <Pressable onPress={logout}>
-        <Text style={{ textAlign: 'center', marginTop: 20, color: 'red' }}>
-          Cerrar sesión
-        </Text>
-      </Pressable>
 
     </ScrollView>
   );
