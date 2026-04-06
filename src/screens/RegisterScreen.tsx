@@ -6,7 +6,7 @@ import { InputField } from '../components/CustomInputField';
 import { CustomButton } from '../components/CustomButtom';
 import { DocumentTypePicker } from '../components/DocumentTypePicker';
 import { colors } from '../styles/colors';
-import { registerRequest } from '../services/authService';
+import { registerRequest } from '../services/auth.service';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
