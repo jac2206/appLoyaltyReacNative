@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getBalance } from "../services/accountService";
+import { getBalance } from "../services/account.service";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function useBalance() {
 
@@ -9,31 +10,59 @@ export function useBalance() {
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function loadBalance() {
+  //   async function loadBalance() {
 
-      if (!user) return;
+  //     if (!user) return;
 
-      try {
+  //     try {
 
-        const data = await getBalance(
-          user.documentType,
-          user.documentNumber
-        );
+  //       const data = await getBalance(
+  //         user.documentType,
+  //         user.documentNumber
+  //       );
 
-        setBalance(data.balance);
+  //       setBalance(data.balance);
 
-      } catch (error) {
-        console.log("Error loading balance", error);
-      } finally {
-        setLoading(false);
+  //     } catch (error) {
+  //       console.log("Error loading balance", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+
+  //   loadBalance();
+
+  // }, [user]);
+
+  useFocusEffect(
+    useCallback(() => {
+
+      async function loadBalance() {
+
+        if (!user) return;
+
+        try {
+
+          const data = await getBalance(
+            user.documentType,
+            user.documentNumber
+          );
+
+          setBalance(data.balance);
+
+        } catch (error) {
+          console.log("Error loading balance", error);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
 
-    loadBalance();
+      loadBalance();
 
-  }, [user]);
+    }, [user])
+  );
 
   return {
     balance,
