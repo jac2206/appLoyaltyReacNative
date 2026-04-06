@@ -78,6 +78,46 @@ export function HomeScreen({ navigation }: Props) {
 
       <ActivityChart data={weeklyPoints} />
 
+      <Text style={styles.sectionTitle}>Aliados</Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
+          {[1,2,3,4].map((item) => (
+            <View key={item} style={styles.partnerCard}>
+
+              <Image
+                source={require('../../assets/mugiwareLogo.png')}
+                style={styles.partnerImage}
+              />
+
+              <Text style={styles.partnerName}>
+                Aliado {item}
+              </Text>
+
+            </View>
+          ))}
+
+      </ScrollView>
+
+      <View style={styles.actionsContainer}>
+
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("Accumulate", { qrData: undefined })}
+        >
+          <Text style={styles.actionText}>Acumular</Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.actionButton, { backgroundColor: "#10B981" }]}
+          onPress={() => navigation.navigate("Redeem", { qrData: undefined })}
+        >
+          <Text style={styles.actionText}>Redimir</Text>
+        </Pressable>
+
+      </View>
+      
+
     </ScrollView>
   );
 }
@@ -154,5 +194,53 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 12,
     color: '#64748B',
+  },
+
+  actionsContainer: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  marginBottom: 25,
+  },
+
+  actionButton: {
+    flex: 1,
+    backgroundColor: "#2563EB",
+    padding: 15,
+    borderRadius: 12,
+    marginHorizontal: 5,
+    alignItems: "center",
+  },
+
+  actionText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#1E293B",
+  },
+
+  partnerCard: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 12,
+    marginRight: 15,
+    alignItems: "center",
+    elevation: 3,
+  },
+
+  partnerImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 10,
+  },
+
+  partnerName: {
+    fontSize: 12,
+    color: "#334155",
   },
 });

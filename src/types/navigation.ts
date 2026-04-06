@@ -6,4 +6,7 @@ export type AuthStackParamList = {
 export type MainStackParamList = {
   Home: undefined;
   Profile: undefined;
+  QRScanner: undefined;
+  Accumulate: { qrData?: any };
+  Redeem: { qrData?: any };
 };
