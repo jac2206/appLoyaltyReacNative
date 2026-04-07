@@ -6,7 +6,11 @@ import { useAuth } from '../context/AuthContext';
 
 export function AppNavigator() {
 
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
