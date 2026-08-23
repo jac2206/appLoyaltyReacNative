@@ -30,13 +30,12 @@ export function setUnauthorizedHandler(cb: () => void) {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-
     if (error.response?.status === 401) {
       console.log("Token expirado");
 
       Alert.alert(
         "Sesión expirada",
-        "Tu sesión ha expirado, por favor inicia sesión nuevamente"
+        "Tu sesión ha expirado, por favor inicia sesión nuevamente",
       );
 
       // await removeToken();
@@ -46,5 +45,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

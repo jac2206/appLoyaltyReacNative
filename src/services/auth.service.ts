@@ -27,7 +27,6 @@ export async function registerRequest(data: {
   phone: string;
   password: string;
 }) {
-
   const response = await api.post("/users/register", data);
 
   return response.data;

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { BarChart } from 'react-native-gifted-charts';
-import { getCurrentWeekLabel } from '../utils/date-util';
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { BarChart } from "react-native-gifted-charts";
+import { getCurrentWeekLabel } from "../utils/date-util";
 
 interface Props {
   data: number[];
 }
 
 export function ActivityChart({ data }: Props) {
-  const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  const days = ["L", "M", "M", "J", "V", "S", "D"];
   const weekLabel = getCurrentWeekLabel();
 
   const [selected, setSelected] = useState<{
@@ -19,7 +19,7 @@ export function ActivityChart({ data }: Props) {
   const chartData = data.map((value, index) => ({
     value,
     label: days[index],
-    frontColor: '#2563EB',
+    frontColor: "#2563EB",
     onPress: () =>
       setSelected({
         day: days[index],
@@ -54,24 +54,24 @@ export function ActivityChart({ data }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     padding: 20,
     borderRadius: 16,
     elevation: 5,
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subtitle: {
     fontSize: 12,
-    color: '#64748B',
+    color: "#64748B",
     marginBottom: 15,
   },
   selectedText: {
     marginTop: 10,
     fontSize: 14,
-    color: '#1E293B',
-    fontWeight: '500',
+    color: "#1E293B",
+    fontWeight: "500",
   },
 });

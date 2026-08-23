@@ -1,54 +1,43 @@
-import React, { useEffect, useState } from "react";
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
   Alert,
   Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { InputField } from "../components/CustomInputField";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton } from "../components/CustomButtom";
-import { colors } from "../styles/colors";
+import { InputField } from "../components/CustomInputField";
+import { ScreenHeader } from "../components/ScreenHeader";
 import { useAuth } from "../context/AuthContext";
-import { accumulateRequest } from "../services/transaction.service";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MainStackParamList } from "../types/navigation";
 import { useQRForm } from "../hooks/useQRForm";
-
-type Props = NativeStackScreenProps<MainStackParamList, 'Accumulate'>;
-
-export function AccumulateScreen( { navigation, route }: Props ) {
-
+import { accumulateRequest } from "../services/transaction.service";
+import { colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
+type Props = NativeStackScreenProps<MainStackParamList, "Accumulate">;
+export function AccumulateScreen({ navigation, route }: Props) {
   const { user } = useAuth();
-
   const [form, setForm] = useState({
     partnerCode: "",
     locationCode: "",
     amount: "",
     reference: "",
   });
-
-  useQRForm({
-    route,
-    navigation,
-    setForm,
-    type: "ACCUMULATE",
-  });
-
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleAccumulate = async () => {
-
+  useQRForm({ route, navigation, setForm, type: "ACCUMULATE" });
+  const change = (field: keyof typeof form, value: string) =>
+    setForm((current) => ({ ...current, [field]: value }));
+  const submit = async () => {
+    if (!form.partnerCode || !form.locationCode || Number(form.amount) <= 0) {
+      Alert.alert(
+        "Revisa la información",
+        "Ingresa aliado, sede y un monto válido.",
+      );
+      return;
+    }
     try {
-
-      if (!form.partnerCode || !form.locationCode || !form.amount) {
-        Alert.alert("Error", "Campos obligatorios");
-        return;
-      }
-
       await accumulateRequest({
         documentType: user?.documentType ?? "",
         documentNumber: user?.documentNumber ?? "",
@@ -57,137 +46,89 @@ export function AccumulateScreen( { navigation, route }: Props ) {
         amount: Number(form.amount),
         reference: form.reference || "APP-ACCUMULATE",
       });
-
-      Alert.alert("Éxito", "Puntos acumulados correctamente", [
-            {
-                text: "OK",
-                onPress: () => navigation.navigate("Home"),
-            },
-        ]);
-
-      setForm({
-        partnerCode: "",
-        locationCode: "",
-        amount: "",
-        reference: "",
-      });
-
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "No se pudo acumular");
+      Alert.alert("Puntos acumulados", "Tu saldo se actualizará enseguida.", [
+        { text: "Listo", onPress: () => navigation.navigate("Home") },
+      ]);
+    } catch {
+      Alert.alert(
+        "No pudimos acumular",
+        "Inténtalo nuevamente en unos minutos.",
+      );
     }
   };
-
-//   // Simulación QR (luego conectamos cámara real)
-//   const handleScanQR = () => {
-
-//     const fakeQRData = {
-//       partnerCode: "PARTNER_001",
-//       locationCode: "LOC_001",
-//       amount: "200000",
-//       reference: "QR-ACCUM",
-//     };
-
-//     setForm(fakeQRData);
-
-//     Alert.alert("QR leído", "Datos cargados automáticamente");
-//   };
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-
-      <Text style={styles.title}>Acumular Puntos</Text>
-
-      <InputField
-        placeholder="Partner Code"
-        value={form.partnerCode}
-        onChangeText={(t) => handleChange("partnerCode", t)}
-      />
-
-      <InputField
-        placeholder="Location Code"
-        value={form.locationCode}
-        onChangeText={(t) => handleChange("locationCode", t)}
-      />
-
-      <InputField
-        placeholder="Monto"
-        value={form.amount}
-        onChangeText={(t) => handleChange("amount", t)}
-      />
-
-      <InputField
-        placeholder="Referencia"
-        value={form.reference}
-        onChangeText={(t) => handleChange("reference", t)}
-      />
-
-      <CustomButton
-        title="Acumular"
-        onPress={handleAccumulate}
-      />
-
-      {/* <Pressable style={styles.qrButton} onPress={handleScanQR}>
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable> */}
-
-      <Pressable
-        style={styles.qrButton}
-        onPress={() => navigation.navigate("QRScanner")}
+    <SafeAreaView edges={["top"]} style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <ScreenHeader
+          onBack={() => navigation.goBack()}
+          eyebrow="Nueva operación"
+          title="Acumular puntos"
+          subtitle="Registra una compra o escanea el código del aliado."
+        />
+        <View style={styles.info}>
+          <Ionicons
+            name="information-circle-outline"
+            size={19}
+            color={colors.primary}
+          />
+          <Text style={styles.infoText}>
+            Verifica los datos antes de confirmar la operación.
+          </Text>
+        </View>
+        <InputField
+          placeholder="Código del aliado"
+          value={form.partnerCode}
+          onChangeText={(value) => change("partnerCode", value)}
+        />
+        <InputField
+          placeholder="Código de sede"
+          value={form.locationCode}
+          onChangeText={(value) => change("locationCode", value)}
+        />
+        <InputField
+          placeholder="Monto de compra"
+          value={form.amount}
+          onChangeText={(value) => change("amount", value)}
+        />
+        <InputField
+          placeholder="Referencia (opcional)"
+          value={form.reference}
+          onChangeText={(value) => change("reference", value)}
+        />
+        <CustomButton title="Confirmar acumulación" onPress={submit} />
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => navigation.navigate("QRScanner")}
+          style={styles.scan}
         >
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable>
-
-      <Pressable
-        style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
-        >
-        <Text style={styles.backText}>Volver</Text>
-      </Pressable>
-
-    </ScrollView>
+          <Ionicons name="scan-outline" size={21} color={colors.primary} />
+          <Text style={styles.scanText}>Escanear código QR</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
+import { useState } from "react";
 const styles = StyleSheet.create({
-
-  container: {
-    padding: 25,
-    backgroundColor: colors.background,
-    flexGrow: 1,
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: colors.primary,
-    marginBottom: 20,
-  },
-
-  qrButton: {
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#10B981",
+  safe: { flex: 1, backgroundColor: colors.background },
+  container: { padding: 20, paddingBottom: 34 },
+  info: {
     alignItems: "center",
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 14,
+    flexDirection: "row",
+    gap: 9,
+    marginBottom: 20,
+    padding: 13,
   },
-
-  qrText: {
-    color: "#fff",
-    fontWeight: "bold",
+  infoText: { color: colors.textDark, flex: 1, fontSize: 13, lineHeight: 18 },
+  scan: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 9,
+    justifyContent: "center",
+    marginTop: 23,
+    minHeight: 44,
   },
-
-  backButton: {
-  marginTop: 15,
-  padding: 12,
-  borderRadius: 10,
-  backgroundColor: "#64748B",
-  alignItems: "center",
- },
-
-  backText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+  scanText: { color: colors.primary, fontSize: 14, fontWeight: "800" },
 });

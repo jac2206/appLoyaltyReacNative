@@ -1,199 +1,154 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Pressable,
-} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainStackParamList } from '../types/navigation';
-import { useAuth } from '../context/AuthContext';
-import { useBalance } from '../hooks/useBalance';
-
-type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
-
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { CustomButton } from "../components/CustomButtom";
+import { useAuth } from "../context/AuthContext";
+import { useBalance } from "../hooks/useBalance";
+import { colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
+type Props = NativeStackScreenProps<MainStackParamList, "Profile">;
 export function ProfileScreen({ navigation }: Props) {
-
   const { user, logout } = useAuth();
   const { balance } = useBalance();
-
-  const userName = user?.userName ?? '';
-  const userEmail = user?.userEmail ?? '';
-  const userPhone = user?.phone ?? '';
-  const documentType = user?.documentType ?? '';
-  const documentNumber = user?.documentNumber ?? '';
-
-  const goalPoints = 2000;
-  const progressPercentage = (balance / goalPoints) * 100;
-
+  const initial = user?.userName.charAt(0).toUpperCase() ?? "U";
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-
-      <Image
-        source={require('../../assets/sanji.jpg')}
-        style={styles.avatar}
-      />
-
-      <Text style={styles.name}>{userName}</Text>
-
-      <Text style={styles.email}>{userEmail}</Text>
-
-      <View style={styles.infoContainer}>
-
-        <Text style={styles.infoLabel}>Teléfono</Text>
-        <Text style={styles.infoValue}>{userPhone}</Text>
-
-        <Text style={styles.infoLabel}>Documento</Text>
-        <Text style={styles.infoValue}>
-          {documentType} {documentNumber}
-        </Text>
-
-      </View>
-
-      <View style={styles.card}>
-
-        <Text style={styles.cardTitle}>Puntos acumulados</Text>
-
-        <Text style={styles.points}>
-          {balance} pts
-        </Text>
-
-        <View style={styles.progressBar}>
-
-          <View
-            style={[
-              styles.progressFill,
-              { width: `${progressPercentage}%` },
-            ]}
-          />
-
+    <SafeAreaView edges={["top"]} style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Volver"
+          onPress={() => navigation.goBack()}
+          style={styles.back}
+        >
+          <Ionicons name="arrow-back" size={21} color={colors.primary} />
+        </Pressable>
+        <View style={styles.profile}>
+          <View style={styles.avatar}>
+            <Text style={styles.initial}>{initial}</Text>
+          </View>
+          <Text style={styles.name}>{user?.userName}</Text>
+          <Text style={styles.email}>{user?.userEmail}</Text>
         </View>
-
-        <Text style={styles.goalText}>
-          Meta: {goalPoints} pts
-        </Text>
-
-      </View>
-
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.buttonText}>Volver</Text>
-      </Pressable>
-
-      <Pressable
-        style={[styles.button, styles.logoutButton]}
-        onPress={logout}
-      >
-        <Text style={styles.buttonText}>Cerrar sesión</Text>
-      </Pressable>
-
-    </ScrollView>
+        <View style={styles.pointsCard}>
+          <Text style={styles.pointsLabel}>Puntos disponibles</Text>
+          <Text style={styles.points}>
+            {balance.toLocaleString("es-CO")} pts
+          </Text>
+        </View>
+        <Text style={styles.section}>Información personal</Text>
+        <View style={styles.details}>
+          <Detail
+            icon="call-outline"
+            label="Teléfono"
+            value={user?.phone ?? "—"}
+          />
+          <Detail
+            icon="card-outline"
+            label="Documento"
+            value={`${user?.documentType ?? ""} ${user?.documentNumber ?? ""}`}
+          />
+        </View>
+        <CustomButton
+          title="Cerrar sesión"
+          variant="outline"
+          onPress={logout}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
+function Detail({
+  icon,
+  label,
+  value,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  value: string;
+}) {
+  return (
+    <View style={styles.detail}>
+      <View style={styles.detailIcon}>
+        <Ionicons name={icon} size={19} color={colors.primary} />
+      </View>
+      <View>
+        <Text style={styles.detailLabel}>{label}</Text>
+        <Text style={styles.detailValue}>{value}</Text>
+      </View>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
-
-  container: {
-    flexGrow: 1,
-    backgroundColor: '#EFF6FF',
-    alignItems: 'center',
-    padding: 25,
+  safe: { flex: 1, backgroundColor: colors.background },
+  container: { padding: 20, paddingBottom: 34 },
+  back: {
+    alignItems: "center",
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 22,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: "center",
+    width: 44,
   },
-
+  profile: { alignItems: "center", marginTop: 24 },
   avatar: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    marginBottom: 15,
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    borderRadius: 44,
+    height: 88,
+    justifyContent: "center",
+    width: 88,
   },
-
+  initial: { color: colors.white, fontSize: 32, fontWeight: "800" },
   name: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1E293B',
+    color: colors.textDark,
+    fontSize: 23,
+    fontWeight: "800",
+    marginTop: 14,
   },
-
-  email: {
-    fontSize: 14,
-    color: '#64748B',
-    marginBottom: 20,
+  email: { color: colors.textMuted, fontSize: 14, marginTop: 5 },
+  pointsCard: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 18,
+    marginTop: 28,
+    padding: 19,
   },
-
-  infoContainer: {
-    width: '100%',
-    marginBottom: 25,
-  },
-
-  infoLabel: {
-    fontSize: 12,
-    color: '#64748B',
-    marginTop: 10,
-  },
-
-  infoValue: {
-    fontSize: 16,
-    color: '#1E293B',
-  },
-
-  card: {
-    backgroundColor: '#FFFFFF',
-    width: '100%',
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 30,
-    elevation: 5,
-  },
-
-  cardTitle: {
-    fontSize: 16,
-    color: '#64748B',
-  },
-
+  pointsLabel: { color: colors.textMuted, fontSize: 13 },
   points: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#2563EB',
-    marginVertical: 10,
+    color: colors.primary,
+    fontSize: 27,
+    fontWeight: "800",
+    marginTop: 5,
   },
-
-  progressBar: {
-    height: 10,
-    backgroundColor: '#DBEAFE',
-    borderRadius: 5,
-    overflow: 'hidden',
+  section: {
+    color: colors.textDark,
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 11,
+    marginTop: 27,
   },
-
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#2563EB',
+  details: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 18,
+    borderWidth: 1,
   },
-
-  goalText: {
-    marginTop: 8,
-    fontSize: 12,
-    color: '#64748B',
+  detail: { alignItems: "center", flexDirection: "row", gap: 13, padding: 16 },
+  detailIcon: {
+    alignItems: "center",
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 16,
+    height: 32,
+    justifyContent: "center",
+    width: 32,
   },
-
-  button: {
-    width: '100%',
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: '#2563EB',
-    marginBottom: 15,
-    alignItems: 'center',
+  detailLabel: { color: colors.textMuted, fontSize: 12 },
+  detailValue: {
+    color: colors.textDark,
+    fontSize: 15,
+    fontWeight: "700",
+    marginTop: 2,
   },
-
-  logoutButton: {
-    backgroundColor: '#DC2626',
-  },
-
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
-
 });

@@ -1,53 +1,44 @@
-import React, { useState } from "react";
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
-  ScrollView,
-  Text,
-  StyleSheet,
   Alert,
   Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MainStackParamList } from "../types/navigation";
-import { InputField } from "../components/CustomInputField";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 import { CustomButton } from "../components/CustomButtom";
-import { colors } from "../styles/colors";
+import { InputField } from "../components/CustomInputField";
+import { ScreenHeader } from "../components/ScreenHeader";
 import { useAuth } from "../context/AuthContext";
-import { redeemRequest } from "../services/transaction.service";
 import { useQRForm } from "../hooks/useQRForm";
-
+import { redeemRequest } from "../services/transaction.service";
+import { colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 type Props = NativeStackScreenProps<MainStackParamList, "Redeem">;
-
 export function RedeemScreen({ navigation, route }: Props) {
-
   const { user } = useAuth();
-
   const [form, setForm] = useState({
     partnerCode: "",
     locationCode: "",
     points: "",
     reference: "",
   });
-
-  useQRForm({
-    route,
-    navigation,
-    setForm,
-    type: "REDEEM",
-  });
-
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleRedeem = async () => {
-
+  useQRForm({ route, navigation, setForm, type: "REDEEM" });
+  const change = (field: keyof typeof form, value: string) =>
+    setForm((current) => ({ ...current, [field]: value }));
+  const submit = async () => {
+    if (!form.partnerCode || !form.locationCode || Number(form.points) <= 0) {
+      Alert.alert(
+        "Revisa la información",
+        "Ingresa aliado, sede y puntos válidos.",
+      );
+      return;
+    }
     try {
-
-      if (!form.partnerCode || !form.locationCode || !form.points) {
-        Alert.alert("Error", "Campos obligatorios");
-        return;
-      }
-
       await redeemRequest({
         documentType: user?.documentType ?? "",
         documentNumber: user?.documentNumber ?? "",
@@ -56,138 +47,85 @@ export function RedeemScreen({ navigation, route }: Props) {
         points: Number(form.points),
         reference: form.reference || "APP-REDEEM",
       });
-
-      Alert.alert("Éxito", "Puntos redimidos correctamente", [
-        {
-          text: "OK",
-          onPress: () => navigation.navigate("Home"),
-        },
+      Alert.alert("Redención confirmada", "Disfruta tu recompensa.", [
+        { text: "Listo", onPress: () => navigation.navigate("Home") },
       ]);
-
-      setForm({
-        partnerCode: "",
-        locationCode: "",
-        points: "",
-        reference: "",
-      });
-
-    } catch (error) {
-      console.log("Error redeem:", error);
-      Alert.alert("Error", "No se pudo redimir");
+    } catch {
+      Alert.alert(
+        "No pudimos redimir",
+        "Verifica tu saldo e inténtalo nuevamente.",
+      );
     }
   };
-
-// Simulación QR
-//   const handleScanQR = () => {
-
-//     const fakeQRData = {
-//       partnerCode: "PARTNER_001",
-//       locationCode: "LOC_001",
-//       points: "500",
-//       reference: "QR-REDEEM",
-//     };
-
-//     setForm(fakeQRData);
-
-//     Alert.alert("QR leído", "Datos cargados automáticamente");
-//   };
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-
-      <Text style={styles.title}>Redimir Puntos</Text>
-
-      <InputField
-        placeholder="Partner Code"
-        value={form.partnerCode}
-        onChangeText={(t) => handleChange("partnerCode", t)}
-      />
-
-      <InputField
-        placeholder="Location Code"
-        value={form.locationCode}
-        onChangeText={(t) => handleChange("locationCode", t)}
-      />
-
-      <InputField
-        placeholder="Puntos"
-        value={form.points}
-        onChangeText={(t) => handleChange("points", t)}
-      />
-
-      <InputField
-        placeholder="Referencia"
-        value={form.reference}
-        onChangeText={(t) => handleChange("reference", t)}
-      />
-
-      <CustomButton
-        title="Redimir"
-        onPress={handleRedeem}
-      />
-{/* 
-      <Pressable style={styles.qrButton} onPress={handleScanQR}>
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable> */}
-
-      <Pressable
-        style={styles.qrButton}
-        onPress={() => navigation.navigate("QRScanner")}
+    <SafeAreaView edges={["top"]} style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <ScreenHeader
+          onBack={() => navigation.goBack()}
+          eyebrow="Usar puntos"
+          title="Redimir recompensa"
+          subtitle="Confirma los datos del aliado para canjear tus puntos."
+        />
+        <View style={styles.info}>
+          <Ionicons name="gift-outline" size={19} color={colors.accent} />
+          <Text style={styles.infoText}>
+            Los puntos se descontarán solo cuando el aliado confirme la
+            operación.
+          </Text>
+        </View>
+        <InputField
+          placeholder="Código del aliado"
+          value={form.partnerCode}
+          onChangeText={(value) => change("partnerCode", value)}
+        />
+        <InputField
+          placeholder="Código de sede"
+          value={form.locationCode}
+          onChangeText={(value) => change("locationCode", value)}
+        />
+        <InputField
+          placeholder="Puntos a redimir"
+          value={form.points}
+          onChangeText={(value) => change("points", value)}
+        />
+        <InputField
+          placeholder="Referencia (opcional)"
+          value={form.reference}
+          onChangeText={(value) => change("reference", value)}
+        />
+        <CustomButton title="Confirmar redención" onPress={submit} />
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => navigation.navigate("QRScanner")}
+          style={styles.scan}
         >
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable>
-
-      <Pressable
-        style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
-      >
-        <Text style={styles.backText}>Volver</Text>
-      </Pressable>
-
-    </ScrollView>
+          <Ionicons name="scan-outline" size={21} color={colors.primary} />
+          <Text style={styles.scanText}>Escanear código QR</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
-
-  container: {
-    padding: 25,
-    backgroundColor: colors.background,
-    flexGrow: 1,
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: colors.primary,
+  safe: { flex: 1, backgroundColor: colors.background },
+  container: { padding: 20, paddingBottom: 34 },
+  info: {
+    alignItems: "center",
+    backgroundColor: "#F3E8FF",
+    borderRadius: 14,
+    flexDirection: "row",
+    gap: 9,
     marginBottom: 20,
+    padding: 13,
   },
-
-  qrButton: {
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#10B981",
+  infoText: { color: colors.textDark, flex: 1, fontSize: 13, lineHeight: 18 },
+  scan: {
     alignItems: "center",
+    flexDirection: "row",
+    gap: 9,
+    justifyContent: "center",
+    marginTop: 23,
+    minHeight: 44,
   },
-
-  qrText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-
-  backButton: {
-    marginTop: 15,
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: "#64748B",
-    alignItems: "center",
-  },
-
-  backText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-
+  scanText: { color: colors.primary, fontSize: 14, fontWeight: "800" },
 });

@@ -3,10 +3,19 @@ export type AuthStackParamList = {
   Register: undefined;
 };
 
+export type QrPayload = {
+  type: "ACCUMULATE" | "REDEEM";
+  partnerCode: string;
+  locationCode: string;
+  amount?: number;
+  points?: number;
+  reference?: string;
+};
+
 export type MainStackParamList = {
   Home: undefined;
   Profile: undefined;
   QRScanner: undefined;
-  Accumulate: { qrData?: any };
-  Redeem: { qrData?: any };
+  Accumulate: { qrData?: QrPayload };
+  Redeem: { qrData?: QrPayload };
 };
