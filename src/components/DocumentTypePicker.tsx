@@ -13,9 +13,9 @@ export function DocumentTypePicker({ value, onChange }: Props) {
       <Picker selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)}>
         <Picker.Item label="Seleccione tipo de documento" value="" />
 
-        <Picker.Item label="CÃ©dula de CiudadanÃ­a" value="CC" />
+        <Picker.Item label="Cédula de Ciudadanía" value="CC" />
 
-        <Picker.Item label="CÃ©dula de ExtranjerÃ­a" value="CE" />
+        <Picker.Item label="Cédula de Extranjería" value="CE" />
 
         <Picker.Item label="NIT" value="NIT" />
 

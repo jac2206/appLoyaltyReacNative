@@ -24,6 +24,7 @@ export function InputField({
     <View style={styles.container}>
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor={colors.textMuted}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={isPassword ? hidePassword : false}
