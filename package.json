@@ -7,8 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "check": "biome check .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -30,8 +32,11 @@
     "react-native-svg": "^15.15.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.10",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@types/react": "~19.1.0",
-    "prettier": "^3.9.6",
+    "husky": "^9.1.7",
     "typescript": "~5.9.2"
   },
   "private": true
