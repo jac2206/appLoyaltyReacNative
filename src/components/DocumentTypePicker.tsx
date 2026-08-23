@@ -1,6 +1,6 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+﻿import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 type Props = {
   value: string;
@@ -10,15 +10,12 @@ type Props = {
 export function DocumentTypePicker({ value, onChange }: Props) {
   return (
     <View style={styles.container}>
-      <Picker
-        selectedValue={value}
-        onValueChange={(itemValue) => onChange(itemValue)}
-      >
+      <Picker selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)}>
         <Picker.Item label="Seleccione tipo de documento" value="" />
 
-        <Picker.Item label="Cédula de Ciudadanía" value="CC" />
+        <Picker.Item label="CÃ©dula de CiudadanÃ­a" value="CC" />
 
-        <Picker.Item label="Cédula de Extranjería" value="CE" />
+        <Picker.Item label="CÃ©dula de ExtranjerÃ­a" value="CE" />
 
         <Picker.Item label="NIT" value="NIT" />
 
@@ -31,9 +28,9 @@ export function DocumentTypePicker({ value, onChange }: Props) {
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: '#CBD5E1',
     borderRadius: 10,
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 });

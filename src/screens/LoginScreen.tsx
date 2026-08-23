@@ -1,24 +1,24 @@
-﻿import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { CustomButton } from "../components/CustomButtom";
-import { InputField } from "../components/CustomInputField";
-import { useAuth } from "../context/AuthContext";
-import { useLogin } from "../hooks/useLogin";
-import { colors } from "../styles/colors";
-import { AuthStackParamList } from "../types/navigation";
+﻿import { Ionicons } from '@expo/vector-icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { CustomButton } from '../components/CustomButtom';
+import { InputField } from '../components/CustomInputField';
+import { useAuth } from '../context/AuthContext';
+import { useLogin } from '../hooks/useLogin';
+import { colors } from '../styles/colors';
+import { AuthStackParamList } from '../types/navigation';
 
-type Props = NativeStackScreenProps<AuthStackParamList, "Login">;
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+
 export function LoginScreen({ navigation }: Props) {
-  const { userEmail, password, error, setEmail, setPassword, validate } =
-    useLogin();
+  const { userEmail, password, error, setEmail, setPassword, validate } = useLogin();
   const { login } = useAuth();
   const handleLogin = async () => {
     if (validate()) {
       try {
         await login(userEmail, password);
-      } catch { }
+      } catch {}
     }
   };
   return (
@@ -54,12 +54,11 @@ export function LoginScreen({ navigation }: Props) {
           <CustomButton title="Iniciar sesión" onPress={handleLogin} />
           <Pressable
             accessibilityRole="button"
-            onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate('Register')}
             style={styles.link}
           >
             <Text style={styles.linkText}>
-              ¿No tienes cuenta?{" "}
-              <Text style={styles.linkStrong}>Regístrate</Text>
+              ¿No tienes cuenta? <Text style={styles.linkStrong}>Regístrate</Text>
             </Text>
           </Pressable>
         </View>
@@ -67,29 +66,30 @@ export function LoginScreen({ navigation }: Props) {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  container: { flex: 1, justifyContent: "center", padding: 24 },
+  container: { flex: 1, justifyContent: 'center', padding: 24 },
   brand: { marginBottom: 35 },
   brandIcon: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.primary,
     borderRadius: 20,
     height: 56,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginBottom: 22,
     width: 56,
   },
   eyebrow: {
     color: colors.primary,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 1.1,
   },
   title: {
     color: colors.textDark,
     fontSize: 34,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.7,
     marginTop: 8,
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   error: { color: colors.error, fontSize: 13, marginBottom: 2 },
-  link: { alignItems: "center", marginTop: 24 },
+  link: { alignItems: 'center', marginTop: 24 },
   linkText: { color: colors.textMuted, fontSize: 14 },
-  linkStrong: { color: colors.primary, fontWeight: "800" },
+  linkStrong: { color: colors.primary, fontWeight: '800' },
 });

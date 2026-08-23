@@ -1,4 +1,4 @@
-export type Transaction = {
+﻿export type Transaction = {
   documentType: string;
   documentNumber: string;
   partnerCode: string;

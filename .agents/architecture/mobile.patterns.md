@@ -22,7 +22,7 @@ El QR es entrada no confiable. Analizar JSON, validar esquema y tipo antes de na
 
 ```ts
 type QrPayload = {
-  type: "ACCUMULATE" | "REDEEM";
+  type: 'ACCUMULATE' | 'REDEEM';
   partnerCode: string;
   locationCode: string;
   amount?: number;

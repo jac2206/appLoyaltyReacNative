@@ -1,11 +1,11 @@
-import axios from "axios";
+﻿import axios from 'axios';
 // import { removeToken } from "./data/storage";
-import { Alert } from "react-native";
-import { removeItem } from "./data/storage.repository";
-import { STORAGE_KEYS } from "../constants/storageKeys";
+import { Alert } from 'react-native';
+import { removeItem } from './data/storage.repository';
+import { STORAGE_KEYS } from '../constants/storageKeys';
 
 export const api = axios.create({
-  baseURL: "https://loyalty-backend-production-545b.up.railway.app/loyalty/v1",
+  baseURL: 'https://loyalty-backend-production-545b.up.railway.app/loyalty/v1',
 });
 
 let authToken: string | null = null;
@@ -31,11 +31,11 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      console.log("Token expirado");
+      console.log('Token expirado');
 
       Alert.alert(
-        "Sesión expirada",
-        "Tu sesión ha expirado, por favor inicia sesión nuevamente",
+        'SesiÃ³n expirada',
+        'Tu sesiÃ³n ha expirado, por favor inicia sesiÃ³n nuevamente',
       );
 
       // await removeToken();

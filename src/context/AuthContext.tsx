@@ -1,20 +1,16 @@
-import React, {
+﻿import React, {
   createContext,
   useContext,
   useState,
   ReactNode,
   useEffect,
-} from "react";
-import { AuthContextType, User } from "../types/user";
-import { loginRequest, getMeRequest } from "../services/auth.service";
-import { setAuthToken } from "../services/api";
-import { saveToken, getToken, removeToken } from "../services/data/storage";
-import {
-  getItem,
-  removeItem,
-  saveItem,
-} from "../services/data/storage.repository";
-import { STORAGE_KEYS } from "../constants/storageKeys";
+} from 'react';
+import { AuthContextType, User } from '../types/user';
+import { loginRequest, getMeRequest } from '../services/auth.service';
+import { setAuthToken } from '../services/api';
+import { saveToken, getToken, removeToken } from '../services/data/storage';
+import { getItem, removeItem, saveItem } from '../services/data/storage.repository';
+import { STORAGE_KEYS } from '../constants/storageKeys';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -45,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           phone: userData.phone,
         });
       } catch (error) {
-        console.log("Token inválido");
+        console.log('Token invÃ¡lido');
 
         // await removeToken();
         await removeItem(STORAGE_KEYS.TOKEN);
@@ -78,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         phone: userData.phone,
       });
     } catch (error) {
-      console.log("Error login:", error);
+      console.log('Error login:', error);
       throw error;
     }
   };
@@ -86,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     setUser(null);
 
-    setAuthToken("");
+    setAuthToken('');
 
     // await removeToken();
     await removeItem(STORAGE_KEYS.TOKEN);
@@ -103,7 +99,7 @@ export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("useAuth debe usarse dentro de AuthProvider");
+    throw new Error('useAuth debe usarse dentro de AuthProvider');
   }
 
   return context;

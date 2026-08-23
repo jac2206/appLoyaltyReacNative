@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../styles/colors";
+﻿import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../styles/colors';
 
 type Props = {
   placeholder: string;
@@ -31,15 +31,8 @@ export function InputField({
       />
 
       {isPassword && (
-        <Pressable
-          onPress={() => setHidePassword(!hidePassword)}
-          style={styles.icon}
-        >
-          <Ionicons
-            name={hidePassword ? "eye-off" : "eye"}
-            size={22}
-            color="#64748B"
-          />
+        <Pressable onPress={() => setHidePassword(!hidePassword)} style={styles.icon}>
+          <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={22} color="#64748B" />
         </Pressable>
       )}
     </View>
@@ -49,7 +42,7 @@ export function InputField({
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
-    position: "relative",
+    position: 'relative',
   },
 
   input: {
@@ -65,12 +58,12 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    position: "absolute",
+    position: 'absolute',
     right: 12,
     top: 15,
     width: 30,
     height: 30,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

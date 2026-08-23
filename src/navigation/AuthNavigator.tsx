@@ -1,8 +1,8 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "../types/navigation";
-import { LoginScreen } from "../screens/LoginScreen";
-import { RegisterScreen } from "../screens/RegisterScreen";
+﻿import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../types/navigation';
+import { LoginScreen } from '../screens/LoginScreen';
+import { RegisterScreen } from '../screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -12,7 +12,7 @@ export function AuthNavigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        // options={{ title: 'Iniciar Sesión' }}
+        // options={{ title: 'Iniciar SesiÃ³n' }}
       />
       <Stack.Screen
         name="Register"

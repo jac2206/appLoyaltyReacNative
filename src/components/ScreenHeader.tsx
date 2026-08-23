@@ -1,6 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../styles/colors";
+﻿import { Ionicons } from '@expo/vector-icons';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '../styles/colors';
 
 type Props = {
   eyebrow?: string;
@@ -18,10 +18,7 @@ export function ScreenHeader({ eyebrow, title, subtitle, onBack }: Props) {
           accessibilityLabel="Volver"
           hitSlop={8}
           onPress={onBack}
-          style={({ pressed }) => [
-            styles.backButton,
-            pressed && styles.pressed,
-          ]}
+          style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
         >
           <Ionicons color={colors.primary} name="arrow-back" size={22} />
         </Pressable>
@@ -38,13 +35,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderRadius: 22,
     borderWidth: 1,
     height: 44,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginBottom: 20,
     width: 44,
   },
@@ -54,15 +51,15 @@ const styles = StyleSheet.create({
   eyebrow: {
     color: colors.primary,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.7,
     marginBottom: 6,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   title: {
     color: colors.textDark,
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.5,
   },
   subtitle: {

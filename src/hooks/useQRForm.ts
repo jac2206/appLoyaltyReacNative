@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from 'react';
 
 export function useQRForm({
   route,
@@ -9,26 +9,26 @@ export function useQRForm({
   route: any;
   navigation: any;
   setForm: any;
-  type: "ACCUMULATE" | "REDEEM";
+  type: 'ACCUMULATE' | 'REDEEM';
 }) {
   useEffect(() => {
     if (route.params?.qrData) {
       const qr = route.params.qrData;
 
-      if (type === "ACCUMULATE") {
+      if (type === 'ACCUMULATE') {
         setForm({
           partnerCode: qr.partnerCode,
           locationCode: qr.locationCode,
-          amount: qr.amount?.toString() || "",
+          amount: qr.amount?.toString() || '',
           reference: qr.reference,
         });
       }
 
-      if (type === "REDEEM") {
+      if (type === 'REDEEM') {
         setForm({
           partnerCode: qr.partnerCode,
           locationCode: qr.locationCode,
-          points: qr.points?.toString() || "",
+          points: qr.points?.toString() || '',
           reference: qr.reference,
         });
       }

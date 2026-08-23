@@ -1,16 +1,10 @@
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import { colors } from "../styles/colors";
+﻿import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '../styles/colors';
 
 interface Props {
   title: string;
   onPress: () => void;
-  variant?: "primary" | "outline" | "danger";
+  variant?: 'primary' | 'outline' | 'danger';
   loading?: boolean;
   disabled?: boolean;
   accessibilityHint?: string;
@@ -19,7 +13,7 @@ interface Props {
 export function CustomButton({
   title,
   onPress,
-  variant = "primary",
+  variant = 'primary',
   loading = false,
   disabled = false,
   accessibilityHint,
@@ -36,8 +30,8 @@ export function CustomButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        variant === "outline" && styles.outlineButton,
-        variant === "danger" && styles.dangerButton,
+        variant === 'outline' && styles.outlineButton,
+        variant === 'danger' && styles.dangerButton,
         isDisabled && styles.disabled,
         pressed && !isDisabled && styles.pressed,
       ]}
@@ -45,12 +39,10 @@ export function CustomButton({
       <View style={styles.content}>
         {loading && (
           <ActivityIndicator
-            color={variant === "outline" ? colors.primary : colors.white}
+            color={variant === 'outline' ? colors.primary : colors.white}
           />
         )}
-        <Text
-          style={[styles.text, variant === "outline" && styles.outlineText]}
-        >
+        <Text style={[styles.text, variant === 'outline' && styles.outlineText]}>
           {title}
         </Text>
       </View>
@@ -64,13 +56,13 @@ const styles = StyleSheet.create({
     minHeight: 52,
     paddingHorizontal: 20,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 16,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   outlineButton: {
@@ -90,7 +82,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   outlineText: {
     color: colors.primary,

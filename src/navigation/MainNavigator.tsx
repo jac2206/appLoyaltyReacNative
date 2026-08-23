@@ -1,11 +1,11 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MainStackParamList } from "../types/navigation";
-import { HomeScreen } from "../screens/HomeScreen";
-import { ProfileScreen } from "../screens/ProfileScreen";
-import { AccumulateScreen } from "../screens/AccumulateScreen";
-import { RedeemScreen } from "../screens/RedeemScreen";
-import { QRScannerScreen } from "../screens/QRScannerScreen";
+﻿import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../types/navigation';
+import { HomeScreen } from '../screens/HomeScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { AccumulateScreen } from '../screens/AccumulateScreen';
+import { RedeemScreen } from '../screens/RedeemScreen';
+import { QRScannerScreen } from '../screens/QRScannerScreen';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
