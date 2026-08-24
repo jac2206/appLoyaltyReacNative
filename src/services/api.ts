@@ -34,8 +34,8 @@ api.interceptors.response.use(
       console.log('Token expirado');
 
       Alert.alert(
-        'SesiÃ³n expirada',
-        'Tu sesiÃ³n ha expirado, por favor inicia sesiÃ³n nuevamente',
+        'Sesión expirada',
+        'Tu sesión ha expirado, por favor inicia sesión nuevamente',
       );
 
       // await removeToken();
