@@ -4,14 +4,14 @@ import React, {
   useEffect,
   useState,
   ReactNode,
-} from 'react';
+} from "react";
 
-import { darkColors, lightColors, Colors } from '../styles/colors';
-import { getItem, saveItem } from '../services/data/storage.repository';
+import { darkColors, lightColors, Colors } from "../styles/colors";
+import { getItem, saveItem } from "../services/data/storage.repository";
 
-import { STORAGE_KEYS } from '../constants/storageKeys';
+import { STORAGE_KEYS } from "../constants/storageKeys";
 
-type ThemeMode = 'light' | 'dark';
+type ThemeMode = "light" | "dark";
 
 type ThemeContextType = {
   theme: ThemeMode;
@@ -23,7 +23,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<ThemeMode>('light');
+  const [theme, setTheme] = useState<ThemeMode>("light");
 
   useEffect(() => {
     async function loadTheme() {
@@ -38,20 +38,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleTheme = async () => {
-    const newTheme: ThemeMode = theme === 'light' ? 'dark' : 'light';
+    const newTheme: ThemeMode = theme === "light" ? "dark" : "light";
 
     setTheme(newTheme);
 
     await saveItem(STORAGE_KEYS.THEME, newTheme);
   };
 
-  const colors = theme === 'dark' ? darkColors : lightColors;
+  const colors = theme === "dark" ? darkColors : lightColors;
 
   return (
     <ThemeContext.Provider
       value={{
         theme,
-        isDark: theme === 'dark',
+        isDark: theme === "dark",
         colors,
         toggleTheme,
       }}
@@ -65,7 +65,7 @@ export function useTheme() {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error('useTheme debe usarse dentro de ThemeProvider');
+    throw new Error("useTheme debe usarse dentro de ThemeProvider");
   }
 
   return context;

@@ -1,20 +1,20 @@
-﻿import { Ionicons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
-import { CustomButton } from '../components/CustomButtom';
-import { InputField } from '../components/CustomInputField';
-import { ScreenHeader } from '../components/ScreenHeader';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useQRForm } from '../hooks/useQRForm';
-import { redeemRequest } from '../services/transaction.service';
-import { Colors } from '../styles/colors';
-import { MainStackParamList } from '../types/navigation';
+import { CustomButton } from "../components/CustomButtom";
+import { InputField } from "../components/CustomInputField";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useQRForm } from "../hooks/useQRForm";
+import { redeemRequest } from "../services/transaction.service";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Redeem'>;
+type Props = NativeStackScreenProps<MainStackParamList, "Redeem">;
 
 export function RedeemScreen({ navigation, route }: Props) {
   const { user } = useAuth();
@@ -24,17 +24,17 @@ export function RedeemScreen({ navigation, route }: Props) {
   const styles = createStyles(colors);
 
   const [form, setForm] = useState({
-    partnerCode: '',
-    locationCode: '',
-    points: '',
-    reference: '',
+    partnerCode: "",
+    locationCode: "",
+    points: "",
+    reference: "",
   });
 
   useQRForm({
     route,
     navigation,
     setForm,
-    type: 'REDEEM',
+    type: "REDEEM",
   });
 
   const change = (field: keyof typeof form, value: string) =>
@@ -45,34 +45,34 @@ export function RedeemScreen({ navigation, route }: Props) {
 
   const submit = async () => {
     if (!form.partnerCode || !form.locationCode || Number(form.points) <= 0) {
-      Alert.alert('Revisa la información', 'Ingresa aliado, sede y puntos válidos.');
+      Alert.alert("Revisa la información", "Ingresa aliado, sede y puntos válidos.");
 
       return;
     }
 
     try {
       await redeemRequest({
-        documentType: user?.documentType ?? '',
-        documentNumber: user?.documentNumber ?? '',
+        documentType: user?.documentType ?? "",
+        documentNumber: user?.documentNumber ?? "",
         partnerCode: form.partnerCode,
         locationCode: form.locationCode,
         points: Number(form.points),
-        reference: form.reference || 'APP-REDEEM',
+        reference: form.reference || "APP-REDEEM",
       });
 
-      Alert.alert('Redención confirmada', 'Disfruta tu recompensa.', [
+      Alert.alert("Redención confirmada", "Disfruta tu recompensa.", [
         {
-          text: 'Listo',
-          onPress: () => navigation.navigate('Home'),
+          text: "Listo",
+          onPress: () => navigation.navigate("Home"),
         },
       ]);
     } catch {
-      Alert.alert('No pudimos redimir', 'Verifica tu saldo e inténtalo nuevamente.');
+      Alert.alert("No pudimos redimir", "Verifica tu saldo e inténtalo nuevamente.");
     }
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safe}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
         <ScreenHeader
           onBack={() => navigation.goBack()}
@@ -92,32 +92,32 @@ export function RedeemScreen({ navigation, route }: Props) {
         <InputField
           placeholder="Código del aliado"
           value={form.partnerCode}
-          onChangeText={(value) => change('partnerCode', value)}
+          onChangeText={(value) => change("partnerCode", value)}
         />
 
         <InputField
           placeholder="Código de sede"
           value={form.locationCode}
-          onChangeText={(value) => change('locationCode', value)}
+          onChangeText={(value) => change("locationCode", value)}
         />
 
         <InputField
           placeholder="Puntos a redimir"
           value={form.points}
-          onChangeText={(value) => change('points', value)}
+          onChangeText={(value) => change("points", value)}
         />
 
         <InputField
           placeholder="Referencia (opcional)"
           value={form.reference}
-          onChangeText={(value) => change('reference', value)}
+          onChangeText={(value) => change("reference", value)}
         />
 
         <CustomButton title="Confirmar redención" onPress={submit} />
 
         <Pressable
           accessibilityRole="button"
-          onPress={() => navigation.navigate('QRScanner')}
+          onPress={() => navigation.navigate("QRScanner")}
           style={styles.scan}
         >
           <Ionicons name="scan-outline" size={21} color={colors.primary} />
@@ -142,10 +142,10 @@ function createStyles(colors: Colors) {
     },
 
     info: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surfaceMuted,
       borderRadius: 14,
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 9,
       marginBottom: 20,
       padding: 13,
@@ -159,10 +159,10 @@ function createStyles(colors: Colors) {
     },
 
     scan: {
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
       gap: 9,
-      justifyContent: 'center',
+      justifyContent: "center",
       marginTop: 23,
       minHeight: 44,
     },
@@ -170,7 +170,7 @@ function createStyles(colors: Colors) {
     scanText: {
       color: colors.primary,
       fontSize: 14,
-      fontWeight: '800',
+      fontWeight: "800",
     },
   });
 }

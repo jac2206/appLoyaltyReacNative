@@ -4,7 +4,7 @@
 };
 
 export type QrPayload = {
-  type: 'ACCUMULATE' | 'REDEEM';
+  type: "ACCUMULATE" | "REDEEM";
   partnerCode: string;
   locationCode: string;
   amount?: number;

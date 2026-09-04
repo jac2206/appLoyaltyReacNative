@@ -1,10 +1,10 @@
-﻿import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { BarChart } from 'react-native-gifted-charts';
+﻿import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { BarChart } from "react-native-gifted-charts";
 
-import { getCurrentWeekLabel } from '../utils/date-util';
-import { useTheme } from '../context/ThemeContext';
-import { Colors } from '../styles/colors';
+import { getCurrentWeekLabel } from "../utils/date-util";
+import { useTheme } from "../context/ThemeContext";
+import { Colors } from "../styles/colors";
 
 interface Props {
   data: number[];
@@ -15,7 +15,7 @@ export function ActivityChart({ data }: Props) {
 
   const styles = createStyles(colors);
 
-  const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  const days = ["L", "M", "M", "J", "V", "S", "D"];
 
   const weekLabel = getCurrentWeekLabel();
 
@@ -76,7 +76,7 @@ function createStyles(colors: Colors) {
     title: {
       color: colors.textDark,
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
 
     subtitle: {
@@ -89,7 +89,7 @@ function createStyles(colors: Colors) {
       color: colors.textDark,
       marginTop: 10,
       fontSize: 14,
-      fontWeight: '500',
+      fontWeight: "500",
     },
   });
 }

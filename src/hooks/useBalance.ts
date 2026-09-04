@@ -1,7 +1,7 @@
-﻿import { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { getBalance } from '../services/account.service';
-import { useFocusEffect } from '@react-navigation/native';
+﻿import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { getBalance } from "../services/account.service";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function useBalance() {
   const { user } = useAuth();
@@ -45,7 +45,7 @@ export function useBalance() {
 
           setBalance(data.balance);
         } catch (error) {
-          console.log('Error loading balance', error);
+          console.log("Error loading balance", error);
         } finally {
           setLoading(false);
         }

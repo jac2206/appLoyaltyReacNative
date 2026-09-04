@@ -1,20 +1,20 @@
-﻿import { Ionicons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useState } from "react";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { CustomButton } from '../components/CustomButtom';
-import { InputField } from '../components/CustomInputField';
-import { ScreenHeader } from '../components/ScreenHeader';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useQRForm } from '../hooks/useQRForm';
-import { accumulateRequest } from '../services/transaction.service';
-import { Colors } from '../styles/colors';
-import { MainStackParamList } from '../types/navigation';
+import { CustomButton } from "../components/CustomButtom";
+import { InputField } from "../components/CustomInputField";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useQRForm } from "../hooks/useQRForm";
+import { accumulateRequest } from "../services/transaction.service";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Accumulate'>;
+type Props = NativeStackScreenProps<MainStackParamList, "Accumulate">;
 
 type AccumulateForm = {
   partnerCode: string;
@@ -31,17 +31,17 @@ export function AccumulateScreen({ navigation, route }: Props) {
   const styles = createStyles(colors);
 
   const [form, setForm] = useState<AccumulateForm>({
-    partnerCode: '',
-    locationCode: '',
-    amount: '',
-    reference: '',
+    partnerCode: "",
+    locationCode: "",
+    amount: "",
+    reference: "",
   });
 
   useQRForm({
     route,
     navigation,
     setForm,
-    type: 'ACCUMULATE',
+    type: "ACCUMULATE",
   });
 
   const handleChange = (field: keyof AccumulateForm, value: string) => {
@@ -53,34 +53,34 @@ export function AccumulateScreen({ navigation, route }: Props) {
 
   const handleSubmit = async () => {
     if (!form.partnerCode || !form.locationCode || Number(form.amount) <= 0) {
-      Alert.alert('Revisa la información', 'Ingresa aliado, sede y un monto válido.');
+      Alert.alert("Revisa la información", "Ingresa aliado, sede y un monto válido.");
 
       return;
     }
 
     try {
       await accumulateRequest({
-        documentType: user?.documentType ?? '',
-        documentNumber: user?.documentNumber ?? '',
+        documentType: user?.documentType ?? "",
+        documentNumber: user?.documentNumber ?? "",
         partnerCode: form.partnerCode,
         locationCode: form.locationCode,
         amount: Number(form.amount),
-        reference: form.reference || 'APP-ACCUMULATE',
+        reference: form.reference || "APP-ACCUMULATE",
       });
 
-      Alert.alert('Puntos acumulados', 'Tu saldo se actualizará enseguida.', [
+      Alert.alert("Puntos acumulados", "Tu saldo se actualizará enseguida.", [
         {
-          text: 'Listo',
-          onPress: () => navigation.navigate('Home'),
+          text: "Listo",
+          onPress: () => navigation.navigate("Home"),
         },
       ]);
     } catch {
-      Alert.alert('No pudimos acumular', 'Inténtalo nuevamente en unos minutos.');
+      Alert.alert("No pudimos acumular", "Inténtalo nuevamente en unos minutos.");
     }
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safe}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
         <ScreenHeader
           onBack={() => navigation.goBack()}
@@ -104,32 +104,32 @@ export function AccumulateScreen({ navigation, route }: Props) {
         <InputField
           placeholder="Código del aliado"
           value={form.partnerCode}
-          onChangeText={(value) => handleChange('partnerCode', value)}
+          onChangeText={(value) => handleChange("partnerCode", value)}
         />
 
         <InputField
           placeholder="Código de sede"
           value={form.locationCode}
-          onChangeText={(value) => handleChange('locationCode', value)}
+          onChangeText={(value) => handleChange("locationCode", value)}
         />
 
         <InputField
           placeholder="Monto de compra"
           value={form.amount}
-          onChangeText={(value) => handleChange('amount', value)}
+          onChangeText={(value) => handleChange("amount", value)}
         />
 
         <InputField
           placeholder="Referencia (opcional)"
           value={form.reference}
-          onChangeText={(value) => handleChange('reference', value)}
+          onChangeText={(value) => handleChange("reference", value)}
         />
 
         <CustomButton title="Confirmar acumulación" onPress={handleSubmit} />
 
         <Pressable
           accessibilityRole="button"
-          onPress={() => navigation.navigate('QRScanner')}
+          onPress={() => navigation.navigate("QRScanner")}
           style={styles.scan}
         >
           <Ionicons name="scan-outline" size={21} color={colors.primary} />
@@ -154,10 +154,10 @@ function createStyles(colors: Colors) {
     },
 
     info: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surfaceMuted,
       borderRadius: 14,
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 9,
       marginBottom: 20,
       padding: 13,
@@ -171,10 +171,10 @@ function createStyles(colors: Colors) {
     },
 
     scan: {
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
       gap: 9,
-      justifyContent: 'center',
+      justifyContent: "center",
       marginTop: 23,
       minHeight: 44,
     },
@@ -182,7 +182,7 @@ function createStyles(colors: Colors) {
     scanText: {
       color: colors.primary,
       fontSize: 14,
-      fontWeight: '800',
+      fontWeight: "800",
     },
   });
 }

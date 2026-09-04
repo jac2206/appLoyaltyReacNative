@@ -1,16 +1,16 @@
-﻿import { Ionicons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { ActivityChart } from '../components/ActivityChart';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useBalance } from '../hooks/useBalance';
-import { Colors } from '../styles/colors';
-import { MainStackParamList } from '../types/navigation';
+import { ActivityChart } from "../components/ActivityChart";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useBalance } from "../hooks/useBalance";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
+type Props = NativeStackScreenProps<MainStackParamList, "Home">;
 
 const goalPoints = 2000;
 
@@ -24,10 +24,10 @@ export function HomeScreen({ navigation }: Props) {
 
   const progress = Math.min(100, Math.max(0, (balance / goalPoints) * 100));
 
-  const firstName = user?.userName.split(' ')[0] ?? 'Usuario';
+  const firstName = user?.userName.split(" ")[0] ?? "Usuario";
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <SafeAreaView edges={["top"]} style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
@@ -44,7 +44,7 @@ export function HomeScreen({ navigation }: Props) {
           <Pressable
             accessibilityLabel="Abrir perfil"
             accessibilityRole="button"
-            onPress={() => navigation.navigate('Profile')}
+            onPress={() => navigation.navigate("Profile")}
             style={styles.profileButton}
           >
             <Text style={styles.profileInitial}>
@@ -60,7 +60,7 @@ export function HomeScreen({ navigation }: Props) {
             <View>
               <Text style={styles.balanceLabel}>Puntos disponibles</Text>
 
-              <Text style={styles.balance}>{balance.toLocaleString('es-CO')}</Text>
+              <Text style={styles.balance}>{balance.toLocaleString("es-CO")}</Text>
             </View>
 
             <View style={styles.coin}>
@@ -83,7 +83,7 @@ export function HomeScreen({ navigation }: Props) {
             <Text style={styles.progressText}>{Math.round(progress)}% de tu meta</Text>
 
             <Text style={styles.progressText}>
-              {goalPoints.toLocaleString('es-CO')} pts
+              {goalPoints.toLocaleString("es-CO")} pts
             </Text>
           </View>
         </View>
@@ -98,7 +98,7 @@ export function HomeScreen({ navigation }: Props) {
           <Pressable
             accessibilityRole="button"
             onPress={() =>
-              navigation.navigate('Accumulate', {
+              navigation.navigate("Accumulate", {
                 qrData: undefined,
               })
             }
@@ -118,7 +118,7 @@ export function HomeScreen({ navigation }: Props) {
           <Pressable
             accessibilityRole="button"
             onPress={() =>
-              navigation.navigate('Redeem', {
+              navigation.navigate("Redeem", {
                 qrData: undefined,
               })
             }
@@ -145,15 +145,15 @@ export function HomeScreen({ navigation }: Props) {
         <Text style={styles.sectionTitle}>Aliados destacados</Text>
 
         <View style={styles.partners}>
-          {['Compras', 'Restaurantes', 'Viajes'].map((partner, index) => (
+          {["Compras", "Restaurantes", "Viajes"].map((partner, index) => (
             <View key={partner} style={styles.partner}>
               <Ionicons
                 name={
                   index === 0
-                    ? 'storefront-outline'
+                    ? "storefront-outline"
                     : index === 1
-                      ? 'restaurant-outline'
-                      : 'airplane-outline'
+                      ? "restaurant-outline"
+                      : "airplane-outline"
                 }
                 size={21}
                 color={colors.primary}
@@ -181,16 +181,16 @@ function createStyles(colors: Colors) {
     },
 
     topRow: {
-      alignItems: 'center',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
       marginBottom: 24,
     },
 
     greeting: {
       color: colors.textDark,
       fontSize: 27,
-      fontWeight: '800',
+      fontWeight: "800",
     },
 
     caption: {
@@ -200,18 +200,18 @@ function createStyles(colors: Colors) {
     },
 
     profileButton: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.primary,
       borderRadius: 24,
       height: 48,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 48,
     },
 
     profileInitial: {
       color: colors.white,
       fontSize: 18,
-      fontWeight: '800',
+      fontWeight: "800",
     },
 
     balanceCard: {
@@ -233,9 +233,9 @@ function createStyles(colors: Colors) {
     },
 
     balanceTop: {
-      alignItems: 'center',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
     },
 
     balanceLabel: {
@@ -246,16 +246,16 @@ function createStyles(colors: Colors) {
     balance: {
       color: colors.textDark,
       fontSize: 36,
-      fontWeight: '800',
+      fontWeight: "800",
       marginTop: 5,
     },
 
     coin: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surfaceMuted,
       borderRadius: 22,
       height: 44,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 44,
     },
 
@@ -264,37 +264,37 @@ function createStyles(colors: Colors) {
       borderRadius: 6,
       height: 8,
       marginTop: 20,
-      overflow: 'hidden',
+      overflow: "hidden",
     },
 
     progress: {
       backgroundColor: colors.primary,
       borderRadius: 6,
-      height: '100%',
+      height: "100%",
     },
 
     progressLabels: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       marginTop: 9,
     },
 
     progressText: {
       color: colors.textMuted,
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: "600",
     },
 
     sectionTitle: {
       color: colors.textDark,
       fontSize: 18,
-      fontWeight: '800',
+      fontWeight: "800",
       marginBottom: 12,
       marginTop: 28,
     },
 
     actions: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 12,
     },
 
@@ -309,10 +309,10 @@ function createStyles(colors: Colors) {
     },
 
     actionIcon: {
-      alignItems: 'center',
+      alignItems: "center",
       borderRadius: 18,
       height: 36,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 36,
     },
 
@@ -327,7 +327,7 @@ function createStyles(colors: Colors) {
     actionTitle: {
       color: colors.textDark,
       fontSize: 16,
-      fontWeight: '800',
+      fontWeight: "800",
       marginTop: 16,
     },
 
@@ -347,12 +347,12 @@ function createStyles(colors: Colors) {
     },
 
     partners: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: 10,
     },
 
     partner: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
       borderRadius: 14,
@@ -365,7 +365,7 @@ function createStyles(colors: Colors) {
     partnerText: {
       color: colors.textDark,
       fontSize: 11,
-      fontWeight: '700',
+      fontWeight: "700",
     },
   });
 }
