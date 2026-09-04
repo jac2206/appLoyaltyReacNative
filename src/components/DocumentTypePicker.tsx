@@ -1,9 +1,9 @@
-﻿import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+﻿import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
-import { useTheme } from '../context/ThemeContext';
-import { Colors } from '../styles/colors';
+import { useTheme } from "../context/ThemeContext";
+import { Colors } from "../styles/colors";
 
 type Props = {
   value: string;
@@ -12,20 +12,20 @@ type Props = {
 
 const documentTypes = [
   {
-    label: 'Cédula de Ciudadanía',
-    value: 'CC',
+    label: "Cédula de Ciudadanía",
+    value: "CC",
   },
   {
-    label: 'Cédula de Extranjería',
-    value: 'CE',
+    label: "Cédula de Extranjería",
+    value: "CE",
   },
   {
-    label: 'NIT',
-    value: 'NIT',
+    label: "NIT",
+    value: "NIT",
   },
   {
-    label: 'Permiso por Protección Temporal',
-    value: 'PT',
+    label: "Permiso por Protección Temporal",
+    value: "PT",
   },
 ];
 
@@ -71,7 +71,7 @@ function createStyles(colors: Colors) {
       borderRadius: 12,
       marginBottom: 16,
       backgroundColor: colors.surface,
-      overflow: 'hidden',
+      overflow: "hidden",
     },
 
     picker: {

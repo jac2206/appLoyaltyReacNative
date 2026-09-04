@@ -1,6 +1,6 @@
-﻿import { Ionicons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -9,17 +9,17 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
 
-import { CustomButton } from '../components/CustomButtom';
-import { InputField } from '../components/CustomInputField';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useLogin } from '../hooks/useLogin';
-import { Colors } from '../styles/colors';
-import { AuthStackParamList } from '../types/navigation';
+import { CustomButton } from "../components/CustomButtom";
+import { InputField } from "../components/CustomInputField";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useLogin } from "../hooks/useLogin";
+import { Colors } from "../styles/colors";
+import { AuthStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 export function LoginScreen({ navigation }: Props) {
   const { userEmail, password, error, setEmail, setPassword, validate } = useLogin();
@@ -42,7 +42,7 @@ export function LoginScreen({ navigation }: Props) {
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
         style={styles.keyboard}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -57,7 +57,7 @@ export function LoginScreen({ navigation }: Props) {
                 <Ionicons name="diamond-outline" size={33} color={colors.white} />
               </View>
 
-              <Text style={styles.eyebrow}>LOYALTY APP</Text>
+              <Text style={styles.eyebrow}>LOYALTY JAC APP</Text>
 
               <Text style={styles.title}>Tus puntos te esperan.</Text>
 
@@ -92,7 +92,7 @@ export function LoginScreen({ navigation }: Props) {
 
               <Pressable
                 accessibilityRole="button"
-                onPress={() => navigation.navigate('Register')}
+                onPress={() => navigation.navigate("Register")}
                 style={styles.link}
               >
                 <Text style={styles.linkText}>
@@ -124,7 +124,7 @@ function createStyles(colors: Colors) {
 
     container: {
       flexGrow: 1,
-      justifyContent: 'center',
+      justifyContent: "center",
       padding: 24,
     },
 
@@ -133,11 +133,11 @@ function createStyles(colors: Colors) {
     },
 
     brandIcon: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.primary,
       borderRadius: 20,
       height: 56,
-      justifyContent: 'center',
+      justifyContent: "center",
       marginBottom: 22,
       width: 56,
     },
@@ -145,14 +145,14 @@ function createStyles(colors: Colors) {
     eyebrow: {
       color: colors.primary,
       fontSize: 12,
-      fontWeight: '800',
+      fontWeight: "800",
       letterSpacing: 1.1,
     },
 
     title: {
       color: colors.textDark,
       fontSize: 34,
-      fontWeight: '800',
+      fontWeight: "800",
       letterSpacing: -0.7,
       marginTop: 8,
     },
@@ -179,7 +179,7 @@ function createStyles(colors: Colors) {
     },
 
     link: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: 24,
     },
 
@@ -190,7 +190,7 @@ function createStyles(colors: Colors) {
 
     linkStrong: {
       color: colors.primary,
-      fontWeight: '800',
+      fontWeight: "800",
     },
   });
 }

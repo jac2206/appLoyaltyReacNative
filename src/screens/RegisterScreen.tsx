@@ -1,18 +1,18 @@
-﻿import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+﻿import React, { useState } from "react";
+import { Alert, ScrollView, StyleSheet, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { AuthStackParamList } from '../types/navigation';
-import { InputField } from '../components/CustomInputField';
-import { CustomButton } from '../components/CustomButtom';
-import { DocumentTypePicker } from '../components/DocumentTypePicker';
-import { ScreenHeader } from '../components/ScreenHeader';
-import { useTheme } from '../context/ThemeContext';
-import { Colors } from '../styles/colors';
-import { registerRequest } from '../services/auth.service';
+import { AuthStackParamList } from "../types/navigation";
+import { InputField } from "../components/CustomInputField";
+import { CustomButton } from "../components/CustomButtom";
+import { DocumentTypePicker } from "../components/DocumentTypePicker";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { useTheme } from "../context/ThemeContext";
+import { Colors } from "../styles/colors";
+import { registerRequest } from "../services/auth.service";
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
+type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
 export function RegisterScreen({ navigation }: Props) {
   const { colors } = useTheme();
@@ -20,13 +20,13 @@ export function RegisterScreen({ navigation }: Props) {
   const styles = createStyles(colors);
 
   const [form, setForm] = useState({
-    documentType: '',
-    documentNumber: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
+    documentType: "",
+    documentNumber: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
   });
 
   const change = (field: keyof typeof form, value: string) =>
@@ -37,14 +37,14 @@ export function RegisterScreen({ navigation }: Props) {
 
   const register = async () => {
     if (Object.values(form).some((value) => !value.trim())) {
-      Alert.alert('Completa tus datos', 'Todos los campos son obligatorios.');
+      Alert.alert("Completa tus datos", "Todos los campos son obligatorios.");
 
       return;
     }
 
     try {
       await registerRequest({
-        documentType: form.documentType as 'CC' | 'CE' | 'NIT' | 'PT',
+        documentType: form.documentType as "CC" | "CE" | "NIT" | "PT",
 
         documentNumber: form.documentNumber,
 
@@ -57,19 +57,19 @@ export function RegisterScreen({ navigation }: Props) {
         password: form.password,
       });
 
-      Alert.alert('Registro exitoso', 'Tu cuenta fue creada correctamente.');
+      Alert.alert("Registro exitoso", "Tu cuenta fue creada correctamente.");
 
       navigation.goBack();
     } catch {
       Alert.alert(
-        'No fue posible registrarte',
-        'Verifica tus datos e inténtalo nuevamente.',
+        "No fue posible registrarte",
+        "Verifica tus datos e inténtalo nuevamente.",
       );
     }
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safe}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
         <ScreenHeader
           onBack={() => navigation.goBack()}
@@ -80,44 +80,44 @@ export function RegisterScreen({ navigation }: Props) {
 
         <DocumentTypePicker
           value={form.documentType}
-          onChange={(value) => change('documentType', value)}
+          onChange={(value) => change("documentType", value)}
         />
 
         <InputField
           placeholder="Número de documento"
           value={form.documentNumber}
-          onChangeText={(value) => change('documentNumber', value)}
+          onChangeText={(value) => change("documentNumber", value)}
         />
 
         <InputField
           placeholder="Nombres"
           value={form.firstName}
-          onChangeText={(value) => change('firstName', value)}
+          onChangeText={(value) => change("firstName", value)}
         />
 
         <InputField
           placeholder="Apellidos"
           value={form.lastName}
-          onChangeText={(value) => change('lastName', value)}
+          onChangeText={(value) => change("lastName", value)}
         />
 
         <InputField
           placeholder="Correo electrónico"
           value={form.email}
-          onChangeText={(value) => change('email', value)}
+          onChangeText={(value) => change("email", value)}
         />
 
         <InputField
           placeholder="Teléfono"
           value={form.phone}
-          onChangeText={(value) => change('phone', value)}
+          onChangeText={(value) => change("phone", value)}
         />
 
         <InputField
           placeholder="Crea una contraseña"
           secureTextEntry
           value={form.password}
-          onChangeText={(value) => change('password', value)}
+          onChangeText={(value) => change("password", value)}
         />
 
         <CustomButton title="Crear cuenta" onPress={register} />
@@ -147,7 +147,7 @@ function createStyles(colors: Colors) {
       fontSize: 12,
       lineHeight: 18,
       marginTop: 18,
-      textAlign: 'center',
+      textAlign: "center",
     },
   });
 }

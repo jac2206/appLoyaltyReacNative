@@ -1,27 +1,27 @@
-﻿import type { ComponentProps } from 'react';
-import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useIsFocused } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors } from '../styles/colors';
-import { MainStackParamList, QrPayload } from '../types/navigation';
+﻿import type { ComponentProps } from "react";
+import { useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useIsFocused } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { colors } from "../styles/colors";
+import { MainStackParamList, QrPayload } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'QRScanner'>;
+type Props = NativeStackScreenProps<MainStackParamList, "QRScanner">;
 type ScanResult = Parameters<
-  NonNullable<ComponentProps<typeof CameraView>['onBarcodeScanned']>
+  NonNullable<ComponentProps<typeof CameraView>["onBarcodeScanned"]>
 >[0];
 
 function isQrPayload(value: unknown): value is QrPayload {
-  if (!value || typeof value !== 'object') return false;
+  if (!value || typeof value !== "object") return false;
   const qr = value as Record<string, unknown>;
   const base =
-    typeof qr.partnerCode === 'string' && typeof qr.locationCode === 'string';
+    typeof qr.partnerCode === "string" && typeof qr.locationCode === "string";
   return (
     base &&
-    ((qr.type === 'ACCUMULATE' && typeof qr.amount === 'number') ||
-      (qr.type === 'REDEEM' && typeof qr.points === 'number'))
+    ((qr.type === "ACCUMULATE" && typeof qr.amount === "number") ||
+      (qr.type === "REDEEM" && typeof qr.points === "number"))
   );
 }
 
@@ -35,17 +35,17 @@ export function QRScannerScreen({ navigation }: Props) {
     setScanned(true);
     try {
       const payload: unknown = JSON.parse(data);
-      if (!isQrPayload(payload)) throw new Error('invalid QR');
-      navigation.replace(payload.type === 'ACCUMULATE' ? 'Accumulate' : 'Redeem', {
+      if (!isQrPayload(payload)) throw new Error("invalid QR");
+      navigation.replace(payload.type === "ACCUMULATE" ? "Accumulate" : "Redeem", {
         qrData: payload,
       });
     } catch {
       Alert.alert(
-        'Código no válido',
-        'Este QR no pertenece a una operación de recompensas.',
+        "Código no válido",
+        "Este QR no pertenece a una operación de recompensas.",
         [
-          { text: 'Escanear de nuevo', onPress: () => setScanned(false) },
-          { text: 'Volver', onPress: () => navigation.goBack() },
+          { text: "Escanear de nuevo", onPress: () => setScanned(false) },
+          { text: "Volver", onPress: () => navigation.goBack() },
         ],
       );
     }
@@ -64,12 +64,12 @@ export function QRScannerScreen({ navigation }: Props) {
           <Text style={styles.stateIconText}>⌁</Text>
         </View>
         <Text style={styles.stateTitle}>
-          {mountError ? 'No pudimos abrir la cámara' : 'Activa tu cámara'}
+          {mountError ? "No pudimos abrir la cámara" : "Activa tu cámara"}
         </Text>
         <Text style={styles.stateCopy}>
           {mountError
-            ? 'Cierra otras apps que usen la cámara e inténtalo otra vez.'
-            : 'Necesitamos acceso para leer el código QR del aliado.'}
+            ? "Cierra otras apps que usen la cámara e inténtalo otra vez."
+            : "Necesitamos acceso para leer el código QR del aliado."}
         </Text>
         <Pressable
           accessibilityRole="button"
@@ -98,7 +98,7 @@ export function QRScannerScreen({ navigation }: Props) {
         style={StyleSheet.absoluteFillObject}
         onMountError={() => setMountError(true)}
         onBarcodeScanned={scanned ? undefined : handleScan}
-        barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+        barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
       />
       <SafeAreaView pointerEvents="box-none" style={styles.overlay}>
         <View style={styles.overlayTop}>
@@ -123,27 +123,27 @@ export function QRScannerScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  camera: { flex: 1, backgroundColor: '#000' },
-  overlay: { flex: 1, justifyContent: 'space-between', padding: 24 },
-  overlayTop: { alignItems: 'center', flexDirection: 'row', gap: 14 },
+  camera: { flex: 1, backgroundColor: "#000" },
+  overlay: { flex: 1, justifyContent: "space-between", padding: 24 },
+  overlayTop: { alignItems: "center", flexDirection: "row", gap: 14 },
   close: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.92)',
+    alignItems: "center",
+    backgroundColor: "rgba(255,255,255,0.92)",
     borderRadius: 22,
     height: 44,
-    justifyContent: 'center',
+    justifyContent: "center",
     width: 44,
   },
   closeText: {
     color: colors.textDark,
     fontSize: 28,
-    fontWeight: '300',
+    fontWeight: "300",
     lineHeight: 30,
   },
-  scanTitle: { color: colors.white, fontSize: 18, fontWeight: '800' },
-  scanCopy: { color: '#E2E8F0', fontSize: 13, marginTop: 3 },
+  scanTitle: { color: colors.white, fontSize: 18, fontWeight: "800" },
+  scanCopy: { color: "#E2E8F0", fontSize: 13, marginTop: 3 },
   frame: {
-    alignSelf: 'center',
+    alignSelf: "center",
     borderColor: colors.white,
     borderRadius: 22,
     borderWidth: 2,
@@ -151,45 +151,45 @@ const styles = StyleSheet.create({
     width: 240,
   },
   hint: {
-    alignSelf: 'center',
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    alignSelf: "center",
+    backgroundColor: "rgba(0,0,0,0.55)",
     borderRadius: 18,
     color: colors.white,
     fontSize: 13,
     marginBottom: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
     paddingHorizontal: 14,
     paddingVertical: 9,
   },
   state: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.background,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 30,
   },
   stateIcon: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.surfaceMuted,
     borderRadius: 35,
     height: 70,
-    justifyContent: 'center',
+    justifyContent: "center",
     width: 70,
   },
   stateIconText: { color: colors.primary, fontSize: 36 },
   stateTitle: {
     color: colors.textDark,
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "800",
     marginTop: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   stateCopy: {
     color: colors.textMuted,
     fontSize: 15,
     lineHeight: 22,
     marginTop: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   permissionButton: {
     backgroundColor: colors.primary,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingVertical: 15,
   },
-  permissionText: { color: colors.white, fontSize: 15, fontWeight: '800' },
+  permissionText: { color: colors.white, fontSize: 15, fontWeight: "800" },
   cancel: { marginTop: 20, padding: 10 },
-  cancelText: { color: colors.primary, fontSize: 14, fontWeight: '800' },
+  cancelText: { color: colors.primary, fontSize: 14, fontWeight: "800" },
 });

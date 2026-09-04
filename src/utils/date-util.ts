@@ -8,7 +8,7 @@
 export function getCurrentWeekLabel(): string {
   const today = new Date();
 
-  const monthName = today.toLocaleString('es-CO', { month: 'long' });
+  const monthName = today.toLocaleString("es-CO", { month: "long" });
   const year = today.getFullYear();
   const weekNumber = getWeekNumber(today);
 

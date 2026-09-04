@@ -1,16 +1,16 @@
-﻿import { Ionicons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 
-import { CustomButton } from '../components/CustomButtom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useBalance } from '../hooks/useBalance';
-import { Colors } from '../styles/colors';
-import { MainStackParamList } from '../types/navigation';
+import { CustomButton } from "../components/CustomButtom";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useBalance } from "../hooks/useBalance";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
+type Props = NativeStackScreenProps<MainStackParamList, "Profile">;
 
 export function ProfileScreen({ navigation }: Props) {
   const { user, logout } = useAuth();
@@ -18,12 +18,12 @@ export function ProfileScreen({ navigation }: Props) {
 
   const { colors, isDark, toggleTheme } = useTheme();
 
-  const initial = user?.userName.charAt(0).toUpperCase() ?? 'U';
+  const initial = user?.userName.charAt(0).toUpperCase() ?? "U";
 
   const styles = createStyles(colors);
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safe}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
         <Pressable
           accessibilityRole="button"
@@ -47,7 +47,7 @@ export function ProfileScreen({ navigation }: Props) {
         <View style={styles.pointsCard}>
           <Text style={styles.pointsLabel}>Puntos disponibles</Text>
 
-          <Text style={styles.points}>{balance.toLocaleString('es-CO')} pts</Text>
+          <Text style={styles.points}>{balance.toLocaleString("es-CO")} pts</Text>
         </View>
 
         <Text style={styles.section}>Información personal</Text>
@@ -56,14 +56,14 @@ export function ProfileScreen({ navigation }: Props) {
           <Detail
             icon="call-outline"
             label="Teléfono"
-            value={user?.phone ?? '—'}
+            value={user?.phone ?? "—"}
             colors={colors}
           />
 
           <Detail
             icon="card-outline"
             label="Documento"
-            value={`${user?.documentType ?? ''} ${user?.documentNumber ?? ''}`}
+            value={`${user?.documentType ?? ""} ${user?.documentNumber ?? ""}`}
             colors={colors}
           />
         </View>
@@ -76,7 +76,7 @@ export function ProfileScreen({ navigation }: Props) {
           <View style={styles.themeInfo}>
             <View style={styles.themeIcon}>
               <Ionicons
-                name={isDark ? 'moon-outline' : 'sunny-outline'}
+                name={isDark ? "moon-outline" : "sunny-outline"}
                 size={20}
                 color={colors.primary}
               />
@@ -86,7 +86,7 @@ export function ProfileScreen({ navigation }: Props) {
               <Text style={styles.themeTitle}>Tema</Text>
 
               <Text style={styles.themeSubtitle}>
-                {isDark ? 'Modo oscuro' : 'Modo claro'}
+                {isDark ? "Modo oscuro" : "Modo claro"}
               </Text>
             </View>
           </View>
@@ -149,40 +149,40 @@ function createStyles(colors: Colors) {
     },
 
     back: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
       borderRadius: 22,
       borderWidth: 1,
       height: 44,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 44,
     },
 
     profile: {
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: 24,
     },
 
     avatar: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.primary,
       borderRadius: 44,
       height: 88,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 88,
     },
 
     initial: {
       color: colors.white,
       fontSize: 32,
-      fontWeight: '800',
+      fontWeight: "800",
     },
 
     name: {
       color: colors.textDark,
       fontSize: 23,
-      fontWeight: '800',
+      fontWeight: "800",
       marginTop: 14,
     },
 
@@ -207,14 +207,14 @@ function createStyles(colors: Colors) {
     points: {
       color: colors.primary,
       fontSize: 27,
-      fontWeight: '800',
+      fontWeight: "800",
       marginTop: 5,
     },
 
     section: {
       color: colors.textDark,
       fontSize: 18,
-      fontWeight: '800',
+      fontWeight: "800",
       marginBottom: 11,
       marginTop: 27,
     },
@@ -227,18 +227,18 @@ function createStyles(colors: Colors) {
     },
 
     detail: {
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
       gap: 13,
       padding: 16,
     },
 
     detailIcon: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surfaceMuted,
       borderRadius: 16,
       height: 32,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 32,
     },
 
@@ -250,41 +250,41 @@ function createStyles(colors: Colors) {
     detailValue: {
       color: colors.textDark,
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: "700",
       marginTop: 2,
     },
 
     themeRow: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
       borderRadius: 18,
       borderWidth: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       marginBottom: 25,
       padding: 16,
     },
 
     themeInfo: {
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
       gap: 13,
     },
 
     themeIcon: {
-      alignItems: 'center',
+      alignItems: "center",
       backgroundColor: colors.surfaceMuted,
       borderRadius: 16,
       height: 36,
-      justifyContent: 'center',
+      justifyContent: "center",
       width: 36,
     },
 
     themeTitle: {
       color: colors.textDark,
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: "700",
     },
 
     themeSubtitle: {
