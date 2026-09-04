@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+﻿import React, { useState } from "react";
+import { View, TextInput, StyleSheet, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../styles/colors";
 
 type Props = {
   placeholder: string;
@@ -20,16 +16,15 @@ export function InputField({
   onChangeText,
   secureTextEntry,
 }: Props) {
-
   const [hidePassword, setHidePassword] = useState(true);
 
   const isPassword = secureTextEntry;
 
   return (
     <View style={styles.container}>
-
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor={colors.textMuted}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={isPassword ? hidePassword : false}
@@ -37,40 +32,39 @@ export function InputField({
       />
 
       {isPassword && (
-        <Pressable
-          onPress={() => setHidePassword(!hidePassword)}
-          style={styles.icon}
-        >
-          <Ionicons
-            name={hidePassword ? 'eye-off' : 'eye'}
-            size={22}
-            color="#64748B"
-          />
+        <Pressable onPress={() => setHidePassword(!hidePassword)} style={styles.icon}>
+          <Ionicons name={hidePassword ? "eye-off" : "eye"} size={22} color="#64748B" />
         </Pressable>
       )}
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 15,
-    position: 'relative',
+    marginBottom: 16,
+    position: "relative",
   },
 
   input: {
     borderWidth: 1,
-    borderColor: '#CBD5E1',
-    borderRadius: 10,
-    padding: 12,
+    borderColor: colors.border,
+    borderRadius: 12,
+    minHeight: 52,
+    paddingHorizontal: 14,
     paddingRight: 40,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.surface,
+    color: colors.textDark,
+    fontSize: 16,
   },
 
   icon: {
-    position: 'absolute',
+    position: "absolute",
     right: 12,
-    top: 12,
+    top: 15,
+    width: 30,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

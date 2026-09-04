@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+﻿import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { AuthContextType, User } from "../types/user";
 import { loginRequest, getMeRequest } from "../services/auth.service";
 import { setAuthToken } from "../services/api";
@@ -9,14 +15,11 @@ import { STORAGE_KEYS } from "../constants/storageKeys";
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     async function restoreSession() {
-
       // const token = await getToken();
       const token = await getItem<string>(STORAGE_KEYS.TOKEN);
 
@@ -26,7 +29,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-
         setAuthToken(token);
 
         const userData = await getMeRequest(token);
@@ -38,28 +40,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           documentNumber: userData.documentNumber,
           phone: userData.phone,
         });
-
       } catch (error) {
-
-        console.log("Token inválido");
+        console.log("Token invÃ¡lido");
 
         // await removeToken();
         await removeItem(STORAGE_KEYS.TOKEN);
         setUser(null);
-
       } finally {
         setLoading(false);
       }
     }
 
     restoreSession();
-
   }, []);
 
   const login = async (email: string, password: string) => {
-
     try {
-
       const loginData = await loginRequest(email, password);
 
       const token = loginData.token;
@@ -77,16 +73,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         documentNumber: userData.documentNumber,
         phone: userData.phone,
       });
-
     } catch (error) {
-
       console.log("Error login:", error);
       throw error;
     }
   };
 
   const logout = async () => {
-
     setUser(null);
 
     setAuthToken("");
@@ -103,7 +96,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-
   const context = useContext(AuthContext);
 
   if (!context) {

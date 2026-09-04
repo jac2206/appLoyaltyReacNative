@@ -1,153 +1,153 @@
-import React, { useState } from 'react';
-import { ScrollView, Text, StyleSheet, Alert } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../types/navigation';
-import { InputField } from '../components/CustomInputField';
-import { CustomButton } from '../components/CustomButtom';
-import { DocumentTypePicker } from '../components/DocumentTypePicker';
-import { colors } from '../styles/colors';
-import { registerRequest } from '../services/auth.service';
+﻿import React, { useState } from "react";
+import { Alert, ScrollView, StyleSheet, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
+import { AuthStackParamList } from "../types/navigation";
+import { InputField } from "../components/CustomInputField";
+import { CustomButton } from "../components/CustomButtom";
+import { DocumentTypePicker } from "../components/DocumentTypePicker";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { useTheme } from "../context/ThemeContext";
+import { Colors } from "../styles/colors";
+import { registerRequest } from "../services/auth.service";
+
+type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
 export function RegisterScreen({ navigation }: Props) {
+  const { colors } = useTheme();
+
+  const styles = createStyles(colors);
 
   const [form, setForm] = useState({
-    documentType: '',
-    documentNumber: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
+    documentType: "",
+    documentNumber: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
   });
 
-  const handleChange = (field: string, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-  };
+  const change = (field: keyof typeof form, value: string) =>
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
 
-  const handleRegister = async () => {
+  const register = async () => {
+    if (Object.values(form).some((value) => !value.trim())) {
+      Alert.alert("Completa tus datos", "Todos los campos son obligatorios.");
+
+      return;
+    }
 
     try {
-
-      if (!form.documentType ||
-          !form.documentNumber ||
-          !form.firstName ||
-          !form.lastName ||
-          !form.email ||
-          !form.phone ||
-          !form.password) {
-
-        Alert.alert("Error", "Todos los campos son obligatorios");
-        return;
-      }
-
-      const fullName = `${form.firstName} ${form.lastName}`;
-
       await registerRequest({
         documentType: form.documentType as "CC" | "CE" | "NIT" | "PT",
+
         documentNumber: form.documentNumber,
-        fullName,
+
+        fullName: `${form.firstName} ${form.lastName}`,
+
         email: form.email,
+
         phone: form.phone,
+
         password: form.password,
       });
 
-      Alert.alert("Registro exitoso", "Usuario creado correctamente");
+      Alert.alert("Registro exitoso", "Tu cuenta fue creada correctamente.");
 
       navigation.goBack();
-
-    } catch (error) {
-
-      console.log("Error register:", error);
-
-      Alert.alert("Error", "No se pudo registrar el usuario");
+    } catch {
+      Alert.alert(
+        "No fue posible registrarte",
+        "Verifica tus datos e inténtalo nuevamente.",
+      );
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <ScreenHeader
+          onBack={() => navigation.goBack()}
+          eyebrow="Crear cuenta"
+          title="Empieza a ganar puntos"
+          subtitle="Completa tus datos para unirte al programa."
+        />
 
-      <Text style={styles.title}>Registro</Text>
+        <DocumentTypePicker
+          value={form.documentType}
+          onChange={(value) => change("documentType", value)}
+        />
 
-      <DocumentTypePicker
-        value={form.documentType}
-        onChange={(value) => handleChange("documentType", value)}
-      />
+        <InputField
+          placeholder="Número de documento"
+          value={form.documentNumber}
+          onChangeText={(value) => change("documentNumber", value)}
+        />
 
-      <InputField
-        placeholder="Número documento"
-        value={form.documentNumber}
-        onChangeText={(t) => handleChange('documentNumber', t)}
-      />
+        <InputField
+          placeholder="Nombres"
+          value={form.firstName}
+          onChangeText={(value) => change("firstName", value)}
+        />
 
-      <InputField
-        placeholder="Nombres"
-        value={form.firstName}
-        onChangeText={(t) => handleChange('firstName', t)}
-      />
+        <InputField
+          placeholder="Apellidos"
+          value={form.lastName}
+          onChangeText={(value) => change("lastName", value)}
+        />
 
-      <InputField
-        placeholder="Apellidos"
-        value={form.lastName}
-        onChangeText={(t) => handleChange('lastName', t)}
-      />
+        <InputField
+          placeholder="Correo electrónico"
+          value={form.email}
+          onChangeText={(value) => change("email", value)}
+        />
 
-      <InputField
-        placeholder="Correo"
-        value={form.email}
-        onChangeText={(t) => handleChange('email', t)}
-      />
+        <InputField
+          placeholder="Teléfono"
+          value={form.phone}
+          onChangeText={(value) => change("phone", value)}
+        />
 
-      <InputField
-        placeholder="Teléfono"
-        value={form.phone}
-        onChangeText={(t) => handleChange('phone', t)}
-      />
+        <InputField
+          placeholder="Crea una contraseña"
+          secureTextEntry
+          value={form.password}
+          onChangeText={(value) => change("password", value)}
+        />
 
-      <InputField
-        placeholder="Contraseña"
-        secureTextEntry
-        value={form.password}
-        onChangeText={(t) => handleChange('password', t)}
-      />
+        <CustomButton title="Crear cuenta" onPress={register} />
 
-      <CustomButton
-        title="Registrar"
-        onPress={handleRegister}
-      />
-
-      <Text
-        style={styles.loginLink}
-        onPress={() => navigation.goBack()}
-      >
-        ¿Ya tienes cuenta? Inicia sesión
-      </Text>
-
-    </ScrollView>
+        <Text style={styles.legal}>
+          Al continuar aceptas los términos del programa de recompensas.
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: Colors) {
+  return StyleSheet.create({
+    safe: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  container: {
-    padding: 25,
-    backgroundColor: colors.background,
-    flexGrow: 1,
-  },
+    container: {
+      padding: 20,
+      paddingBottom: 34,
+    },
 
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: colors.primary,
-    marginBottom: 20,
-  },
-
-  loginLink: {
-    marginTop: 20,
-    textAlign: 'center',
-    color: colors.primary,
-  }
-
-});
+    legal: {
+      color: colors.textMuted,
+      fontSize: 12,
+      lineHeight: 18,
+      marginTop: 18,
+      textAlign: "center",
+    },
+  });
+}

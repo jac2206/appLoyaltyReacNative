@@ -1,246 +1,371 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Pressable,
-} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainStackParamList } from '../types/navigation';
-import { ActivityChart } from '../components/ActivityChart';
-import { useAuth } from '../context/AuthContext';
-import { useBalance } from '../hooks/useBalance';
+﻿import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
+import { ActivityChart } from "../components/ActivityChart";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useBalance } from "../hooks/useBalance";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
+
+type Props = NativeStackScreenProps<MainStackParamList, "Home">;
+
+const goalPoints = 2000;
 
 export function HomeScreen({ navigation }: Props) {
-
   const { user } = useAuth();
   const { balance } = useBalance();
 
-  const userName = user?.userName ?? '';
-  const userEmail = user?.userEmail ?? '';
+  const { colors } = useTheme();
 
-  const weeklyPoints = [40, 80, 60, 100, 50, 90, 70];
-  const goalPoints = 2000;
+  const styles = createStyles(colors);
 
-  const progressPercentage = (balance / goalPoints) * 100;
+  const progress = Math.min(100, Math.max(0, (balance / goalPoints) * 100));
 
-  function handleOpenProfile() {
-    navigation.navigate('Profile');
-  }
+  const firstName = user?.userName.split(" ")[0] ?? "Usuario";
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      
-      <View style={styles.userSection}>
-        <Pressable
-          onPress={handleOpenProfile}
-          style={({ pressed }) => [
-            pressed && { opacity: 0.6 },
-          ]}
-        >
-          <Image
-            source={require('../../assets/sanji.jpg')}
-            style={styles.avatar}
-          />
-        </Pressable>
+    <SafeAreaView edges={["top"]} style={styles.safeArea}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Encabezado */}
 
-        <View>
-          <Text style={styles.welcome}>Hola 👋</Text>
-          <Text style={styles.name}>{userName}</Text>
-          <Text style={styles.email}>{userEmail}</Text>
-        </View>
-      </View>
+        <View style={styles.topRow}>
+          <View>
+            <Text style={styles.greeting}>Hola, {firstName}</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Tus Puntos</Text>
+            <Text style={styles.caption}>Tu resumen de recompensas</Text>
+          </View>
 
-        <Text style={styles.points}>
-          {balance.toString()} pts
-        </Text>
-
-        <View style={styles.progressBar}>
-          <View
-            style={[
-              styles.progressFill,
-              { width: `${progressPercentage}%` },
-            ]}
-          />
+          <Pressable
+            accessibilityLabel="Abrir perfil"
+            accessibilityRole="button"
+            onPress={() => navigation.navigate("Profile")}
+            style={styles.profileButton}
+          >
+            <Text style={styles.profileInitial}>
+              {firstName.charAt(0).toUpperCase()}
+            </Text>
+          </Pressable>
         </View>
 
-        <Text style={styles.goalText}>
-          Meta: {goalPoints.toString()} pts
-        </Text>
-      </View>
+        {/* Balance */}
 
-      <ActivityChart data={weeklyPoints} />
+        <View style={styles.balanceCard}>
+          <View style={styles.balanceTop}>
+            <View>
+              <Text style={styles.balanceLabel}>Puntos disponibles</Text>
 
-      <Text style={styles.sectionTitle}>Aliados</Text>
+              <Text style={styles.balance}>{balance.toLocaleString("es-CO")}</Text>
+            </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.coin}>
+              <Ionicons name="diamond-outline" size={25} color={colors.primary} />
+            </View>
+          </View>
 
-          {[1,2,3,4].map((item) => (
-            <View key={item} style={styles.partnerCard}>
+          <View style={styles.progressTrack}>
+            <View
+              style={[
+                styles.progress,
+                {
+                  width: `${progress}%`,
+                },
+              ]}
+            />
+          </View>
 
-              <Image
-                source={require('../../assets/mugiwareLogo.png')}
-                style={styles.partnerImage}
+          <View style={styles.progressLabels}>
+            <Text style={styles.progressText}>{Math.round(progress)}% de tu meta</Text>
+
+            <Text style={styles.progressText}>
+              {goalPoints.toLocaleString("es-CO")} pts
+            </Text>
+          </View>
+        </View>
+
+        {/* Acciones */}
+
+        <Text style={styles.sectionTitle}>¿Qué quieres hacer?</Text>
+
+        <View style={styles.actions}>
+          {/* Acumular */}
+
+          <Pressable
+            accessibilityRole="button"
+            onPress={() =>
+              navigation.navigate("Accumulate", {
+                qrData: undefined,
+              })
+            }
+            style={({ pressed }) => [styles.actionCard, pressed && styles.pressed]}
+          >
+            <View style={[styles.actionIcon, styles.accumulateIcon]}>
+              <Ionicons name="add" size={28} color={colors.primary} />
+            </View>
+
+            <Text style={styles.actionTitle}>Acumular</Text>
+
+            <Text style={styles.actionCopy}>Suma puntos con una compra</Text>
+          </Pressable>
+
+          {/* Redimir */}
+
+          <Pressable
+            accessibilityRole="button"
+            onPress={() =>
+              navigation.navigate("Redeem", {
+                qrData: undefined,
+              })
+            }
+            style={({ pressed }) => [styles.actionCard, pressed && styles.pressed]}
+          >
+            <View style={[styles.actionIcon, styles.redeemIcon]}>
+              <Ionicons name="gift-outline" size={25} color={colors.accent} />
+            </View>
+
+            <Text style={styles.actionTitle}>Redimir</Text>
+
+            <Text style={styles.actionCopy}>Disfruta tus recompensas</Text>
+          </Pressable>
+        </View>
+
+        {/* Gráfica */}
+
+        <View style={styles.chartSpacing}>
+          <ActivityChart data={[40, 80, 60, 100, 50, 90, 70]} />
+        </View>
+
+        {/* Aliados */}
+
+        <Text style={styles.sectionTitle}>Aliados destacados</Text>
+
+        <View style={styles.partners}>
+          {["Compras", "Restaurantes", "Viajes"].map((partner, index) => (
+            <View key={partner} style={styles.partner}>
+              <Ionicons
+                name={
+                  index === 0
+                    ? "storefront-outline"
+                    : index === 1
+                      ? "restaurant-outline"
+                      : "airplane-outline"
+                }
+                size={21}
+                color={colors.primary}
               />
 
-              <Text style={styles.partnerName}>
-                Aliado {item}
-              </Text>
-
+              <Text style={styles.partnerText}>{partner}</Text>
             </View>
           ))}
-
+        </View>
       </ScrollView>
-
-      <View style={styles.actionsContainer}>
-
-        <Pressable
-          style={styles.actionButton}
-          onPress={() => navigation.navigate("Accumulate", { qrData: undefined })}
-        >
-          <Text style={styles.actionText}>Acumular</Text>
-        </Pressable>
-
-        <Pressable
-          style={[styles.actionButton, { backgroundColor: "#10B981" }]}
-          onPress={() => navigation.navigate("Redeem", { qrData: undefined })}
-        >
-          <Text style={styles.actionText}>Redimir</Text>
-        </Pressable>
-
-      </View>
-      
-
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#EFF6FF',
-    flexGrow: 1,
-  },
+function createStyles(colors: Colors) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  userSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 25,
-  },
+    container: {
+      padding: 20,
+      paddingBottom: 36,
+    },
 
-  avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginRight: 15,
-  },
+    topRow: {
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 24,
+    },
 
-  welcome: {
-    fontSize: 16,
-    color: '#64748B',
-  },
+    greeting: {
+      color: colors.textDark,
+      fontSize: 27,
+      fontWeight: "800",
+    },
 
-  name: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1E293B',
-  },
+    caption: {
+      color: colors.textMuted,
+      fontSize: 14,
+      marginTop: 4,
+    },
 
-  email: {
-    fontSize: 14,
-    color: '#64748B',
-  },
+    profileButton: {
+      alignItems: "center",
+      backgroundColor: colors.primary,
+      borderRadius: 24,
+      height: 48,
+      justifyContent: "center",
+      width: 48,
+    },
 
-  card: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 25,
-    elevation: 5,
-  },
+    profileInitial: {
+      color: colors.white,
+      fontSize: 18,
+      fontWeight: "800",
+    },
 
-  cardTitle: {
-    fontSize: 16,
-    color: '#64748B',
-  },
+    balanceCard: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: 22,
+      borderWidth: 1,
+      padding: 20,
 
-  points: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2563EB',
-    marginVertical: 10,
-  },
+      shadowColor: colors.textDark,
+      shadowOffset: {
+        width: 0,
+        height: 8,
+      },
+      shadowOpacity: 0.06,
+      shadowRadius: 16,
 
-  progressBar: {
-    height: 10,
-    backgroundColor: '#DBEAFE',
-    borderRadius: 5,
-    overflow: 'hidden',
-  },
+      elevation: 2,
+    },
 
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#2563EB',
-  },
+    balanceTop: {
+      alignItems: "center",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
 
-  goalText: {
-    marginTop: 8,
-    fontSize: 12,
-    color: '#64748B',
-  },
+    balanceLabel: {
+      color: colors.textMuted,
+      fontSize: 14,
+    },
 
-  actionsContainer: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  marginBottom: 25,
-  },
+    balance: {
+      color: colors.textDark,
+      fontSize: 36,
+      fontWeight: "800",
+      marginTop: 5,
+    },
 
-  actionButton: {
-    flex: 1,
-    backgroundColor: "#2563EB",
-    padding: 15,
-    borderRadius: 12,
-    marginHorizontal: 5,
-    alignItems: "center",
-  },
+    coin: {
+      alignItems: "center",
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: 22,
+      height: 44,
+      justifyContent: "center",
+      width: 44,
+    },
 
-  actionText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+    progressTrack: {
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: 6,
+      height: 8,
+      marginTop: 20,
+      overflow: "hidden",
+    },
 
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#1E293B",
-  },
+    progress: {
+      backgroundColor: colors.primary,
+      borderRadius: 6,
+      height: "100%",
+    },
 
-  partnerCard: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 12,
-    marginRight: 15,
-    alignItems: "center",
-    elevation: 3,
-  },
+    progressLabels: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 9,
+    },
 
-  partnerImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginBottom: 10,
-  },
+    progressText: {
+      color: colors.textMuted,
+      fontSize: 12,
+      fontWeight: "600",
+    },
 
-  partnerName: {
-    fontSize: 12,
-    color: "#334155",
-  },
-});
+    sectionTitle: {
+      color: colors.textDark,
+      fontSize: 18,
+      fontWeight: "800",
+      marginBottom: 12,
+      marginTop: 28,
+    },
+
+    actions: {
+      flexDirection: "row",
+      gap: 12,
+    },
+
+    actionCard: {
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: 18,
+      borderWidth: 1,
+      flex: 1,
+      minHeight: 156,
+      padding: 16,
+    },
+
+    actionIcon: {
+      alignItems: "center",
+      borderRadius: 18,
+      height: 36,
+      justifyContent: "center",
+      width: 36,
+    },
+
+    accumulateIcon: {
+      backgroundColor: colors.surfaceMuted,
+    },
+
+    redeemIcon: {
+      backgroundColor: colors.surfaceMuted,
+    },
+
+    actionTitle: {
+      color: colors.textDark,
+      fontSize: 16,
+      fontWeight: "800",
+      marginTop: 16,
+    },
+
+    actionCopy: {
+      color: colors.textMuted,
+      fontSize: 12,
+      lineHeight: 17,
+      marginTop: 5,
+    },
+
+    pressed: {
+      opacity: 0.72,
+    },
+
+    chartSpacing: {
+      marginTop: 26,
+    },
+
+    partners: {
+      flexDirection: "row",
+      gap: 10,
+    },
+
+    partner: {
+      alignItems: "center",
+      backgroundColor: colors.surface,
+      borderColor: colors.border,
+      borderRadius: 14,
+      borderWidth: 1,
+      flex: 1,
+      gap: 7,
+      paddingVertical: 13,
+    },
+
+    partnerText: {
+      color: colors.textDark,
+      fontSize: 11,
+      fontWeight: "700",
+    },
+  });
+}

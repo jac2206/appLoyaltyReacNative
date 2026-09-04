@@ -1,4 +1,4 @@
-import { api } from "./api";
+﻿import { api } from "./api";
 
 export async function loginRequest(email: string, password: string) {
   const response = await api.post("/users/login", {
@@ -27,7 +27,6 @@ export async function registerRequest(data: {
   phone: string;
   password: string;
 }) {
-
   const response = await api.post("/users/register", data);
 
   return response.data;

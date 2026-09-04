@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getBalance } from "../services/account.service";
 import { useFocusEffect } from "@react-navigation/native";
 
 export function useBalance() {
-
   const { user } = useAuth();
 
   const [balance, setBalance] = useState<number>(0);
@@ -38,20 +37,13 @@ export function useBalance() {
 
   useFocusEffect(
     useCallback(() => {
-
       async function loadBalance() {
-
         if (!user) return;
 
         try {
-
-          const data = await getBalance(
-            user.documentType,
-            user.documentNumber
-          );
+          const data = await getBalance(user.documentType, user.documentNumber);
 
           setBalance(data.balance);
-
         } catch (error) {
           console.log("Error loading balance", error);
         } finally {
@@ -60,12 +52,11 @@ export function useBalance() {
       }
 
       loadBalance();
-
-    }, [user])
+    }, [user]),
   );
 
   return {
     balance,
-    loading
+    loading,
   };
 }

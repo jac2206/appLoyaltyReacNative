@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  Pressable,
-} from "react-native";
-import { InputField } from "../components/CustomInputField";
-import { CustomButton } from "../components/CustomButtom";
-import { colors } from "../styles/colors";
-import { useAuth } from "../context/AuthContext";
-import { accumulateRequest } from "../services/transaction.service";
+﻿import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MainStackParamList } from "../types/navigation";
+import { useState } from "react";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { CustomButton } from "../components/CustomButtom";
+import { InputField } from "../components/CustomInputField";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { useQRForm } from "../hooks/useQRForm";
+import { accumulateRequest } from "../services/transaction.service";
+import { Colors } from "../styles/colors";
+import { MainStackParamList } from "../types/navigation";
 
-type Props = NativeStackScreenProps<MainStackParamList, 'Accumulate'>;
+type Props = NativeStackScreenProps<MainStackParamList, "Accumulate">;
 
-export function AccumulateScreen( { navigation, route }: Props ) {
+type AccumulateForm = {
+  partnerCode: string;
+  locationCode: string;
+  amount: string;
+  reference: string;
+};
 
+export function AccumulateScreen({ navigation, route }: Props) {
   const { user } = useAuth();
 
-  const [form, setForm] = useState({
+  const { colors } = useTheme();
+
+  const styles = createStyles(colors);
+
+  const [form, setForm] = useState<AccumulateForm>({
     partnerCode: "",
     locationCode: "",
     amount: "",
@@ -36,19 +44,21 @@ export function AccumulateScreen( { navigation, route }: Props ) {
     type: "ACCUMULATE",
   });
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const handleChange = (field: keyof AccumulateForm, value: string) => {
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
   };
 
-  const handleAccumulate = async () => {
+  const handleSubmit = async () => {
+    if (!form.partnerCode || !form.locationCode || Number(form.amount) <= 0) {
+      Alert.alert("Revisa la información", "Ingresa aliado, sede y un monto válido.");
+
+      return;
+    }
 
     try {
-
-      if (!form.partnerCode || !form.locationCode || !form.amount) {
-        Alert.alert("Error", "Campos obligatorios");
-        return;
-      }
-
       await accumulateRequest({
         documentType: user?.documentType ?? "",
         documentNumber: user?.documentNumber ?? "",
@@ -58,136 +68,121 @@ export function AccumulateScreen( { navigation, route }: Props ) {
         reference: form.reference || "APP-ACCUMULATE",
       });
 
-      Alert.alert("Éxito", "Puntos acumulados correctamente", [
-            {
-                text: "OK",
-                onPress: () => navigation.navigate("Home"),
-            },
-        ]);
-
-      setForm({
-        partnerCode: "",
-        locationCode: "",
-        amount: "",
-        reference: "",
-      });
-
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "No se pudo acumular");
+      Alert.alert("Puntos acumulados", "Tu saldo se actualizará enseguida.", [
+        {
+          text: "Listo",
+          onPress: () => navigation.navigate("Home"),
+        },
+      ]);
+    } catch {
+      Alert.alert("No pudimos acumular", "Inténtalo nuevamente en unos minutos.");
     }
   };
 
-//   // Simulación QR (luego conectamos cámara real)
-//   const handleScanQR = () => {
-
-//     const fakeQRData = {
-//       partnerCode: "PARTNER_001",
-//       locationCode: "LOC_001",
-//       amount: "200000",
-//       reference: "QR-ACCUM",
-//     };
-
-//     setForm(fakeQRData);
-
-//     Alert.alert("QR leído", "Datos cargados automáticamente");
-//   };
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView edges={["top"]} style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <ScreenHeader
+          onBack={() => navigation.goBack()}
+          eyebrow="Nueva operación"
+          title="Acumular puntos"
+          subtitle="Registra una compra o escanea el código del aliado."
+        />
 
-      <Text style={styles.title}>Acumular Puntos</Text>
+        <View style={styles.info}>
+          <Ionicons
+            name="information-circle-outline"
+            size={19}
+            color={colors.primary}
+          />
 
-      <InputField
-        placeholder="Partner Code"
-        value={form.partnerCode}
-        onChangeText={(t) => handleChange("partnerCode", t)}
-      />
+          <Text style={styles.infoText}>
+            Verifica los datos antes de confirmar la operación.
+          </Text>
+        </View>
 
-      <InputField
-        placeholder="Location Code"
-        value={form.locationCode}
-        onChangeText={(t) => handleChange("locationCode", t)}
-      />
+        <InputField
+          placeholder="Código del aliado"
+          value={form.partnerCode}
+          onChangeText={(value) => handleChange("partnerCode", value)}
+        />
 
-      <InputField
-        placeholder="Monto"
-        value={form.amount}
-        onChangeText={(t) => handleChange("amount", t)}
-      />
+        <InputField
+          placeholder="Código de sede"
+          value={form.locationCode}
+          onChangeText={(value) => handleChange("locationCode", value)}
+        />
 
-      <InputField
-        placeholder="Referencia"
-        value={form.reference}
-        onChangeText={(t) => handleChange("reference", t)}
-      />
+        <InputField
+          placeholder="Monto de compra"
+          value={form.amount}
+          onChangeText={(value) => handleChange("amount", value)}
+        />
 
-      <CustomButton
-        title="Acumular"
-        onPress={handleAccumulate}
-      />
+        <InputField
+          placeholder="Referencia (opcional)"
+          value={form.reference}
+          onChangeText={(value) => handleChange("reference", value)}
+        />
 
-      {/* <Pressable style={styles.qrButton} onPress={handleScanQR}>
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable> */}
+        <CustomButton title="Confirmar acumulación" onPress={handleSubmit} />
 
-      <Pressable
-        style={styles.qrButton}
-        onPress={() => navigation.navigate("QRScanner")}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => navigation.navigate("QRScanner")}
+          style={styles.scan}
         >
-        <Text style={styles.qrText}>Escanear QR</Text>
-      </Pressable>
+          <Ionicons name="scan-outline" size={21} color={colors.primary} />
 
-      <Pressable
-        style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
-        >
-        <Text style={styles.backText}>Volver</Text>
-      </Pressable>
-
-    </ScrollView>
+          <Text style={styles.scanText}>Escanear código QR</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: Colors) {
+  return StyleSheet.create({
+    safe: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  container: {
-    padding: 25,
-    backgroundColor: colors.background,
-    flexGrow: 1,
-  },
+    container: {
+      padding: 20,
+      paddingBottom: 34,
+    },
 
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: colors.primary,
-    marginBottom: 20,
-  },
+    info: {
+      alignItems: "center",
+      backgroundColor: colors.surfaceMuted,
+      borderRadius: 14,
+      flexDirection: "row",
+      gap: 9,
+      marginBottom: 20,
+      padding: 13,
+    },
 
-  qrButton: {
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#10B981",
-    alignItems: "center",
-  },
+    infoText: {
+      color: colors.textDark,
+      flex: 1,
+      fontSize: 13,
+      lineHeight: 18,
+    },
 
-  qrText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+    scan: {
+      alignItems: "center",
+      flexDirection: "row",
+      gap: 9,
+      justifyContent: "center",
+      marginTop: 23,
+      minHeight: 44,
+    },
 
-  backButton: {
-  marginTop: 15,
-  padding: 12,
-  borderRadius: 10,
-  backgroundColor: "#64748B",
-  alignItems: "center",
- },
-
-  backText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-});
+    scanText: {
+      color: colors.primary,
+      fontSize: 14,
+      fontWeight: "800",
+    },
+  });
+}
