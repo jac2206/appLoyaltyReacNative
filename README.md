@@ -471,6 +471,19 @@ Actualización de saldo
 
 Componentes relacionados:
 
+La pantalla `TransactionsScreen` consulta el historial con los filtros `ACUM` y
+`REDEM`. Como el backend no pagina la respuesta, la aplicación muestra 10
+movimientos inicialmente y agrega otros 10 con “Ver más movimientos”. El filtro
+“Todos” combina ambas consultas y ordena por fecha descendente.
+
+El proyecto usa Expo SDK 57, React Native 0.86 y React 19. Para abrirlo en Expo
+Go, la versión instalada de Expo Go debe ser compatible con SDK 57.
+
+Las pantallas siguen el flujo `screens -> hooks/context -> services -> api`.
+Los estilos de pantalla viven en `src/styles` y los servicios siempre declaran
+respuestas tipadas, por ejemplo `Promise<TransactionsResponse>` junto con
+`api.get<TransactionsResponse>(...)`.
+
 ```text
 AccumulateScreen.tsx
 QRScannerScreen.tsx

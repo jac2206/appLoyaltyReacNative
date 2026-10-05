@@ -12,3 +12,28 @@ export type AuthContextType = {
   logout: () => void;
   loading: boolean;
 };
+
+export type RegisterRequest = {
+  documentType: "CC" | "CE" | "NIT" | "PT";
+  documentNumber: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  token: string;
+};
+
+export type UserProfileResponse = {
+  fullName: string;
+  email: string;
+  documentType: string;
+  documentNumber: string;
+  phone: string;
+};
+
+export type RegisterResponse = {
+  message?: string;
+};
