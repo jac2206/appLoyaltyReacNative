@@ -1,7 +1,17 @@
 ﻿import { api } from "./api";
 
-export async function loginRequest(email: string, password: string) {
-  const response = await api.post("/users/login", {
+import type {
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+  UserProfileResponse,
+} from "../types/user";
+
+export async function loginRequest(
+  email: string,
+  password: string,
+): Promise<LoginResponse> {
+  const response = await api.post<LoginResponse>("/users/login", {
     email,
     password,
   });
@@ -9,8 +19,8 @@ export async function loginRequest(email: string, password: string) {
   return response.data;
 }
 
-export async function getMeRequest(token: string) {
-  const response = await api.get("/users/me", {
+export async function getMeRequest(token: string): Promise<UserProfileResponse> {
+  const response = await api.get<UserProfileResponse>("/users/me", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -19,15 +29,10 @@ export async function getMeRequest(token: string) {
   return response.data;
 }
 
-export async function registerRequest(data: {
-  documentType: "CC" | "CE" | "NIT" | "PT";
-  documentNumber: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  password: string;
-}) {
-  const response = await api.post("/users/register", data);
+export async function registerRequest(
+  data: RegisterRequest,
+): Promise<RegisterResponse> {
+  const response = await api.post<RegisterResponse>("/users/register", data);
 
   return response.data;
 }

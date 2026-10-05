@@ -18,4 +18,5 @@ export type MainStackParamList = {
   QRScanner: undefined;
   Accumulate: { qrData?: QrPayload };
   Redeem: { qrData?: QrPayload };
+  Transactions: undefined;
 };

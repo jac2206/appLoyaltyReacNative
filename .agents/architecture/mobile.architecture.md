@@ -7,7 +7,7 @@ App.tsx
   AuthProvider
     AppNavigator (decide sesión)
       AuthNavigator: Login, Register
-      MainNavigator: Home, Profile, QRScanner, Accumulate, Redeem
+      MainNavigator: Home, Profile, QRScanner, Accumulate, Redeem, Transactions
 
 screen -> hook/context -> service -> api (Axios) -> backend
                          -> storage.repository -> AsyncStorage
@@ -22,7 +22,7 @@ screen -> hook/context -> service -> api (Axios) -> backend
 - `src/services`: adaptadores del backend por dominio; devuelven datos tipados y no renderizan alertas.
 - `src/services/data`: persistencia local; `storage.repository.ts` serializa valores genéricos.
 - `src/types`: contratos de dominio y navegación.
-- `src/styles`: tokens visuales compartidos.
+- `src/styles`: tokens visuales y hojas de estilo por pantalla compartidos. Las pantallas solo consumen estilos exportados desde esta capa.
 
 ## Decisiones y límites
 

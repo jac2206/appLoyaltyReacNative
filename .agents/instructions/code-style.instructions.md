@@ -11,6 +11,7 @@ Todo cambio en archivos `*.ts` o `*.tsx` debe finalizar con Prettier y TypeScrip
 - Separar con una línea en blanco: imports, tipos, componente/hook, helpers y `StyleSheet.create`.
 - Ordenar imports: React/tipos, React Native/Expo, librerías externas y módulos locales.
 - No usar estilos inline salvo una composición dinámica pequeña. Preferir `StyleSheet.create` al final del archivo.
+- En `src/screens` no declarar `StyleSheet.create` ni funciones locales de estilos; importar la hoja correspondiente desde `src/styles`.
 - Los componentes reciben props tipadas; desestructurar props en varias líneas cuando sea necesario para que se lean con claridad.
 - No usar `any`, funciones anónimas largas en JSX ni objetos de estilos extensos dentro del render.
 

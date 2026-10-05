@@ -28,6 +28,9 @@ No cambies un contrato del backend, el esquema de un QR, una ruta de navegación
 
 - TypeScript estricto: no introducir `any`; modelar respuestas, errores, formularios y parámetros de navegación.
 - Las pantallas no hacen llamadas HTTP directas. Los servicios encapsulan endpoints y `api.ts` concentra Axios, token e interceptores.
+- Toda pantalla debe respetar `screens -> hooks/context -> services -> api`; las pantallas no importan servicios para ejecutar casos de uso.
+- Cada pantalla mantiene su hoja de estilos en `src/styles/<screen>.styles.ts`; no declarar `StyleSheet` dentro de `src/screens`.
+- Cada servicio debe tipar parámetros y respuestas explícitamente (`Promise<ResponseType>` y `api.get<ResponseType>`, `api.post<ResponseType>`, etc.).
 - No persistir contraseñas ni datos sensibles innecesarios. El token se guarda solo mediante el repositorio de almacenamiento.
 - Nunca loguear tokens, contraseñas, documentos completos ni payloads sensibles.
 - Toda operación de puntos debe enviar la identidad de la sesión y una referencia; validar campos antes de llamar al servicio.

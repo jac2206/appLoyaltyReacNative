@@ -6,6 +6,7 @@ import { ProfileScreen } from "../screens/ProfileScreen";
 import { AccumulateScreen } from "../screens/AccumulateScreen";
 import { RedeemScreen } from "../screens/RedeemScreen";
 import { QRScannerScreen } from "../screens/QRScannerScreen";
+import { TransactionsScreen } from "../screens/TransactionsScreen";
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
@@ -37,6 +38,7 @@ export function MainNavigator() {
         component={RedeemScreen}
         // options={{ title: 'Redeem' }}
       />
+      <Stack.Screen name="Transactions" component={TransactionsScreen} />
     </Stack.Navigator>
   );
 }
