@@ -1,6 +1,6 @@
 ﻿import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 
@@ -9,15 +9,17 @@ import { InputField } from "../components/CustomInputField";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
-import { useQRForm } from "../hooks/useQRForm";
-import { redeemRequest } from "../services/transaction.service";
-import { Colors } from "../styles/colors";
+import { useRedeem } from "../hooks/useRedeem";
+import { useTypedQRForm } from "../hooks/useTypedQRForm";
 import { MainStackParamList } from "../types/navigation";
+
+import { createStyles } from "../styles/redeem.styles";
 
 type Props = NativeStackScreenProps<MainStackParamList, "Redeem">;
 
 export function RedeemScreen({ navigation, route }: Props) {
   const { user } = useAuth();
+  const { loading, submit: submitRedeem } = useRedeem();
 
   const { colors } = useTheme();
 
@@ -30,7 +32,7 @@ export function RedeemScreen({ navigation, route }: Props) {
     reference: "",
   });
 
-  useQRForm({
+  useTypedQRForm({
     route,
     navigation,
     setForm,
@@ -45,13 +47,16 @@ export function RedeemScreen({ navigation, route }: Props) {
 
   const submit = async () => {
     if (!form.partnerCode || !form.locationCode || Number(form.points) <= 0) {
-      Alert.alert("Revisa la información", "Ingresa aliado, sede y puntos válidos.");
+      Alert.alert(
+        "Revisa la información",
+        "Ingresa aliado, sede y puntos válidos.",
+      );
 
       return;
     }
 
     try {
-      await redeemRequest({
+      const succeeded = await submitRedeem({
         documentType: user?.documentType ?? "",
         documentNumber: user?.documentNumber ?? "",
         partnerCode: form.partnerCode,
@@ -60,15 +65,21 @@ export function RedeemScreen({ navigation, route }: Props) {
         reference: form.reference || "APP-REDEEM",
       });
 
+      if (!succeeded) {
+        Alert.alert(
+          "No pudimos redimir",
+          "Verifica tu saldo e inténtalo nuevamente.",
+        );
+        return;
+      }
+
       Alert.alert("Redención confirmada", "Disfruta tu recompensa.", [
         {
           text: "Listo",
           onPress: () => navigation.navigate("Home"),
         },
       ]);
-    } catch {
-      Alert.alert("No pudimos redimir", "Verifica tu saldo e inténtalo nuevamente.");
-    }
+    } catch {}
   };
 
   return (
@@ -85,7 +96,8 @@ export function RedeemScreen({ navigation, route }: Props) {
           <Ionicons name="gift-outline" size={19} color={colors.accent} />
 
           <Text style={styles.infoText}>
-            Los puntos se descontarán solo cuando el aliado confirme la operación.
+            Los puntos se descontarán solo cuando el aliado confirme la
+            operación.
           </Text>
         </View>
 
@@ -113,7 +125,11 @@ export function RedeemScreen({ navigation, route }: Props) {
           onChangeText={(value) => change("reference", value)}
         />
 
-        <CustomButton title="Confirmar redención" onPress={submit} />
+        <CustomButton
+          title="Confirmar redención"
+          onPress={submit}
+          loading={loading}
+        />
 
         <Pressable
           accessibilityRole="button"
@@ -127,50 +143,4 @@ export function RedeemScreen({ navigation, route }: Props) {
       </ScrollView>
     </SafeAreaView>
   );
-}
-
-function createStyles(colors: Colors) {
-  return StyleSheet.create({
-    safe: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-
-    container: {
-      padding: 20,
-      paddingBottom: 34,
-    },
-
-    info: {
-      alignItems: "center",
-      backgroundColor: colors.surfaceMuted,
-      borderRadius: 14,
-      flexDirection: "row",
-      gap: 9,
-      marginBottom: 20,
-      padding: 13,
-    },
-
-    infoText: {
-      color: colors.textDark,
-      flex: 1,
-      fontSize: 13,
-      lineHeight: 18,
-    },
-
-    scan: {
-      alignItems: "center",
-      flexDirection: "row",
-      gap: 9,
-      justifyContent: "center",
-      marginTop: 23,
-      minHeight: 44,
-    },
-
-    scanText: {
-      color: colors.primary,
-      fontSize: 14,
-      fontWeight: "800",
-    },
-  });
 }

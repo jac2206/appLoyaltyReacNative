@@ -1,12 +1,13 @@
 ﻿import type { ComponentProps } from "react";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { colors } from "../styles/colors";
 import { MainStackParamList, QrPayload } from "../types/navigation";
+
+import { qrScannerStyles as styles } from "../styles/qr-scanner.styles";
 
 type Props = NativeStackScreenProps<MainStackParamList, "QRScanner">;
 type ScanResult = Parameters<
@@ -36,9 +37,12 @@ export function QRScannerScreen({ navigation }: Props) {
     try {
       const payload: unknown = JSON.parse(data);
       if (!isQrPayload(payload)) throw new Error("invalid QR");
-      navigation.replace(payload.type === "ACCUMULATE" ? "Accumulate" : "Redeem", {
-        qrData: payload,
-      });
+      navigation.replace(
+        payload.type === "ACCUMULATE" ? "Accumulate" : "Redeem",
+        {
+          qrData: payload,
+        },
+      );
     } catch {
       Alert.alert(
         "Código no válido",
@@ -95,7 +99,7 @@ export function QRScannerScreen({ navigation }: Props) {
     <View style={styles.camera}>
       <CameraView
         active={isFocused}
-        style={StyleSheet.absoluteFillObject}
+        style={styles.cameraFill}
         onMountError={() => setMountError(true)}
         onBarcodeScanned={scanned ? undefined : handleScan}
         barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
@@ -112,7 +116,9 @@ export function QRScannerScreen({ navigation }: Props) {
           </Pressable>
           <View>
             <Text style={styles.scanTitle}>Escanea el código QR</Text>
-            <Text style={styles.scanCopy}>Enfoca el código dentro del recuadro</Text>
+            <Text style={styles.scanCopy}>
+              Enfoca el código dentro del recuadro
+            </Text>
           </View>
         </View>
         <View style={styles.frame} />
@@ -121,84 +127,3 @@ export function QRScannerScreen({ navigation }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  camera: { flex: 1, backgroundColor: "#000" },
-  overlay: { flex: 1, justifyContent: "space-between", padding: 24 },
-  overlayTop: { alignItems: "center", flexDirection: "row", gap: 14 },
-  close: {
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.92)",
-    borderRadius: 22,
-    height: 44,
-    justifyContent: "center",
-    width: 44,
-  },
-  closeText: {
-    color: colors.textDark,
-    fontSize: 28,
-    fontWeight: "300",
-    lineHeight: 30,
-  },
-  scanTitle: { color: colors.white, fontSize: 18, fontWeight: "800" },
-  scanCopy: { color: "#E2E8F0", fontSize: 13, marginTop: 3 },
-  frame: {
-    alignSelf: "center",
-    borderColor: colors.white,
-    borderRadius: 22,
-    borderWidth: 2,
-    height: 240,
-    width: 240,
-  },
-  hint: {
-    alignSelf: "center",
-    backgroundColor: "rgba(0,0,0,0.55)",
-    borderRadius: 18,
-    color: colors.white,
-    fontSize: 13,
-    marginBottom: 20,
-    overflow: "hidden",
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-  },
-  state: {
-    alignItems: "center",
-    backgroundColor: colors.background,
-    flex: 1,
-    justifyContent: "center",
-    padding: 30,
-  },
-  stateIcon: {
-    alignItems: "center",
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 35,
-    height: 70,
-    justifyContent: "center",
-    width: 70,
-  },
-  stateIconText: { color: colors.primary, fontSize: 36 },
-  stateTitle: {
-    color: colors.textDark,
-    fontSize: 22,
-    fontWeight: "800",
-    marginTop: 20,
-    textAlign: "center",
-  },
-  stateCopy: {
-    color: colors.textMuted,
-    fontSize: 15,
-    lineHeight: 22,
-    marginTop: 10,
-    textAlign: "center",
-  },
-  permissionButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    marginTop: 26,
-    paddingHorizontal: 22,
-    paddingVertical: 15,
-  },
-  permissionText: { color: colors.white, fontSize: 15, fontWeight: "800" },
-  cancel: { marginTop: 20, padding: 10 },
-  cancelText: { color: colors.primary, fontSize: 14, fontWeight: "800" },
-});
