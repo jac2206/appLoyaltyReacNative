@@ -55,10 +55,7 @@ export function AccumulateScreen({ navigation, route }: Props) {
 
   const handleSubmit = async () => {
     if (!form.partnerCode || !form.locationCode || Number(form.amount) <= 0) {
-      Alert.alert(
-        "Revisa la información",
-        "Ingresa aliado, sede y un monto válido.",
-      );
+      Alert.alert("Revisa la información", "Ingresa aliado, sede y un monto válido.");
 
       return;
     }
@@ -74,10 +71,7 @@ export function AccumulateScreen({ navigation, route }: Props) {
       });
 
       if (!succeeded) {
-        Alert.alert(
-          "No pudimos acumular",
-          "Inténtalo nuevamente en unos minutos.",
-        );
+        Alert.alert("No pudimos acumular", "Inténtalo nuevamente en unos minutos.");
         return;
       }
 

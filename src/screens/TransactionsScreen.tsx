@@ -1,13 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ScreenHeader } from "../components/ScreenHeader";
@@ -68,12 +62,7 @@ export function TransactionsScreen({ navigation }: Props) {
                 onPress={() => changeFilter(item.value)}
                 style={[styles.filter, isActive && styles.activeFilter]}
               >
-                <Text
-                  style={[
-                    styles.filterText,
-                    isActive && styles.activeFilterText,
-                  ]}
-                >
+                <Text style={[styles.filterText, isActive && styles.activeFilterText]}>
                   {item.label}
                 </Text>
               </Pressable>
@@ -90,14 +79,10 @@ export function TransactionsScreen({ navigation }: Props) {
 
         {!loading && error && (
           <View style={styles.loading}>
-            <Ionicons
-              color={colors.error}
-              name="cloud-offline-outline"
-              size={40}
-            />
+            <Ionicons color={colors.error} name="cloud-offline-outline" size={40} />
             <Text style={styles.stateText}>
-              No pudimos cargar tus movimientos. Revisa tu conexión e inténtalo
-              de nuevo.
+              No pudimos cargar tus movimientos. Revisa tu conexión e inténtalo de
+              nuevo.
             </Text>
             <Pressable
               accessibilityRole="button"
@@ -112,11 +97,7 @@ export function TransactionsScreen({ navigation }: Props) {
 
         {!loading && !error && transactions.length === 0 && (
           <View style={styles.loading}>
-            <Ionicons
-              color={colors.textMuted}
-              name="receipt-outline"
-              size={40}
-            />
+            <Ionicons color={colors.textMuted} name="receipt-outline" size={40} />
             <Text style={styles.stateText}>
               Todavía no tienes movimientos para este filtro.
             </Text>
@@ -140,9 +121,7 @@ export function TransactionsScreen({ navigation }: Props) {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Ver más movimientos"
-                onPress={() =>
-                  setVisibleCount((current) => current + PAGE_SIZE)
-                }
+                onPress={() => setVisibleCount((current) => current + PAGE_SIZE)}
                 style={styles.moreButton}
               >
                 <Text style={styles.moreText}>Ver más movimientos</Text>
@@ -165,13 +144,10 @@ function TransactionCard({
   transaction: TransactionRecord;
 }) {
   const isAccumulation = transaction.type === "ACUM";
-  const formattedDate = new Date(transaction.createdAt).toLocaleString(
-    "es-CO",
-    {
-      dateStyle: "medium",
-      timeStyle: "short",
-    },
-  );
+  const formattedDate = new Date(transaction.createdAt).toLocaleString("es-CO", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 
   return (
     <View style={styles.transactionCard}>
@@ -189,10 +165,7 @@ function TransactionCard({
           </Text>
         </View>
         <Text
-          style={[
-            styles.points,
-            isAccumulation ? styles.positive : styles.negative,
-          ]}
+          style={[styles.points, isAccumulation ? styles.positive : styles.negative]}
         >
           {isAccumulation ? "+" : "-"}
           {transaction.points.toLocaleString("es-CO")} pts

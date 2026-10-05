@@ -23,8 +23,7 @@ export function useTransactions(filter: TransactionFilter) {
     setError(false);
 
     try {
-      const types: TransactionType[] =
-        filter === "ALL" ? ["ACUM", "REDEM"] : [filter];
+      const types: TransactionType[] = filter === "ALL" ? ["ACUM", "REDEM"] : [filter];
       const responses = await Promise.all(
         types.map((type) =>
           getTransactionsRequest(user.documentType, user.documentNumber, type),
@@ -34,8 +33,7 @@ export function useTransactions(filter: TransactionFilter) {
         .flatMap((response) => response.transactions)
         .sort(
           (first, second) =>
-            new Date(second.createdAt).getTime() -
-            new Date(first.createdAt).getTime(),
+            new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
         );
 
       setTransactions(nextTransactions);

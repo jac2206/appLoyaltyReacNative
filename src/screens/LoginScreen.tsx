@@ -23,8 +23,7 @@ import { createStyles } from "../styles/login.styles";
 type Props = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 export function LoginScreen({ navigation }: Props) {
-  const { userEmail, password, error, setEmail, setPassword, validate } =
-    useLogin();
+  const { userEmail, password, error, setEmail, setPassword, validate } = useLogin();
 
   const { login } = useAuth();
 
@@ -56,11 +55,7 @@ export function LoginScreen({ navigation }: Props) {
 
             <View style={styles.brand}>
               <View style={styles.brandIcon}>
-                <Ionicons
-                  name="diamond-outline"
-                  size={33}
-                  color={colors.white}
-                />
+                <Ionicons name="diamond-outline" size={33} color={colors.white} />
               </View>
 
               <Text style={styles.eyebrow}>LOYALTY JAC APP</Text>
@@ -102,8 +97,7 @@ export function LoginScreen({ navigation }: Props) {
                 style={styles.link}
               >
                 <Text style={styles.linkText}>
-                  ¿No tienes cuenta?{" "}
-                  <Text style={styles.linkStrong}>Regístrate</Text>
+                  ¿No tienes cuenta? <Text style={styles.linkStrong}>Regístrate</Text>
                 </Text>
               </Pressable>
             </View>

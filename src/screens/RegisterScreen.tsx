@@ -125,11 +125,7 @@ export function RegisterScreen({ navigation }: Props) {
           onChangeText={(value) => change("password", value)}
         />
 
-        <CustomButton
-          title="Crear cuenta"
-          onPress={register}
-          loading={loading}
-        />
+        <CustomButton title="Crear cuenta" onPress={register} loading={loading} />
 
         <Text style={styles.legal}>
           Al continuar aceptas los términos del programa de recompensas.

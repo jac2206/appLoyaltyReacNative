@@ -47,10 +47,7 @@ export function RedeemScreen({ navigation, route }: Props) {
 
   const submit = async () => {
     if (!form.partnerCode || !form.locationCode || Number(form.points) <= 0) {
-      Alert.alert(
-        "Revisa la información",
-        "Ingresa aliado, sede y puntos válidos.",
-      );
+      Alert.alert("Revisa la información", "Ingresa aliado, sede y puntos válidos.");
 
       return;
     }
@@ -66,10 +63,7 @@ export function RedeemScreen({ navigation, route }: Props) {
       });
 
       if (!succeeded) {
-        Alert.alert(
-          "No pudimos redimir",
-          "Verifica tu saldo e inténtalo nuevamente.",
-        );
+        Alert.alert("No pudimos redimir", "Verifica tu saldo e inténtalo nuevamente.");
         return;
       }
 
@@ -96,8 +90,7 @@ export function RedeemScreen({ navigation, route }: Props) {
           <Ionicons name="gift-outline" size={19} color={colors.accent} />
 
           <Text style={styles.infoText}>
-            Los puntos se descontarán solo cuando el aliado confirme la
-            operación.
+            Los puntos se descontarán solo cuando el aliado confirme la operación.
           </Text>
         </View>
 
@@ -125,11 +118,7 @@ export function RedeemScreen({ navigation, route }: Props) {
           onChangeText={(value) => change("reference", value)}
         />
 
-        <CustomButton
-          title="Confirmar redención"
-          onPress={submit}
-          loading={loading}
-        />
+        <CustomButton title="Confirmar redención" onPress={submit} loading={loading} />
 
         <Pressable
           accessibilityRole="button"

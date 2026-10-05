@@ -61,17 +61,11 @@ export function HomeScreen({ navigation }: Props) {
             <View>
               <Text style={styles.balanceLabel}>Puntos disponibles</Text>
 
-              <Text style={styles.balance}>
-                {balance.toLocaleString("es-CO")}
-              </Text>
+              <Text style={styles.balance}>{balance.toLocaleString("es-CO")}</Text>
             </View>
 
             <View style={styles.coin}>
-              <Ionicons
-                name="diamond-outline"
-                size={25}
-                color={colors.primary}
-              />
+              <Ionicons name="diamond-outline" size={25} color={colors.primary} />
             </View>
           </View>
 
@@ -87,9 +81,7 @@ export function HomeScreen({ navigation }: Props) {
           </View>
 
           <View style={styles.progressLabels}>
-            <Text style={styles.progressText}>
-              {Math.round(progress)}% de tu meta
-            </Text>
+            <Text style={styles.progressText}>{Math.round(progress)}% de tu meta</Text>
 
             <Text style={styles.progressText}>
               {goalPoints.toLocaleString("es-CO")} pts
@@ -111,10 +103,7 @@ export function HomeScreen({ navigation }: Props) {
                 qrData: undefined,
               })
             }
-            style={({ pressed }) => [
-              styles.actionCard,
-              pressed && styles.pressed,
-            ]}
+            style={({ pressed }) => [styles.actionCard, pressed && styles.pressed]}
           >
             <View style={[styles.actionIcon, styles.accumulateIcon]}>
               <Ionicons name="add" size={28} color={colors.primary} />
@@ -134,10 +123,7 @@ export function HomeScreen({ navigation }: Props) {
                 qrData: undefined,
               })
             }
-            style={({ pressed }) => [
-              styles.actionCard,
-              pressed && styles.pressed,
-            ]}
+            style={({ pressed }) => [styles.actionCard, pressed && styles.pressed]}
           >
             <View style={[styles.actionIcon, styles.redeemIcon]}>
               <Ionicons name="gift-outline" size={25} color={colors.accent} />
@@ -153,10 +139,7 @@ export function HomeScreen({ navigation }: Props) {
           accessibilityRole="button"
           accessibilityLabel="Ver movimientos"
           onPress={() => navigation.navigate("Transactions")}
-          style={({ pressed }) => [
-            styles.historyButton,
-            pressed && styles.pressed,
-          ]}
+          style={({ pressed }) => [styles.historyButton, pressed && styles.pressed]}
         >
           <Ionicons name="list-outline" size={20} color={colors.primary} />
           <Text style={styles.historyText}>Ver todos tus movimientos</Text>

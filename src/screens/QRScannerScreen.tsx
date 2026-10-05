@@ -37,12 +37,9 @@ export function QRScannerScreen({ navigation }: Props) {
     try {
       const payload: unknown = JSON.parse(data);
       if (!isQrPayload(payload)) throw new Error("invalid QR");
-      navigation.replace(
-        payload.type === "ACCUMULATE" ? "Accumulate" : "Redeem",
-        {
-          qrData: payload,
-        },
-      );
+      navigation.replace(payload.type === "ACCUMULATE" ? "Accumulate" : "Redeem", {
+        qrData: payload,
+      });
     } catch {
       Alert.alert(
         "Código no válido",
@@ -116,9 +113,7 @@ export function QRScannerScreen({ navigation }: Props) {
           </Pressable>
           <View>
             <Text style={styles.scanTitle}>Escanea el código QR</Text>
-            <Text style={styles.scanCopy}>
-              Enfoca el código dentro del recuadro
-            </Text>
+            <Text style={styles.scanCopy}>Enfoca el código dentro del recuadro</Text>
           </View>
         </View>
         <View style={styles.frame} />

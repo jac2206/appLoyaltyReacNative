@@ -49,9 +49,7 @@ export function ProfileScreen({ navigation }: Props) {
         <View style={styles.pointsCard}>
           <Text style={styles.pointsLabel}>Puntos disponibles</Text>
 
-          <Text style={styles.points}>
-            {balance.toLocaleString("es-CO")} pts
-          </Text>
+          <Text style={styles.points}>{balance.toLocaleString("es-CO")} pts</Text>
         </View>
 
         <Text style={styles.section}>Información personal</Text>
@@ -106,11 +104,7 @@ export function ProfileScreen({ navigation }: Props) {
           />
         </View>
 
-        <CustomButton
-          title="Cerrar sesión"
-          variant="outline"
-          onPress={logout}
-        />
+        <CustomButton title="Cerrar sesión" variant="outline" onPress={logout} />
       </ScrollView>
     </SafeAreaView>
   );

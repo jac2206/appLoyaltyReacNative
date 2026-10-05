@@ -19,9 +19,7 @@ export async function loginRequest(
   return response.data;
 }
 
-export async function getMeRequest(
-  token: string,
-): Promise<UserProfileResponse> {
+export async function getMeRequest(token: string): Promise<UserProfileResponse> {
   const response = await api.get<UserProfileResponse>("/users/me", {
     headers: {
       Authorization: `Bearer ${token}`,
