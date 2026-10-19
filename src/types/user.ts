@@ -9,7 +9,13 @@
 export type AuthContextType = {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  loginWithBiometrics: () => Promise<void>;
+  enableBiometricLogin: () => Promise<void>;
+  disableBiometricLogin: () => Promise<void>;
+  biometricAvailable: boolean;
+  biometricEnabled: boolean;
+  biometricLabel: string;
+  logout: () => Promise<void>;
   loading: boolean;
 };
 
