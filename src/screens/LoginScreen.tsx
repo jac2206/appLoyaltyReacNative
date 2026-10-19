@@ -6,7 +6,6 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -23,19 +22,42 @@ import { createStyles } from "../styles/login.styles";
 type Props = NativeStackScreenProps<AuthStackParamList, "Login">;
 
 export function LoginScreen({ navigation }: Props) {
-  const { userEmail, password, error, setEmail, setPassword, validate } = useLogin();
+  const { userEmail, password, error, setEmail, setPassword, setError, validate } =
+    useLogin();
 
-  const { login } = useAuth();
+  const {
+    biometricAvailable,
+    biometricEnabled,
+    biometricLabel,
+    login,
+    loginWithBiometrics,
+  } = useAuth();
 
   const { colors } = useTheme();
 
   const styles = createStyles(colors);
 
   const handleLogin = async () => {
+    setError(null);
+
     if (validate()) {
       try {
         await login(userEmail, password);
       } catch {}
+    }
+  };
+
+  const handleBiometricLogin = async () => {
+    setError(null);
+
+    try {
+      await loginWithBiometrics();
+    } catch (biometricLoginError) {
+      setError(
+        biometricLoginError instanceof Error
+          ? biometricLoginError.message
+          : "No se pudo iniciar sesión con biometría.",
+      );
     }
   };
 
@@ -90,6 +112,20 @@ export function LoginScreen({ navigation }: Props) {
               )}
 
               <CustomButton title="Iniciar sesión" onPress={handleLogin} />
+
+              {biometricAvailable && biometricEnabled && (
+                <CustomButton
+                  title={`Ingresar con ${biometricLabel}`}
+                  onPress={handleBiometricLogin}
+                  variant="outline"
+                  icon={
+                    biometricLabel.includes("Face")
+                      ? "scan-outline"
+                      : "finger-print-outline"
+                  }
+                  accessibilityHint="Autentica tu identidad con la biometría del dispositivo"
+                />
+              )}
 
               <Pressable
                 accessibilityRole="button"

@@ -1397,3 +1397,25 @@ Además, Biome, Husky y Commitlint permiten mantener un estándar de calidad y c
 > Husky automatiza las validaciones.
 > Commitlint garantiza Conventional Commits.
 > EAS permite generar y distribuir la aplicación.
+## Autenticacion biometrica y almacenamiento seguro
+
+La aplicacion permite iniciar sesion con huella digital o Face ID en dispositivos
+compatibles.
+
+Flujo de uso:
+
+1. El usuario inicia sesion con correo y contrasena.
+2. Desde Perfil activa Acceso biometrico.
+3. El sistema operativo solicita la huella o Face ID configurado en el dispositivo.
+4. La aplicacion guarda el token en `expo-secure-store`.
+5. En el siguiente login se puede usar el boton biometrico.
+
+La huella nunca se guarda en la aplicacion. `AsyncStorage` se reserva para datos
+no sensibles, como preferencias de interfaz. Los tokens se almacenan mediante
+`src/services/data/storage.repository.ts` usando `SecureStore` en Android e iOS.
+
+En web se utiliza un fallback a `AsyncStorage`, ya que `SecureStore` no esta
+disponible en ese entorno.
+
+Para Face ID y biometria se requiere una build nativa compatible con la
+configuracion de `app.json`; Expo Go puede no soportar todos los permisos nativos.

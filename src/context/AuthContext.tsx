@@ -8,20 +8,44 @@
 import { AuthContextType, User } from "../types/user";
 import { loginRequest, getMeRequest } from "../services/auth.service";
 import { setAuthToken } from "../services/api";
-import { saveToken, getToken, removeToken } from "../services/data/storage";
-import { getItem, removeItem, saveItem } from "../services/data/storage.repository";
-import { STORAGE_KEYS } from "../constants/storageKeys";
+import {
+  getAuthToken,
+  removeAuthToken,
+  saveAuthToken,
+} from "../services/data/storage.repository";
+import {
+  authenticateWithBiometrics,
+  getBiometricAvailability,
+  removeBiometricToken,
+  saveBiometricToken,
+  verifyBiometrics,
+} from "../services/biometric.service";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [biometricEnabled, setBiometricEnabled] = useState(false);
+  const [biometricLabel, setBiometricLabel] = useState("biometría");
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+
+  const refreshBiometricAvailability = async () => {
+    const availability = await getBiometricAvailability();
+
+    setBiometricAvailable(availability.available);
+    setBiometricEnabled(availability.enabled);
+    setBiometricLabel(availability.label);
+  };
 
   useEffect(() => {
+    refreshBiometricAvailability().catch(() => {
+      setBiometricAvailable(false);
+    });
+
     async function restoreSession() {
-      // const token = await getToken();
-      const token = await getItem<string>(STORAGE_KEYS.TOKEN);
+      const token = await getAuthToken();
 
       if (!token) {
         setLoading(false);
@@ -30,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       try {
         setAuthToken(token);
+        setSessionToken(token);
 
         const userData = await getMeRequest(token);
 
@@ -40,11 +65,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           documentNumber: userData.documentNumber,
           phone: userData.phone,
         });
-      } catch (error) {
-        console.log("Token invÃ¡lido");
-
-        // await removeToken();
-        await removeItem(STORAGE_KEYS.TOKEN);
+      } catch {
+        await removeAuthToken();
+        setAuthToken("");
+        setSessionToken(null);
         setUser(null);
       } finally {
         setLoading(false);
@@ -55,14 +79,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
+    const loginData = await loginRequest(email, password);
+
+    const token = loginData.token;
+
+    setAuthToken(token);
+    setSessionToken(token);
+    await saveAuthToken(token);
+
+    const userData = await getMeRequest(token);
+
+    setUser({
+      userName: userData.fullName,
+      userEmail: userData.email,
+      documentType: userData.documentType,
+      documentNumber: userData.documentNumber,
+      phone: userData.phone,
+    });
+  };
+
+  const loginWithBiometrics = async () => {
+    const token = await authenticateWithBiometrics();
+
+    if (!token) {
+      throw new Error("No se pudo completar la autenticación biométrica.");
+    }
+
     try {
-      const loginData = await loginRequest(email, password);
-
-      const token = loginData.token;
-
       setAuthToken(token);
-      await saveItem(STORAGE_KEYS.TOKEN, token);
-      // await saveToken(token);
+      setSessionToken(token);
+      await saveAuthToken(token);
 
       const userData = await getMeRequest(token);
 
@@ -73,23 +119,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         documentNumber: userData.documentNumber,
         phone: userData.phone,
       });
-    } catch (error) {
-      console.log("Error login:", error);
-      throw error;
+    } catch {
+      setAuthToken("");
+      setSessionToken(null);
+      await removeAuthToken();
+      await removeBiometricToken();
+      await refreshBiometricAvailability();
+      throw new Error(
+        "Tu sesión biométrica ya no es válida. Inicia sesión con tu correo y contraseña.",
+      );
     }
+  };
+
+  const enableBiometricLogin = async () => {
+    if (!sessionToken || !biometricAvailable) {
+      throw new Error("La biometría no está disponible en este dispositivo.");
+    }
+
+    if (!(await verifyBiometrics())) {
+      throw new Error("No se pudo confirmar tu identidad biométrica.");
+    }
+
+    await saveBiometricToken(sessionToken);
+    await refreshBiometricAvailability();
+  };
+
+  const disableBiometricLogin = async () => {
+    await removeBiometricToken();
+    await refreshBiometricAvailability();
   };
 
   const logout = async () => {
     setUser(null);
 
     setAuthToken("");
+    setSessionToken(null);
 
-    // await removeToken();
-    await removeItem(STORAGE_KEYS.TOKEN);
+    await removeAuthToken();
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        loginWithBiometrics,
+        enableBiometricLogin,
+        disableBiometricLogin,
+        biometricAvailable,
+        biometricEnabled,
+        biometricLabel,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -134,8 +134,10 @@ export function createStyles(colors: Colors) {
 
     themeInfo: {
       alignItems: "center",
+      flex: 1,
       flexDirection: "row",
       gap: 13,
+      minWidth: 0,
     },
 
     themeIcon: {
@@ -147,6 +149,11 @@ export function createStyles(colors: Colors) {
       width: 36,
     },
 
+    themeText: {
+      flex: 1,
+      minWidth: 0,
+    },
+
     themeTitle: {
       color: colors.textDark,
       fontSize: 15,
@@ -155,6 +162,7 @@ export function createStyles(colors: Colors) {
 
     themeSubtitle: {
       color: colors.textMuted,
+      flexShrink: 1,
       fontSize: 12,
       marginTop: 3,
     },

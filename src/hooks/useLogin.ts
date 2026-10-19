@@ -21,6 +21,7 @@ export function useLogin() {
     error,
     setEmail,
     setPassword,
+    setError,
     validate,
   };
 }
