@@ -10,6 +10,7 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   accessibilityHint?: string;
+  icon?: keyof typeof Ionicons.glyphMap;
 }
 
 export function CustomButton({
@@ -19,6 +20,7 @@ export function CustomButton({
   loading = false,
   disabled = false,
   accessibilityHint,
+  icon,
 }: Props) {
   const { colors } = useTheme();
 
@@ -50,6 +52,14 @@ export function CustomButton({
       ]}
     >
       <View style={styles.content}>
+        {icon && (
+          <Ionicons
+            name={icon}
+            size={20}
+            color={variant === "outline" ? colors.primary : colors.white}
+          />
+        )}
+
         {loading && (
           <ActivityIndicator
             color={variant === "outline" ? colors.primary : colors.white}
@@ -115,3 +125,4 @@ function createStyles(colors: Colors) {
     },
   });
 }
+import { Ionicons } from "@expo/vector-icons";

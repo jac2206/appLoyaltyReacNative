@@ -1,7 +1,7 @@
 ﻿import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
 
 import { CustomButton } from "../components/CustomButtom";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,15 @@ import { createStyles } from "../styles/profile.styles";
 type Props = NativeStackScreenProps<MainStackParamList, "Profile">;
 
 export function ProfileScreen({ navigation }: Props) {
-  const { user, logout } = useAuth();
+  const {
+    biometricAvailable,
+    biometricEnabled,
+    biometricLabel,
+    disableBiometricLogin,
+    enableBiometricLogin,
+    user,
+    logout,
+  } = useAuth();
   const { balance } = useBalance();
 
   const { colors, isDark, toggleTheme } = useTheme();
@@ -23,6 +31,23 @@ export function ProfileScreen({ navigation }: Props) {
   const initial = user?.userName.charAt(0).toUpperCase() ?? "U";
 
   const styles = createStyles(colors);
+
+  const handleBiometricChange = async (enabled: boolean) => {
+    try {
+      if (enabled) {
+        await enableBiometricLogin();
+      } else {
+        await disableBiometricLogin();
+      }
+    } catch (error) {
+      Alert.alert(
+        "Acceso biométrico",
+        error instanceof Error
+          ? error.message
+          : "No se pudo actualizar el acceso biométrico.",
+      );
+    }
+  };
 
   return (
     <SafeAreaView edges={["top"]} style={styles.safe}>
@@ -84,7 +109,7 @@ export function ProfileScreen({ navigation }: Props) {
               />
             </View>
 
-            <View>
+            <View style={styles.themeText}>
               <Text style={styles.themeTitle}>Tema</Text>
 
               <Text style={styles.themeSubtitle}>
@@ -96,6 +121,39 @@ export function ProfileScreen({ navigation }: Props) {
           <Switch
             value={isDark}
             onValueChange={toggleTheme}
+            trackColor={{
+              false: colors.border,
+              true: colors.primary,
+            }}
+            thumbColor={colors.white}
+          />
+        </View>
+
+        <Text style={styles.section}>Seguridad</Text>
+
+        <View style={styles.themeRow}>
+          <View style={styles.themeInfo}>
+            <View style={styles.themeIcon}>
+              <Ionicons name="finger-print-outline" size={20} color={colors.primary} />
+            </View>
+
+            <View style={styles.themeText}>
+              <Text style={styles.themeTitle}>Acceso biométrico</Text>
+
+              <Text style={styles.themeSubtitle}>
+                {biometricAvailable
+                  ? biometricEnabled
+                    ? `Activado con ${biometricLabel}`
+                    : "Actívalo para iniciar sesión más rápido"
+                  : "Configura huella o Face ID en tu dispositivo"}
+              </Text>
+            </View>
+          </View>
+
+          <Switch
+            value={biometricEnabled}
+            onValueChange={handleBiometricChange}
+            disabled={!biometricAvailable}
             trackColor={{
               false: colors.border,
               true: colors.primary,
