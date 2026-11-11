@@ -16,6 +16,10 @@ La aplicación permite a los usuarios:
 * 🌐 Consumir servicios de un backend mediante API.
 * 💾 Mantener información local de la sesión.
 
+Las instrucciones de colaboración están en [AGENTS.md](AGENTS.md). El flujo de
+cambios guiados por especificaciones está en [.agents/specs/workflow.md](.agents/specs/workflow.md).
+La interfaz utiliza los temas JAC documentados en [.agents/desing/design.system.md](.agents/desing/design.system.md).
+
 ---
 
 # 🧠 1. Tecnologías
@@ -29,7 +33,6 @@ El proyecto utiliza:
 * Context API
 * AsyncStorage
 * Axios
-* Vitest
 * Biome
 * Husky
 * Commitlint
@@ -86,19 +89,22 @@ src
 │   ├── ActivityChart.tsx
 │   ├── CustomButtom.tsx
 │   ├── CustomInputField.tsx
-│   ├── DocumentTypePicker.tsx
+│   ├── DocumentTypeSelector.tsx
 │   └── ScreenHeader.tsx
 │
 ├── constants
 │   └── storageKeys.ts
 │
 ├── context
-│   └── AuthContext.tsx
+│   ├── AuthContext.tsx
+│   └── ThemeContext.tsx
 │
 ├── hooks
 │   ├── useBalance.ts
 │   ├── useLogin.ts
-│   └── useQRForm.ts
+│   ├── useAccumulate.ts, useRedeem.ts, useRegister.ts
+│   ├── useTransactions.ts
+│   └── useTypedQRForm.ts
 │
 ├── navigation
 │   ├── AppNavigator.tsx
@@ -112,7 +118,8 @@ src
 │   ├── ProfileScreen.tsx
 │   ├── QRScannerScreen.tsx
 │   ├── RedeemScreen.tsx
-│   └── RegisterScreen.tsx
+│   ├── RegisterScreen.tsx
+│   └── TransactionsScreen.tsx
 │
 ├── services
 │   ├── account.service.ts
@@ -124,7 +131,8 @@ src
 │   └── transaction.service.ts
 │
 ├── styles
-│   └── colors.ts
+│   ├── colors.ts, tokens.ts
+│   └── hojas de estilo por pantalla
 │
 ├── types
 │   ├── navigation.ts
@@ -149,7 +157,7 @@ Ejemplos:
 ActivityChart
 CustomButtom
 CustomInputField
-DocumentTypePicker
+DocumentTypeSelector
 ScreenHeader
 ```
 
@@ -216,7 +224,7 @@ Contiene lógica reutilizable relacionada con la aplicación.
 ```text
 useBalance.ts
 useLogin.ts
-useQRForm.ts
+useTypedQRForm.ts
 ```
 
 Los hooks permiten evitar que las screens acumulen lógica de negocio o de comunicación con servicios.
@@ -487,7 +495,7 @@ respuestas tipadas, por ejemplo `Promise<TransactionsResponse>` junto con
 ```text
 AccumulateScreen.tsx
 QRScannerScreen.tsx
-useQRForm.ts
+useTypedQRForm.ts
 ```
 
 ---
@@ -675,7 +683,7 @@ biome.json
 El proyecto utiliza:
 
 * 2 espacios de indentación.
-* Comillas simples.
+* Comillas dobles en JavaScript y TypeScript.
 * Punto y coma.
 * Trailing commas.
 * Ancho de línea de 88 caracteres.
@@ -724,6 +732,10 @@ Script:
 
 `check` valida formato y linting sin modificar los archivos.
 
+Para comprobar tipos ejecuta `npx tsc --noEmit`. Actualmente no hay un runner ni
+scripts de pruebas configurados; la estrategia y los casos manuales están en
+[.agents/testing/strategy.md](.agents/testing/strategy.md).
+
 ---
 
 # 🪝 15. Git Hooks con Husky
@@ -766,7 +778,6 @@ Contenido:
 #!/usr/bin/env sh
 
 npm run format
-npm run check
 ```
 
 Cuando se ejecuta:
@@ -777,9 +788,10 @@ git commit
 
 Husky:
 
-1. Formatea el código.
-2. Ejecuta las validaciones de Biome.
-3. Detiene el commit si existen errores.
+1. Ejecuta el formateo de Biome sobre el proyecto, modificando los archivos que lo requieran.
+2. Detiene el commit si el comando de formato falla.
+
+El hook no ejecuta `npm run check`: ejecútalo por separado para validar el lint y los imports. `npm run format` puede modificar archivos fuera del cambio actual; revisa el resultado antes de confirmar.
 
 Flujo:
 
@@ -789,10 +801,6 @@ git commit
 pre-commit
     ↓
 npm run format
-    ↓
-npm run check
-    ↓
-Biome
     ↓
 ✅ Continúa
 ❌ Error → Commit detenido
@@ -817,7 +825,7 @@ npm install -D @commitlint/cli @commitlint/config-conventional
 Archivo:
 
 ```text
-commitlint.config.json
+.commitlintrc.json
 ```
 
 Contenido:
@@ -911,10 +919,6 @@ se ejecuta:
                      ↓
               npm run format
                      ↓
-               npm run check
-                     ↓
-                   Biome
-                     ↓
               ┌──────────────┐
               │  commit-msg  │
               └──────┬───────┘
@@ -926,7 +930,7 @@ se ejecuta:
                     ✅
 ```
 
-Si Biome o Commitlint detectan un error, el commit no se crea.
+Si falla el formateo del hook o Commitlint rechaza el mensaje, el commit no se crea. Ejecuta `npm run check` y `npx tsc --noEmit` por separado para verificar lint y tipos.
 
 ---
 

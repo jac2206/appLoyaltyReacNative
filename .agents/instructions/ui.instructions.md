@@ -5,7 +5,7 @@
 - Mantener un CTA principal y prevenir doble toque durante solicitudes.
 - Los importes usan moneda/localización definida por producto; no asumir formato ni convertir puntos con reglas locales.
 - No ocultar información crítica detrás de iconos o color. Todas las acciones deben ser accesibles con lector de pantalla.
-- Reutilizar `CustomButton` e `InputField` o mejorar sus APIs de forma compatible antes de crear duplicados.
+- Reutilizar `CustomButtom` y `CustomInputField` o mejorar sus APIs de forma compatible antes de crear duplicados.
 
 ## Implementación legible
 
