@@ -1,13 +1,13 @@
-﻿import type { ComponentProps } from "react";
+﻿import { useIsFocused } from "@react-navigation/native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { useIsFocused } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { MainStackParamList, QrPayload } from "../types/navigation";
-
-import { qrScannerStyles as styles } from "../styles/qr-scanner.styles";
+import { useTheme } from "../context/ThemeContext";
+import { createQrScannerStyles } from "../styles/qr-scanner.styles";
+import type { MainStackParamList, QrPayload } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MainStackParamList, "QRScanner">;
 type ScanResult = Parameters<
@@ -27,6 +27,8 @@ function isQrPayload(value: unknown): value is QrPayload {
 }
 
 export function QRScannerScreen({ navigation }: Props) {
+  const { colors } = useTheme();
+  const styles = createQrScannerStyles(colors);
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [mountError, setMountError] = useState(false);

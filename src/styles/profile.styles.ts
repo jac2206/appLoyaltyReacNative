@@ -1,6 +1,7 @@
 ﻿import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
+import { radius, spacing } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
@@ -10,8 +11,8 @@ export function createStyles(colors: Colors) {
     },
 
     container: {
-      padding: 20,
-      paddingBottom: 34,
+      padding: spacing.xl,
+      paddingBottom: spacing.xxxl,
     },
 
     back: {
@@ -40,7 +41,7 @@ export function createStyles(colors: Colors) {
     },
 
     initial: {
-      color: colors.white,
+      color: colors.onPrimary,
       fontSize: 32,
       fontWeight: "800",
     },
@@ -60,7 +61,7 @@ export function createStyles(colors: Colors) {
 
     pointsCard: {
       backgroundColor: colors.surfaceMuted,
-      borderRadius: 18,
+      borderRadius: radius.lg,
       marginTop: 28,
       padding: 19,
     },
@@ -71,7 +72,7 @@ export function createStyles(colors: Colors) {
     },
 
     points: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontSize: 27,
       fontWeight: "800",
       marginTop: 5,
@@ -88,7 +89,7 @@ export function createStyles(colors: Colors) {
     details: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 18,
+      borderRadius: radius.lg,
       borderWidth: 1,
     },
 
@@ -124,7 +125,7 @@ export function createStyles(colors: Colors) {
       alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 18,
+      borderRadius: radius.lg,
       borderWidth: 1,
       flexDirection: "row",
       justifyContent: "space-between",

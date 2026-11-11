@@ -1,3 +1,5 @@
+> Guía histórica: el punto de entrada vigente es [loyalty-mobile](loyalty-mobile/SKILL.md). Este archivo no es una skill de Codex.
+
 # Skill: React Native Loyalty Feature
 
 ## Cuándo usarlo
@@ -22,4 +24,4 @@ Al crear o modificar una pantalla, navegación, hook, contexto, llamada móvil, 
 
 ## Calidad de código
 
-Antes de cerrar, aplicar `instructions/code-style.instructions.md`: ejecutar Prettier en los archivos modificados, TypeScript y `git diff --check`. La legibilidad de JSX y estilos es parte de la entrega, no un paso opcional.
+Antes de cerrar, aplicar `instructions/code-style.instructions.md`: comprobar Biome, TypeScript y `git diff --check`. La legibilidad de JSX y estilos es parte de la entrega, no un paso opcional.

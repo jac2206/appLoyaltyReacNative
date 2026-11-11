@@ -1,7 +1,8 @@
-﻿import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
-
+﻿import { Ionicons } from "@expo/vector-icons";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styles/colors";
+import type { Colors } from "../styles/colors";
+import { radius, spacing } from "../styles/tokens";
 
 interface Props {
   title: string;
@@ -27,6 +28,12 @@ export function CustomButton({
   const styles = createStyles(colors);
 
   const isDisabled = disabled || loading;
+  const foreground =
+    variant === "outline"
+      ? colors.primaryText
+      : variant === "danger"
+        ? colors.onError
+        : colors.onPrimary;
 
   return (
     <Pressable
@@ -52,23 +59,11 @@ export function CustomButton({
       ]}
     >
       <View style={styles.content}>
-        {icon && (
-          <Ionicons
-            name={icon}
-            size={20}
-            color={variant === "outline" ? colors.primary : colors.white}
-          />
-        )}
+        {icon && <Ionicons name={icon} size={20} color={foreground} />}
 
-        {loading && (
-          <ActivityIndicator
-            color={variant === "outline" ? colors.primary : colors.white}
-          />
-        )}
+        {loading && <ActivityIndicator color={foreground} />}
 
-        <Text style={[styles.text, variant === "outline" && styles.outlineText]}>
-          {title}
-        </Text>
+        <Text style={[styles.text, { color: foreground }]}>{title}</Text>
       </View>
     </Pressable>
   );
@@ -79,8 +74,8 @@ function createStyles(colors: Colors) {
     button: {
       backgroundColor: colors.primary,
       minHeight: 52,
-      paddingHorizontal: 20,
-      borderRadius: 12,
+      paddingHorizontal: spacing.xl,
+      borderRadius: radius.md,
       alignItems: "center",
       justifyContent: "center",
       marginTop: 16,
@@ -119,10 +114,5 @@ function createStyles(colors: Colors) {
       fontSize: 16,
       fontWeight: "bold",
     },
-
-    outlineText: {
-      color: colors.primary,
-    },
   });
 }
-import { Ionicons } from "@expo/vector-icons";

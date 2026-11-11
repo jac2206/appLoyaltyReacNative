@@ -1,15 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useTheme } from "../context/ThemeContext";
-import { TransactionFilter, useTransactions } from "../hooks/useTransactions";
+import { type TransactionFilter, useTransactions } from "../hooks/useTransactions";
 import { createTransactionsStyles } from "../styles/transactions.styles";
-import { MainStackParamList } from "../types/navigation";
-import { TransactionRecord } from "../types/transaction";
+import type { MainStackParamList } from "../types/navigation";
+import type { TransactionRecord } from "../types/transaction";
 
 type Props = NativeStackScreenProps<MainStackParamList, "Transactions">;
 
@@ -155,7 +155,7 @@ function TransactionCard({
         <View style={styles.transactionType}>
           <View style={styles.transactionIcon}>
             <Ionicons
-              color={isAccumulation ? colors.success : colors.accent}
+              color={isAccumulation ? colors.success : colors.primaryText}
               name={isAccumulation ? "arrow-down-outline" : "arrow-up-outline"}
               size={19}
             />

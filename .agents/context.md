@@ -8,7 +8,7 @@ Loyalty App permite que una persona gestione puntos de un programa de lealtad: c
 
 - Expo SDK 57, React Native 0.86, React 19 y TypeScript estricto.
 - React Navigation Native Stack para navegación.
-- Axios para HTTP, AsyncStorage para la sesión y `expo-camera` para QR.
+- Axios para HTTP, SecureStore para el token cuando está disponible, AsyncStorage para preferencias y como alternativa de persistencia, y `expo-camera` para QR.
 - `react-native-gifted-charts` para la gráfica de actividad.
 - Backend externo bajo `/loyalty/v1`; su URL actual está en `src/services/api.ts`.
 
@@ -16,10 +16,10 @@ Loyalty App permite que una persona gestione puntos de un programa de lealtad: c
 
 | Dominio       | Fuente de verdad                     | Cliente                                |
 | ------------- | ------------------------------------ | -------------------------------------- |
-| Sesión        | Token y perfil validados por backend | `AuthContext` y AsyncStorage           |
+| Sesión        | Token y perfil validados por backend | `AuthContext` y `storage.repository.ts`           |
 | Cuenta        | Saldo del backend                    | `useBalance`                           |
 | Transacciones | Backend                              | pantallas Accumulate/Redeem/Transactions y `transaction.service` |
-| QR            | Código escaneado                     | `QRScannerScreen` y `useQRForm`        |
+| QR            | Código escaneado                     | `QRScannerScreen` y `useTypedQRForm`        |
 
 El gráfico semanal y la lista de aliados en Home son actualmente datos de presentación estáticos, no historial ni catálogo real.
 
