@@ -1,6 +1,7 @@
 ﻿import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
+import { radius, spacing } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
@@ -10,14 +11,14 @@ export function createStyles(colors: Colors) {
     },
 
     container: {
-      padding: 20,
-      paddingBottom: 34,
+      padding: spacing.xl,
+      paddingBottom: spacing.xxxl,
     },
 
     info: {
       alignItems: "center",
       backgroundColor: colors.surfaceMuted,
-      borderRadius: 14,
+      borderRadius: radius.md,
       flexDirection: "row",
       gap: 9,
       marginBottom: 20,
@@ -41,7 +42,7 @@ export function createStyles(colors: Colors) {
     },
 
     scanText: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontSize: 14,
       fontWeight: "800",
     },

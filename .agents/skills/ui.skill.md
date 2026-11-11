@@ -1,3 +1,5 @@
+> Guía histórica: el punto de entrada vigente es [loyalty-ui](loyalty-ui/SKILL.md). Este archivo no es una skill de Codex.
+
 # Skill: UI de recompensas
 
 ## Objetivo

@@ -7,22 +7,14 @@ Loyalty App es una aplicación móvil de recompensas construida con Expo, React 
 ## Lectura obligatoria antes de cambiar código
 
 1. [Contexto](context.md).
-2. La especificación del dominio afectado en `specs/`.
+2. La especificación del dominio afectado en `specs/`, si existe.
 3. La arquitectura y los patrones en `architecture/`.
 4. Las instrucciones pertinentes en `instructions/`.
 5. La estrategia de pruebas en `testing/`.
 
-## Flujo SDD obligatorio
+## Flujo SDD
 
-1. Identificar el dominio afectado y actualizar o crear su especificación antes de implementar.
-2. Escribir criterios de aceptación verificables y declarar contratos de datos, navegación y API que cambien.
-3. Diseñar la mínima solución que respete `screens -> hooks/context -> services -> api`.
-4. Implementar con tipos estrictos y componentes reutilizables.
-5. Añadir o actualizar pruebas en la capa correspondiente; si aún no existe infraestructura, dejar los casos definidos en la spec y no afirmar que se ejecutaron.
-6. Verificar TypeScript y los flujos manuales indicados por la spec.
-7. Actualizar la documentación si cambian contratos, rutas, tokens, dependencias o decisiones técnicas.
-
-No cambies un contrato del backend, el esquema de un QR, una ruta de navegación o la persistencia de sesión sin reflejarlo primero en la spec correspondiente. No mezcles una refactorización amplia con una funcionalidad salvo que la spec lo justifique.
+Aplicar [specs/workflow.md](specs/workflow.md) de forma proporcional. Consultar la spec del dominio si existe; antes de cambiar comportamiento o contratos, registrar criterios verificables y actualizar la spec pertinente. Un ajuste pequeño sin cambio de comportamiento no necesita crear una spec. Verificar y comunicar resultados reales, diferencias con el código y pruebas pendientes. No cambiar contratos del backend, QR, navegación o persistencia sin reflejarlo en la spec correspondiente.
 
 ## Reglas no negociables
 
@@ -44,6 +36,7 @@ npm start
 npm run android
 npm run ios
 npm run web
+npm run check
 npx tsc --noEmit
 ```
 
@@ -51,4 +44,4 @@ La app no tiene aún runner de pruebas configurado. Consulta `testing/strategy.m
 
 ## Formato de código obligatorio
 
-Antes de editar TypeScript, leer `instructions/code-style.instructions.md`. Todo cambio debe conservar código expandido, legible y formateado con Prettier. La verificación final incluye `npx tsc --noEmit` y `git diff --check`; si se modifica código TypeScript, también ejecutar Prettier sobre los archivos tocados.
+Antes de editar TypeScript, leer `instructions/code-style.instructions.md`. Todo cambio debe conservar código legible y seguir `biome.json`. Verifica con `npx tsc --noEmit`, `npm run check` y `git diff --check`; informa por separado los errores preexistentes.

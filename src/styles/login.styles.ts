@@ -1,6 +1,7 @@
 ﻿import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
+import { radius, spacing } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
@@ -20,7 +21,7 @@ export function createStyles(colors: Colors) {
     container: {
       flexGrow: 1,
       justifyContent: "center",
-      padding: 24,
+      padding: spacing.xl,
     },
 
     brand: {
@@ -30,7 +31,7 @@ export function createStyles(colors: Colors) {
     brandIcon: {
       alignItems: "center",
       backgroundColor: colors.primary,
-      borderRadius: 20,
+      borderRadius: radius.lg,
       height: 56,
       justifyContent: "center",
       marginBottom: 22,
@@ -38,7 +39,7 @@ export function createStyles(colors: Colors) {
     },
 
     eyebrow: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontSize: 12,
       fontWeight: "800",
       letterSpacing: 1.1,
@@ -62,9 +63,9 @@ export function createStyles(colors: Colors) {
     form: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 22,
+      borderRadius: radius.lg,
       borderWidth: 1,
-      padding: 20,
+      padding: spacing.xl,
     },
 
     error: {
@@ -84,7 +85,7 @@ export function createStyles(colors: Colors) {
     },
 
     linkStrong: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontWeight: "800",
     },
   });

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
 
 export function createTransactionsStyles(colors: Colors) {
   return StyleSheet.create({
@@ -25,7 +25,7 @@ export function createTransactionsStyles(colors: Colors) {
     },
     activeFilter: { backgroundColor: colors.primary },
     filterText: { color: colors.textMuted, fontSize: 13, fontWeight: "700" },
-    activeFilterText: { color: colors.white },
+    activeFilterText: { color: colors.onPrimary },
     loading: { alignItems: "center", paddingVertical: 48 },
     stateText: {
       color: colors.textMuted,
@@ -63,7 +63,7 @@ export function createTransactionsStyles(colors: Colors) {
     },
     points: { fontSize: 16, fontWeight: "800" },
     positive: { color: colors.success },
-    negative: { color: colors.accent },
+    negative: { color: colors.textDark },
     reference: { color: colors.textMuted, fontSize: 13, marginTop: 13 },
     details: { color: colors.textMuted, fontSize: 12, marginTop: 6 },
     moreButton: {
@@ -75,6 +75,6 @@ export function createTransactionsStyles(colors: Colors) {
       marginTop: 18,
       minHeight: 48,
     },
-    moreText: { color: colors.primary, fontSize: 15, fontWeight: "800" },
+    moreText: { color: colors.primaryText, fontSize: 15, fontWeight: "800" },
   });
 }

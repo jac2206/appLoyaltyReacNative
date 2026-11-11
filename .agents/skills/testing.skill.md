@@ -1,3 +1,5 @@
+> Guía histórica: el punto de entrada vigente es [loyalty-testing](loyalty-testing/SKILL.md). Este archivo no es una skill de Codex.
+
 # Skill: pruebas de la app móvil
 
 ## Estrategia

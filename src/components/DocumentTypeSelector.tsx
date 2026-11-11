@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styles/colors";
+import type { Colors } from "../styles/colors";
+import { radius, spacing } from "../styles/tokens";
 
 type Props = {
   value: string;
@@ -84,13 +85,13 @@ function createStyles(colors: Colors) {
       alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 12,
+      borderRadius: radius.md,
       borderWidth: 1,
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: 16,
+      marginBottom: spacing.lg,
       minHeight: 52,
-      paddingHorizontal: 14,
+      paddingHorizontal: spacing.lg,
     },
     placeholder: {
       color: colors.textMuted,
@@ -110,7 +111,7 @@ function createStyles(colors: Colors) {
     },
     modalOverlay: {
       alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.55)",
+      backgroundColor: colors.overlay,
       flex: 1,
       justifyContent: "center",
       padding: 24,
@@ -118,7 +119,7 @@ function createStyles(colors: Colors) {
     modalCard: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 18,
+      borderRadius: radius.lg,
       borderWidth: 1,
       padding: 18,
       width: "100%",
@@ -146,7 +147,7 @@ function createStyles(colors: Colors) {
       fontSize: 15,
     },
     check: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontSize: 18,
       fontWeight: "800",
     },

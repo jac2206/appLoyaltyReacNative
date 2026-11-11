@@ -1,10 +1,9 @@
 ﻿import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
-
-import { getCurrentWeekLabel } from "../utils/date-util";
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styles/colors";
+import type { Colors } from "../styles/colors";
+import { getCurrentWeekLabel } from "../utils/date-util";
 
 interface Props {
   data: number[];
@@ -52,6 +51,9 @@ export function ActivityChart({ data }: Props) {
         yAxisThickness={0}
         xAxisThickness={0}
         noOfSections={4}
+        rulesColor={colors.border}
+        xAxisLabelTextStyle={styles.axisLabel}
+        yAxisTextStyle={styles.axisLabel}
         isAnimated
       />
 
@@ -70,7 +72,9 @@ function createStyles(colors: Colors) {
       backgroundColor: colors.surface,
       padding: 20,
       borderRadius: 16,
-      elevation: 5,
+      borderColor: colors.border,
+      borderWidth: 1,
+      elevation: 1,
     },
 
     title: {
@@ -83,6 +87,11 @@ function createStyles(colors: Colors) {
       color: colors.textMuted,
       fontSize: 12,
       marginBottom: 15,
+    },
+
+    axisLabel: {
+      color: colors.textMuted,
+      fontSize: 12,
     },
 
     selectedText: {

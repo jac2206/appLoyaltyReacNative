@@ -1,7 +1,9 @@
-﻿import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../styles/colors";
+﻿import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { useTheme } from "../context/ThemeContext";
+import type { Colors } from "../styles/colors";
+import { radius, spacing } from "../styles/tokens";
 
 type Props = {
   placeholder: string;
@@ -17,6 +19,8 @@ export function InputField({
   secureTextEntry,
 }: Props) {
   const [hidePassword, setHidePassword] = useState(true);
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   const isPassword = secureTextEntry;
 
@@ -32,39 +36,52 @@ export function InputField({
       />
 
       {isPassword && (
-        <Pressable onPress={() => setHidePassword(!hidePassword)} style={styles.icon}>
-          <Ionicons name={hidePassword ? "eye-off" : "eye"} size={22} color="#64748B" />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={
+            hidePassword ? "Mostrar contraseña" : "Ocultar contraseña"
+          }
+          onPress={() => setHidePassword(!hidePassword)}
+          style={styles.icon}
+        >
+          <Ionicons
+            name={hidePassword ? "eye-off" : "eye"}
+            size={22}
+            color={colors.textMuted}
+          />
         </Pressable>
       )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-    position: "relative",
-  },
+function createStyles(colors: Colors) {
+  return StyleSheet.create({
+    container: {
+      marginBottom: spacing.lg,
+      position: "relative",
+    },
 
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    minHeight: 52,
-    paddingHorizontal: 14,
-    paddingRight: 40,
-    backgroundColor: colors.surface,
-    color: colors.textDark,
-    fontSize: 16,
-  },
+    input: {
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: radius.md,
+      minHeight: 52,
+      paddingHorizontal: spacing.lg,
+      paddingRight: spacing.xxxl + spacing.sm,
+      backgroundColor: colors.surface,
+      color: colors.textDark,
+      fontSize: 16,
+    },
 
-  icon: {
-    position: "absolute",
-    right: 12,
-    top: 15,
-    width: 30,
-    height: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+    icon: {
+      position: "absolute",
+      right: 12,
+      top: 4,
+      width: 44,
+      height: 44,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+}

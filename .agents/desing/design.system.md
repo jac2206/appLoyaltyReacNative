@@ -1,34 +1,16 @@
-# Sistema de diseño móvil
+# Sistema de diseño móvil — JAC
 
-> Se conserva el nombre de carpeta `desing/` para respetar la estructura acordada.
+Loyalty utiliza los tokens semánticos JAC en `src/styles/colors.ts` y la escala de espaciado y radios en `src/styles/tokens.ts`. El tema claro y el oscuro conservan las mismas claves; `textDark` representa el texto principal en ambos temas. `ThemeContext` gestiona la preferencia actual.
 
-## Principios
+## Uso
 
-1. Claridad antes que decoración: saldo, acción y resultado siempre son visibles.
-2. Confianza: importes, puntos y datos de operación se confirman antes de ejecutar.
-3. Accesibilidad: contraste suficiente, objetivos táctiles de al menos 44 × 44 pt y texto legible sin depender solo del color.
-4. Consistencia: una misma intención usa el mismo componente, etiqueta, color y comportamiento.
-5. Prevención de errores: validación cercana al campo, estados de carga y acciones destructivas claramente diferenciadas.
+- `primary` es el fondo de acciones; usa `onPrimary` para texto e iconos sobre ese fondo. Para texto de acción sobre superficies usa `primaryText`, un color derivado para mejorar contraste en el tema claro.
+- `onError`, `overlay` y `cameraBackground` son roles derivados para botones de peligro y el escáner; no son tokens oficiales de la paleta JAC.
+- Usa `background`, `surface`, `surfaceMuted`, `textDark`, `textMuted` y `border` según su función. Reserva `accent` dorado para énfasis puntual y comprueba el contraste antes de usarlo como texto.
+- Reutiliza `CustomButton`, `InputField`, `DocumentTypeSelector` y `ScreenHeader`, y usa Ionicons para acciones. Los controles sin texto necesitan un nombre accesible y un área táctil adecuada.
+- Conserva los estados de carga, error, éxito, permisos y prevención de doble envío; no comuniques estados solamente mediante color.
+- Para Android y iOS utiliza componentes nativos, áreas seguras, texto escalable y comprueba ambos temas. El objetivo de accesibilidad es WCAG 2.2 AA donde corresponda; requiere pruebas reales para evaluar conformidad.
 
-## Tokens existentes
+La referencia JAC recomienda Montserrat para títulos e Inter para texto. La aplicación todavía utiliza las fuentes nativas: no se incluyeron archivos de fuente ni dependencias nuevas. La aplicación no incorpora logotipos JAC adicionales; la referencia disponible no identifica todos los originales maestros aprobados.
 
-| Token        | Valor     | Uso                                |
-| ------------ | --------- | ---------------------------------- |
-| `primary`    | `#2563EB` | acción principal, saldo y foco     |
-| `secondary`  | `#3B82F6` | variante informativa               |
-| `background` | `#EFF6FF` | fondo de pantallas                 |
-| `textDark`   | `#1E293B` | texto principal                    |
-| `white`      | `#FFFFFF` | superficies y texto sobre primario |
-
-Agregar tokens semánticos (`success`, `error`, `warning`, `textMuted`, `border`) antes de usar hexadecimales sueltos. El rojo solo comunica error o salida; el verde solo éxito o confirmación.
-
-## Material Design adaptado a React Native
-
-- Usar jerarquía de Material: superficie, contenido, acción principal y feedback.
-- Botones: un CTA primario por pantalla; usar `Pressable`, estado `disabled`, feedback visual y etiqueta verbal concreta.
-- Formularios: etiqueta/placeholder en español, tipo de teclado adecuado, `secureTextEntry` para contraseña, error junto al campo y no solo `Alert`.
-- Cards: radio consistente (12–16), elevación moderada y no emplearlas para todo el contenido.
-- Cámara/QR: permiso explicado, contraste alto en overlay y salida accesible.
-- Incluir `accessibilityLabel`, `accessibilityRole` y `accessibilityHint` cuando el texto o icono no explique la acción.
-
-No introducir una biblioteca Material sin una decisión registrada: el diseño actual usa componentes propios y StyleSheet.
+El nombre de carpeta `desing/` se mantiene por compatibilidad con las rutas existentes.

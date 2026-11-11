@@ -1,6 +1,7 @@
 ﻿import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
+import { spacing } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
@@ -10,8 +11,8 @@ export function createStyles(colors: Colors) {
     },
 
     container: {
-      padding: 20,
-      paddingBottom: 34,
+      padding: spacing.xl,
+      paddingBottom: spacing.xxxl,
     },
 
     legal: {

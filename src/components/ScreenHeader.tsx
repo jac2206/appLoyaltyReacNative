@@ -2,7 +2,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "../context/ThemeContext";
-import { Colors } from "../styles/colors";
+import type { Colors } from "../styles/colors";
 
 type Props = {
   eyebrow?: string;
@@ -62,7 +62,7 @@ function createStyles(colors: Colors) {
     },
 
     eyebrow: {
-      color: colors.primary,
+      color: colors.primaryText,
       fontSize: 13,
       fontWeight: "700",
       letterSpacing: 0.7,

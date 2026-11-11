@@ -14,7 +14,7 @@ Cada prueba expresa una única regla de producto. Preparar mocks de servicio, ej
 ## Mocks requeridos
 
 - `api`/Axios para respuestas, fallo de red y 401.
-- AsyncStorage para persistencia.
+- AsyncStorage y SecureStore para persistencia, según el flujo.
 - React Navigation para foco, navegación y parámetros.
 - `expo-camera` para permisos y callback de escaneo.
 

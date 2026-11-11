@@ -1,6 +1,7 @@
 ﻿import { StyleSheet } from "react-native";
 
-import { Colors } from "./colors";
+import type { Colors } from "./colors";
+import { radius, spacing } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
@@ -10,8 +11,8 @@ export function createStyles(colors: Colors) {
     },
 
     container: {
-      padding: 20,
-      paddingBottom: 36,
+      padding: spacing.xl,
+      paddingBottom: spacing.xxxl,
     },
 
     topRow: {
@@ -43,7 +44,7 @@ export function createStyles(colors: Colors) {
     },
 
     profileInitial: {
-      color: colors.white,
+      color: colors.onPrimary,
       fontSize: 18,
       fontWeight: "800",
     },
@@ -51,9 +52,9 @@ export function createStyles(colors: Colors) {
     balanceCard: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 22,
+      borderRadius: radius.lg,
       borderWidth: 1,
-      padding: 20,
+      padding: spacing.xl,
 
       shadowColor: colors.textDark,
       shadowOffset: {
@@ -135,7 +136,7 @@ export function createStyles(colors: Colors) {
     actionCard: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 18,
+      borderRadius: radius.lg,
       borderWidth: 1,
       flex: 1,
       minHeight: 156,
@@ -184,7 +185,7 @@ export function createStyles(colors: Colors) {
       alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 14,
+      borderRadius: radius.md,
       borderWidth: 1,
       flexDirection: "row",
       gap: 9,
@@ -195,7 +196,7 @@ export function createStyles(colors: Colors) {
     },
 
     historyText: {
-      color: colors.primary,
+      color: colors.primaryText,
       flex: 1,
       fontSize: 14,
       fontWeight: "800",
@@ -210,7 +211,7 @@ export function createStyles(colors: Colors) {
       alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 14,
+      borderRadius: radius.md,
       borderWidth: 1,
       flex: 1,
       gap: 7,

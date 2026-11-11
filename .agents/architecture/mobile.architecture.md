@@ -4,22 +4,23 @@
 
 ```text
 App.tsx
-  AuthProvider
-    AppNavigator (decide sesión)
+  ThemeProvider
+    AuthProvider
+      AppNavigator (decide sesión)
       AuthNavigator: Login, Register
       MainNavigator: Home, Profile, QRScanner, Accumulate, Redeem, Transactions
 
 screen -> hook/context -> service -> api (Axios) -> backend
-                         -> storage.repository -> AsyncStorage
+                         -> storage.repository -> SecureStore / AsyncStorage
 ```
 
 ## Responsabilidades
 
 - `src/screens`: composición visual, eventos de usuario y estados de pantalla. No conocen Axios ni AsyncStorage.
 - `src/components`: controles y bloques visuales reutilizables, sin reglas de negocio ni navegación de dominio.
-- `src/hooks`: estado y orquestación de un caso de uso de UI. Ejemplos: `useBalance`, `useLogin`, `useQRForm`.
+- `src/hooks`: estado y orquestación de un caso de uso de UI. Ejemplos: `useBalance`, `useLogin`, `useTypedQRForm`.
 - `src/context`: estado transversal de sesión y sus acciones públicas (`login`, `logout`).
-- `src/services`: adaptadores del backend por dominio; devuelven datos tipados y no renderizan alertas.
+- `src/services`: adaptadores del backend por dominio; devuelven datos tipados. Actualmente `api.ts` muestra una alerta ante 401.
 - `src/services/data`: persistencia local; `storage.repository.ts` serializa valores genéricos.
 - `src/types`: contratos de dominio y navegación.
 - `src/styles`: tokens visuales y hojas de estilo por pantalla compartidos. Las pantallas solo consumen estilos exportados desde esta capa.
