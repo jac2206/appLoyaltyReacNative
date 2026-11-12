@@ -30,12 +30,10 @@ export function createStyles(colors: Colors) {
 
     brandIcon: {
       alignItems: "center",
-      backgroundColor: colors.primary,
-      borderRadius: radius.lg,
-      height: 56,
+      height: 64,
       justifyContent: "center",
       marginBottom: 22,
-      width: 56,
+      width: 64,
     },
 
     eyebrow: {

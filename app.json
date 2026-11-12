@@ -4,16 +4,16 @@
     "slug": "loyalty-app",
     "version": "1.2.0",
     "orientation": "portrait",
-    "icon": "./assets/mugiwareLogo.png",
+    "icon": "./assets/jac-isotype.png",
     "userInterfaceStyle": "light",
     "plugins": [
       "expo-font",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/mugiwareLogo.png",
+          "image": "./assets/jac-isotype.png",
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#071323"
         }
       ],
       "expo-secure-store",
@@ -29,14 +29,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/mugiwareLogo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/jac-app-icon.png",
+        "backgroundColor": "#071323"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.jac112206.loyaltyapp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/jac-app-icon.png"
     },
     "extra": {
       "eas": {

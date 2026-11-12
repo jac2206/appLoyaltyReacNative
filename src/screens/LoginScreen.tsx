@@ -1,5 +1,4 @@
-﻿import { Ionicons } from "@expo/vector-icons";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+﻿import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CustomButton } from "../components/CustomButtom";
 import { InputField } from "../components/CustomInputField";
+import { JacMark } from "../components/JacMark";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useLogin } from "../hooks/useLogin";
@@ -76,7 +76,7 @@ export function LoginScreen({ navigation }: Props) {
 
             <View style={styles.brand}>
               <View style={styles.brandIcon}>
-                <Ionicons name="diamond-outline" size={33} color={colors.onPrimary} />
+                <JacMark size={64} />
               </View>
 
               <Text style={styles.eyebrow}>LOYALTY JAC APP</Text>
