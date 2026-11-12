@@ -1,8 +1,9 @@
-﻿import React, { useState } from "react";
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { useTheme } from "../context/ThemeContext";
 import type { Colors } from "../styles/colors";
+import { spacing, typography } from "../styles/tokens";
 import { getCurrentWeekLabel } from "../utils/date-util";
 
 interface Props {
@@ -13,6 +14,7 @@ export function ActivityChart({ data }: Props) {
   const { colors } = useTheme();
 
   const styles = createStyles(colors);
+  const [availableWidth, setAvailableWidth] = useState(0);
 
   const days = ["L", "M", "M", "J", "V", "S", "D"];
 
@@ -38,24 +40,33 @@ export function ActivityChart({ data }: Props) {
   }));
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={(event) =>
+        setAvailableWidth(event.nativeEvent.layout.width - spacing.lg * 2)
+      }
+    >
       <Text style={styles.title}>Actividad semanal</Text>
 
       <Text style={styles.subtitle}>{weekLabel}</Text>
 
-      <BarChart
-        data={chartData}
-        barWidth={22}
-        spacing={20}
-        roundedTop
-        yAxisThickness={0}
-        xAxisThickness={0}
-        noOfSections={4}
-        rulesColor={colors.border}
-        xAxisLabelTextStyle={styles.axisLabel}
-        yAxisTextStyle={styles.axisLabel}
-        isAnimated
-      />
+      {availableWidth > 0 && (
+        <BarChart
+          data={chartData}
+          width={Math.max(120, availableWidth - 48)}
+          barWidth={Math.max(8, (availableWidth - 72) / 14)}
+          spacing={Math.max(6, (availableWidth - 72) / 14)}
+          initialSpacing={8}
+          endSpacing={8}
+          roundedTop
+          yAxisThickness={0}
+          xAxisThickness={0}
+          noOfSections={4}
+          rulesColor={colors.border}
+          xAxisLabelTextStyle={styles.axisLabel}
+          yAxisTextStyle={styles.axisLabel}
+        />
+      )}
 
       {selected && (
         <Text style={styles.selectedText}>
@@ -70,7 +81,7 @@ function createStyles(colors: Colors) {
   return StyleSheet.create({
     container: {
       backgroundColor: colors.surface,
-      padding: 20,
+      padding: spacing.lg,
       borderRadius: 16,
       borderColor: colors.border,
       borderWidth: 1,
@@ -79,26 +90,24 @@ function createStyles(colors: Colors) {
 
     title: {
       color: colors.textDark,
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.subheading,
     },
 
     subtitle: {
       color: colors.textMuted,
-      fontSize: 12,
+      ...typography.caption,
       marginBottom: 15,
     },
 
     axisLabel: {
       color: colors.textMuted,
-      fontSize: 12,
+      ...typography.caption,
     },
 
     selectedText: {
       color: colors.textDark,
       marginTop: 10,
-      fontSize: 14,
-      fontWeight: "500",
+      ...typography.small,
     },
   });
 }

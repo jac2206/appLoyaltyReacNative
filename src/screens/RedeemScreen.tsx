@@ -1,19 +1,19 @@
-﻿import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
+import { Alert, View } from "react-native";
 
 import { CustomButton } from "../components/CustomButtom";
 import { InputField } from "../components/CustomInputField";
+import { FormSection } from "../components/FormSection";
+import { InlineNotice } from "../components/InlineNotice";
 import { ScreenHeader } from "../components/ScreenHeader";
+import { ScreenLayout } from "../components/ScreenLayout";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useRedeem } from "../hooks/useRedeem";
 import { useTypedQRForm } from "../hooks/useTypedQRForm";
-import { MainStackParamList } from "../types/navigation";
-
 import { createStyles } from "../styles/redeem.styles";
+import type { MainStackParamList } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MainStackParamList, "Redeem">;
 
@@ -77,59 +77,81 @@ export function RedeemScreen({ navigation, route }: Props) {
   };
 
   return (
-    <SafeAreaView edges={["top"]} style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <ScreenHeader
-          onBack={() => navigation.goBack()}
-          eyebrow="Usar puntos"
-          title="Redimir recompensa"
-          subtitle="Confirma los datos del aliado para canjear tus puntos."
+    <ScreenLayout>
+      <ScreenHeader
+        onBack={() => navigation.goBack()}
+        eyebrow="Usar puntos"
+        title="Redimir recompensa"
+        subtitle="Confirma los datos del aliado para canjear tus puntos."
+      />
+
+      <InlineNotice
+        title="Revisa tu redención"
+        message="Confirma el aliado, la sede y los puntos que quieres utilizar."
+      />
+      <View style={styles.quickAction}>
+        <CustomButton
+          title="Completar con código QR"
+          icon="scan-outline"
+          variant="secondary"
+          disabled={loading}
+          onPress={() => navigation.navigate("QRScanner")}
         />
+      </View>
 
-        <View style={styles.info}>
-          <Ionicons name="gift-outline" size={19} color={colors.accent} />
-
-          <Text style={styles.infoText}>
-            Los puntos se descontarán solo cuando el aliado confirme la operación.
-          </Text>
-        </View>
-
+      <FormSection
+        title="Datos de la redención"
+        description="Completa los códigos que te entrega el aliado."
+      >
         <InputField
-          placeholder="Código del aliado"
+          label="Código del aliado"
+          placeholder="Ej. ALIADO-01"
+          autoCapitalize="none"
+          autoCorrect={false}
+          icon="storefront-outline"
+          editable={!loading}
           value={form.partnerCode}
           onChangeText={(value) => change("partnerCode", value)}
         />
 
         <InputField
-          placeholder="Código de sede"
+          label="Código de sede"
+          placeholder="Ej. SEDE-01"
+          autoCapitalize="none"
+          autoCorrect={false}
+          icon="location-outline"
+          editable={!loading}
           value={form.locationCode}
           onChangeText={(value) => change("locationCode", value)}
         />
 
         <InputField
-          placeholder="Puntos a redimir"
+          label="Puntos a redimir"
+          placeholder="0"
+          keyboardType="decimal-pad"
+          icon="gift-outline"
+          editable={!loading}
+          hint="Ingresa los puntos que deseas utilizar."
           value={form.points}
           onChangeText={(value) => change("points", value)}
         />
 
         <InputField
-          placeholder="Referencia (opcional)"
+          label="Referencia (opcional)"
+          placeholder="Ej. número de compra"
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable={!loading}
           value={form.reference}
           onChangeText={(value) => change("reference", value)}
         />
-
-        <CustomButton title="Confirmar redención" onPress={submit} loading={loading} />
-
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => navigation.navigate("QRScanner")}
-          style={styles.scan}
-        >
-          <Ionicons name="scan-outline" size={21} color={colors.primary} />
-
-          <Text style={styles.scanText}>Escanear código QR</Text>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+      </FormSection>
+      <CustomButton
+        title="Confirmar redención"
+        onPress={submit}
+        loading={loading}
+        icon="checkmark-outline"
+      />
+    </ScreenLayout>
   );
 }

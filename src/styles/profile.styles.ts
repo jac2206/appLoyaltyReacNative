@@ -1,34 +1,17 @@
-﻿import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import type { Colors } from "./colors";
-import { radius, spacing } from "./tokens";
+import { radius, spacing, typography } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
-    safe: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-
-    container: {
-      padding: spacing.xl,
-      paddingBottom: spacing.xxxl,
-    },
-
-    back: {
-      alignItems: "center",
-      backgroundColor: colors.surface,
-      borderColor: colors.border,
-      borderRadius: 22,
-      borderWidth: 1,
-      height: 44,
-      justifyContent: "center",
-      width: 44,
-    },
-
     profile: {
       alignItems: "center",
-      marginTop: 24,
+      backgroundColor: colors.surface,
+      borderRadius: radius.lg,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: spacing.xl,
     },
 
     avatar: {
@@ -41,14 +24,15 @@ export function createStyles(colors: Colors) {
 
     name: {
       color: colors.textDark,
-      fontSize: 23,
-      fontWeight: "800",
+      ...typography.title,
+
       marginTop: 14,
+      textAlign: "center",
     },
 
     email: {
       color: colors.textMuted,
-      fontSize: 14,
+      ...typography.small,
       marginTop: 5,
     },
 
@@ -61,20 +45,21 @@ export function createStyles(colors: Colors) {
 
     pointsLabel: {
       color: colors.textMuted,
-      fontSize: 13,
+      ...typography.small,
     },
 
     points: {
       color: colors.primaryText,
-      fontSize: 27,
-      fontWeight: "800",
+      ...typography.title,
+
       marginTop: 5,
+      textAlign: "center",
     },
 
     section: {
       color: colors.textDark,
-      fontSize: 18,
-      fontWeight: "800",
+      ...typography.heading,
+
       marginBottom: 11,
       marginTop: 27,
     },
@@ -91,7 +76,10 @@ export function createStyles(colors: Colors) {
       flexDirection: "row",
       gap: 13,
       padding: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
     },
+    detailText: { flex: 1, minWidth: 0 },
 
     detailIcon: {
       alignItems: "center",
@@ -104,13 +92,13 @@ export function createStyles(colors: Colors) {
 
     detailLabel: {
       color: colors.textMuted,
-      fontSize: 12,
+      ...typography.caption,
     },
 
     detailValue: {
       color: colors.textDark,
-      fontSize: 15,
-      fontWeight: "700",
+      ...typography.label,
+
       marginTop: 2,
     },
 
@@ -121,6 +109,8 @@ export function createStyles(colors: Colors) {
       borderRadius: radius.lg,
       borderWidth: 1,
       flexDirection: "row",
+      flexWrap: "wrap",
+      gap: spacing.md,
       justifyContent: "space-between",
       marginBottom: 25,
       padding: 16,
@@ -131,7 +121,7 @@ export function createStyles(colors: Colors) {
       flex: 1,
       flexDirection: "row",
       gap: 13,
-      minWidth: 0,
+      minWidth: 180,
     },
 
     themeIcon: {
@@ -150,14 +140,13 @@ export function createStyles(colors: Colors) {
 
     themeTitle: {
       color: colors.textDark,
-      fontSize: 15,
-      fontWeight: "700",
+      ...typography.label,
     },
 
     themeSubtitle: {
       color: colors.textMuted,
       flexShrink: 1,
-      fontSize: 12,
+      ...typography.caption,
       marginTop: 3,
     },
   });

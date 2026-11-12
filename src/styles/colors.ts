@@ -1,4 +1,4 @@
-﻿export const lightColors = {
+export const lightColors = {
   primary: "#007EA8",
   secondary: "#1E40AF",
   background: "#F6F9FC",
@@ -18,6 +18,8 @@
   onError: "#FFFFFF",
   overlay: "rgba(7, 19, 35, 0.75)",
   cameraBackground: "#071323",
+  controlBorder: "#6C8298",
+  inputSurface: "#FFFFFF",
 };
 
 export const darkColors = {
@@ -40,6 +42,8 @@ export const darkColors = {
   onError: "#0B1E3C",
   overlay: "rgba(7, 19, 35, 0.75)",
   cameraBackground: "#071323",
+  controlBorder: "#607F9D",
+  inputSurface: "#0B2038",
 };
 
 export type Colors = typeof lightColors;

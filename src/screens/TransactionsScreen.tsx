@@ -1,10 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useMemo, useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Pressable, Text, View } from "react-native";
+import { ContentState } from "../components/ContentState";
+import { CustomButton } from "../components/CustomButtom";
 import { ScreenHeader } from "../components/ScreenHeader";
+import { ScreenLayout } from "../components/ScreenLayout";
 import { useTheme } from "../context/ThemeContext";
 import { type TransactionFilter, useTransactions } from "../hooks/useTransactions";
 import { createTransactionsStyles } from "../styles/transactions.styles";
@@ -37,100 +38,83 @@ export function TransactionsScreen({ navigation }: Props) {
   };
 
   return (
-    <SafeAreaView edges={["top"]} style={styles.safe}>
-      <ScrollView
-        contentContainerStyle={styles.container}
-        showsVerticalScrollIndicator={false}
-      >
-        <ScreenHeader
-          onBack={() => navigation.goBack()}
-          eyebrow="Tu actividad"
-          title="Movimientos"
-          subtitle="Consulta cómo han cambiado tus puntos."
-        />
+    <ScreenLayout>
+      <ScreenHeader
+        onBack={() => navigation.goBack()}
+        eyebrow="Tu actividad"
+        title="Movimientos"
+        subtitle="Consulta cómo han cambiado tus puntos."
+      />
 
-        <View style={styles.filters}>
-          {filters.map((item) => {
-            const isActive = item.value === filter;
+      <View style={styles.filters}>
+        {filters.map((item) => {
+          const isActive = item.value === filter;
 
-            return (
-              <Pressable
-                key={item.value}
-                accessibilityRole="tab"
-                accessibilityState={{ selected: isActive }}
-                accessibilityLabel={`Filtrar por ${item.label}`}
-                onPress={() => changeFilter(item.value)}
-                style={[styles.filter, isActive && styles.activeFilter]}
-              >
-                <Text style={[styles.filterText, isActive && styles.activeFilterText]}>
-                  {item.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
-        {loading && (
-          <View accessibilityLiveRegion="polite" style={styles.loading}>
-            <ActivityIndicator color={colors.primary} size="large" />
-            <Text style={styles.stateText}>Cargando tus movimientos...</Text>
-          </View>
-        )}
-
-        {!loading && error && (
-          <View style={styles.loading}>
-            <Ionicons color={colors.error} name="cloud-offline-outline" size={40} />
-            <Text style={styles.stateText}>
-              No pudimos cargar tus movimientos. Revisa tu conexión e inténtalo de
-              nuevo.
-            </Text>
+          return (
             <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Reintentar cargar movimientos"
-              onPress={reload}
-              style={styles.moreButton}
+              key={item.value}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isActive }}
+              accessibilityLabel={`Filtrar por ${item.label}`}
+              onPress={() => changeFilter(item.value)}
+              style={[styles.filter, isActive && styles.activeFilter]}
             >
-              <Text style={styles.moreText}>Reintentar</Text>
+              <Text style={[styles.filterText, isActive && styles.activeFilterText]}>
+                {item.label}
+              </Text>
             </Pressable>
+          );
+        })}
+      </View>
+
+      {loading && (
+        <ContentState
+          loading
+          title="Cargando movimientos"
+          message="Estamos consultando tu actividad."
+        />
+      )}
+
+      {!loading && error && (
+        <ContentState
+          icon="cloud-offline-outline"
+          title="No pudimos cargar tu actividad"
+          message="Revisa tu conexión e inténtalo nuevamente."
+          action={{ label: "Reintentar", onPress: reload }}
+        />
+      )}
+
+      {!loading && !error && transactions.length === 0 && (
+        <ContentState
+          title="Aún no hay movimientos"
+          message="Cuando tengas operaciones de este tipo, las encontrarás aquí."
+        />
+      )}
+
+      {!loading && !error && transactions.length > 0 && (
+        <>
+          <View style={styles.transactionList}>
+            {visibleTransactions.map((transaction) => (
+              <TransactionCard
+                key={transaction.id}
+                colors={colors}
+                styles={styles}
+                transaction={transaction}
+              />
+            ))}
           </View>
-        )}
 
-        {!loading && !error && transactions.length === 0 && (
-          <View style={styles.loading}>
-            <Ionicons color={colors.textMuted} name="receipt-outline" size={40} />
-            <Text style={styles.stateText}>
-              Todavía no tienes movimientos para este filtro.
-            </Text>
-          </View>
-        )}
-
-        {!loading && !error && transactions.length > 0 && (
-          <>
-            <View style={styles.transactionList}>
-              {visibleTransactions.map((transaction) => (
-                <TransactionCard
-                  key={transaction.id}
-                  colors={colors}
-                  styles={styles}
-                  transaction={transaction}
-                />
-              ))}
-            </View>
-
-            {visibleCount < transactions.length && (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Ver más movimientos"
-                onPress={() => setVisibleCount((current) => current + PAGE_SIZE)}
-                style={styles.moreButton}
-              >
-                <Text style={styles.moreText}>Ver más movimientos</Text>
-              </Pressable>
-            )}
-          </>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          {visibleCount < transactions.length && (
+            <CustomButton
+              title="Ver más movimientos"
+              variant="outline"
+              icon="chevron-down-outline"
+              onPress={() => setVisibleCount((current) => current + PAGE_SIZE)}
+            />
+          )}
+        </>
+      )}
+    </ScreenLayout>
   );
 }
 

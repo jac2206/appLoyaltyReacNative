@@ -1,10 +1,14 @@
-﻿import { useIsFocused } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ContentState } from "../components/ContentState";
+import { CustomButton } from "../components/CustomButtom";
+import { ScreenLayout } from "../components/ScreenLayout";
 import { useTheme } from "../context/ThemeContext";
 import { createQrScannerStyles } from "../styles/qr-scanner.styles";
 import type { MainStackParamList, QrPayload } from "../types/navigation";
@@ -56,42 +60,39 @@ export function QRScannerScreen({ navigation }: Props) {
 
   if (!permission)
     return (
-      <SafeAreaView style={styles.state}>
-        <Text style={styles.stateTitle}>Preparando cámara…</Text>
-      </SafeAreaView>
+      <ScreenLayout centered>
+        <ContentState
+          loading
+          title="Preparando cámara"
+          message="Estamos comprobando los permisos del dispositivo."
+        />
+      </ScreenLayout>
     );
   if (!permission.granted || mountError)
     return (
-      <SafeAreaView style={styles.state}>
-        <View style={styles.stateIcon}>
-          <Text style={styles.stateIconText}>⌁</Text>
-        </View>
-        <Text style={styles.stateTitle}>
-          {mountError ? "No pudimos abrir la cámara" : "Activa tu cámara"}
-        </Text>
-        <Text style={styles.stateCopy}>
-          {mountError
-            ? "Cierra otras apps que usen la cámara e inténtalo otra vez."
-            : "Necesitamos acceso para leer el código QR del aliado."}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => {
-            setMountError(false);
-            requestPermission();
+      <ScreenLayout centered>
+        <ContentState
+          icon="camera-outline"
+          title={mountError ? "No pudimos abrir la cámara" : "Activa tu cámara"}
+          message={
+            mountError
+              ? "Cierra otras apps que usen la cámara e inténtalo otra vez."
+              : "Necesitamos acceso para leer el código QR del aliado."
+          }
+          action={{
+            label: "Intentar nuevamente",
+            onPress: () => {
+              setMountError(false);
+              requestPermission();
+            },
           }}
-          style={styles.permissionButton}
-        >
-          <Text style={styles.permissionText}>Intentar nuevamente</Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
+        />
+        <CustomButton
+          title="Volver"
+          variant="ghost"
           onPress={() => navigation.goBack()}
-          style={styles.cancel}
-        >
-          <Text style={styles.cancelText}>Volver</Text>
-        </Pressable>
-      </SafeAreaView>
+        />
+      </ScreenLayout>
     );
 
   return (
@@ -111,9 +112,14 @@ export function QRScannerScreen({ navigation }: Props) {
             onPress={() => navigation.goBack()}
             style={styles.close}
           >
-            <Text style={styles.closeText}>×</Text>
+            <Ionicons
+              accessible={false}
+              name="close-outline"
+              size={24}
+              color={colors.textDark}
+            />
           </Pressable>
-          <View>
+          <View style={styles.scanHeading}>
             <Text style={styles.scanTitle}>Escanea el código QR</Text>
             <Text style={styles.scanCopy}>Enfoca el código dentro del recuadro</Text>
           </View>

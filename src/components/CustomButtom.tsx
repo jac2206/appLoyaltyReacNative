@@ -1,13 +1,14 @@
-﻿import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import type { Colors } from "../styles/colors";
-import { radius, spacing } from "../styles/tokens";
+import { layout, radius, spacing, typography } from "../styles/tokens";
 
 interface Props {
   title: string;
   onPress: () => void;
-  variant?: "primary" | "outline" | "danger";
+  variant?: "primary" | "outline" | "danger" | "secondary" | "ghost";
   loading?: boolean;
   disabled?: boolean;
   accessibilityHint?: string;
@@ -24,16 +25,19 @@ export function CustomButton({
   icon,
 }: Props) {
   const { colors } = useTheme();
+  const [focused, setFocused] = useState(false);
 
   const styles = createStyles(colors);
 
   const isDisabled = disabled || loading;
   const foreground =
-    variant === "outline"
+    variant === "outline" || variant === "ghost"
       ? colors.primaryText
-      : variant === "danger"
-        ? colors.onError
-        : colors.onPrimary;
+      : variant === "secondary"
+        ? colors.textDark
+        : variant === "danger"
+          ? colors.onError
+          : colors.onPrimary;
 
   return (
     <Pressable
@@ -46,6 +50,8 @@ export function CustomButton({
       }}
       disabled={isDisabled}
       onPress={onPress}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       style={({ pressed }) => [
         styles.button,
 
@@ -53,13 +59,21 @@ export function CustomButton({
 
         variant === "danger" && styles.dangerButton,
 
+        variant === "secondary" && styles.secondaryButton,
+
+        variant === "ghost" && styles.ghostButton,
+
+        focused && styles.focused,
+
         isDisabled && styles.disabled,
 
         pressed && !isDisabled && styles.pressed,
       ]}
     >
       <View style={styles.content}>
-        {icon && <Ionicons name={icon} size={20} color={foreground} />}
+        {icon && !loading && (
+          <Ionicons accessible={false} name={icon} size={20} color={foreground} />
+        )}
 
         {loading && <ActivityIndicator color={foreground} />}
 
@@ -73,12 +87,15 @@ function createStyles(colors: Colors) {
   return StyleSheet.create({
     button: {
       backgroundColor: colors.primary,
-      minHeight: 52,
+      minHeight: layout.controlHeight,
       paddingHorizontal: spacing.xl,
       borderRadius: radius.md,
       alignItems: "center",
       justifyContent: "center",
       marginTop: 16,
+      paddingVertical: spacing.md,
+      borderWidth: 1,
+      borderColor: "transparent",
     },
 
     content: {
@@ -97,22 +114,25 @@ function createStyles(colors: Colors) {
       backgroundColor: colors.error,
     },
 
+    secondaryButton: {
+      backgroundColor: colors.surfaceMuted,
+      borderColor: colors.border,
+    },
+    ghostButton: { backgroundColor: "transparent" },
+    focused: { borderColor: colors.textDark, borderWidth: 2 },
+
     disabled: {
       opacity: 0.55,
     },
 
     pressed: {
-      transform: [
-        {
-          scale: 0.98,
-        },
-      ],
+      opacity: 0.8,
     },
 
     text: {
-      color: colors.white,
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.subheading,
+      textAlign: "center",
+      flexShrink: 1,
     },
   });
 }
