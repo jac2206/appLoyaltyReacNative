@@ -1,15 +1,15 @@
 ﻿import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ActivityChart } from "../components/ActivityChart";
+import { JacMark } from "../components/JacMark";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useBalance } from "../hooks/useBalance";
-import { MainStackParamList } from "../types/navigation";
-
 import { createStyles } from "../styles/home.styles";
+import type { MainStackParamList } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MainStackParamList, "Home">;
 
@@ -48,9 +48,7 @@ export function HomeScreen({ navigation }: Props) {
             onPress={() => navigation.navigate("Profile")}
             style={styles.profileButton}
           >
-            <Text style={styles.profileInitial}>
-              {firstName.charAt(0).toUpperCase()}
-            </Text>
+            <JacMark size={48} />
           </Pressable>
         </View>
 
@@ -65,7 +63,7 @@ export function HomeScreen({ navigation }: Props) {
             </View>
 
             <View style={styles.coin}>
-              <Ionicons name="diamond-outline" size={25} color={colors.primary} />
+              <JacMark size={44} />
             </View>
           </View>
 

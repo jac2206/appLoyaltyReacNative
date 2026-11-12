@@ -36,17 +36,10 @@ export function createStyles(colors: Colors) {
 
     profileButton: {
       alignItems: "center",
-      backgroundColor: colors.primary,
       borderRadius: 24,
       height: 48,
       justifyContent: "center",
       width: 48,
-    },
-
-    profileInitial: {
-      color: colors.onPrimary,
-      fontSize: 18,
-      fontWeight: "800",
     },
 
     balanceCard: {
@@ -87,7 +80,6 @@ export function createStyles(colors: Colors) {
 
     coin: {
       alignItems: "center",
-      backgroundColor: colors.surfaceMuted,
       borderRadius: 22,
       height: 44,
       justifyContent: "center",

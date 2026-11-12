@@ -33,17 +33,10 @@ export function createStyles(colors: Colors) {
 
     avatar: {
       alignItems: "center",
-      backgroundColor: colors.primary,
       borderRadius: 44,
       height: 88,
       justifyContent: "center",
       width: 88,
-    },
-
-    initial: {
-      color: colors.onPrimary,
-      fontSize: 32,
-      fontWeight: "800",
     },
 
     name: {

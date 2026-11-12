@@ -1,16 +1,16 @@
 ﻿import { Ionicons } from "@expo/vector-icons";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CustomButton } from "../components/CustomButtom";
+import { JacMark } from "../components/JacMark";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useBalance } from "../hooks/useBalance";
-import { MainStackParamList } from "../types/navigation";
-import { Colors } from "../styles/colors";
-
+import type { Colors } from "../styles/colors";
 import { createStyles } from "../styles/profile.styles";
+import type { MainStackParamList } from "../types/navigation";
 
 type Props = NativeStackScreenProps<MainStackParamList, "Profile">;
 
@@ -27,8 +27,6 @@ export function ProfileScreen({ navigation }: Props) {
   const { balance } = useBalance();
 
   const { colors, isDark, toggleTheme } = useTheme();
-
-  const initial = user?.userName.charAt(0).toUpperCase() ?? "U";
 
   const styles = createStyles(colors);
 
@@ -63,7 +61,7 @@ export function ProfileScreen({ navigation }: Props) {
 
         <View style={styles.profile}>
           <View style={styles.avatar}>
-            <Text style={styles.initial}>{initial}</Text>
+            <JacMark size={88} />
           </View>
 
           <Text style={styles.name}>{user?.userName}</Text>
