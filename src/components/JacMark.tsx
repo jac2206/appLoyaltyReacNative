@@ -13,7 +13,7 @@ export function JacMark({ size }: Props) {
       importantForAccessibility="no-hide-descendants"
       resizeMode="contain"
       source={require("../../assets/jac-isotype.png")}
-      style={{ height: size, width: size }}
+      style={{ height: size, width: size, borderRadius: size / 2 }}
     />
   );
 }

@@ -1,27 +1,12 @@
-﻿import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import type { Colors } from "./colors";
-import { radius, spacing } from "./tokens";
+import { radius, spacing, typography } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
-    safe: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-
-    keyboard: {
-      flex: 1,
-    },
-
-    scrollContent: {
-      flexGrow: 1,
-    },
-
     container: {
-      flexGrow: 1,
-      justifyContent: "center",
-      padding: spacing.xl,
+      width: "100%",
     },
 
     brand: {
@@ -38,22 +23,22 @@ export function createStyles(colors: Colors) {
 
     eyebrow: {
       color: colors.primaryText,
-      fontSize: 12,
-      fontWeight: "800",
+      ...typography.caption,
+
       letterSpacing: 1.1,
     },
 
     title: {
       color: colors.textDark,
-      fontSize: 34,
-      fontWeight: "800",
+      ...typography.display,
+
       letterSpacing: -0.7,
       marginTop: 8,
     },
 
     copy: {
       color: colors.textMuted,
-      fontSize: 15,
+      ...typography.small,
       lineHeight: 22,
       marginTop: 10,
     },
@@ -65,26 +50,29 @@ export function createStyles(colors: Colors) {
       borderWidth: 1,
       padding: spacing.xl,
     },
-
-    error: {
-      color: colors.error,
-      fontSize: 13,
-      marginBottom: 2,
+    formTitle: { ...typography.heading, color: colors.textDark },
+    formCopy: {
+      ...typography.small,
+      color: colors.textMuted,
+      marginTop: spacing.xs,
+      marginBottom: spacing.xl,
     },
 
     link: {
       alignItems: "center",
       marginTop: 24,
+      minHeight: 48,
+      justifyContent: "center",
     },
 
     linkText: {
       color: colors.textMuted,
-      fontSize: 14,
+      ...typography.small,
     },
 
     linkStrong: {
       color: colors.primaryText,
-      fontWeight: "800",
+      ...typography.label,
     },
   });
 }

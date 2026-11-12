@@ -1,8 +1,9 @@
-﻿import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "../context/ThemeContext";
 import type { Colors } from "../styles/colors";
+import { layout, radius, spacing, typography } from "../styles/tokens";
 
 type Props = {
   eyebrow?: string;
@@ -32,7 +33,9 @@ export function ScreenHeader({ eyebrow, title, subtitle, onBack }: Props) {
 
       {eyebrow && <Text style={styles.eyebrow}>{eyebrow}</Text>}
 
-      <Text style={styles.title}>{title}</Text>
+      <Text accessibilityRole="header" style={styles.title}>
+        {title}
+      </Text>
 
       {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
     </View>
@@ -49,12 +52,12 @@ function createStyles(colors: Colors) {
       alignItems: "center",
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 22,
+      borderRadius: radius.md,
       borderWidth: 1,
-      height: 44,
+      height: layout.touchTarget,
       justifyContent: "center",
       marginBottom: 20,
-      width: 44,
+      width: layout.touchTarget,
     },
 
     pressed: {
@@ -63,8 +66,7 @@ function createStyles(colors: Colors) {
 
     eyebrow: {
       color: colors.primaryText,
-      fontSize: 13,
-      fontWeight: "700",
+      ...typography.caption,
       letterSpacing: 0.7,
       marginBottom: 6,
       textTransform: "uppercase",
@@ -72,16 +74,14 @@ function createStyles(colors: Colors) {
 
     title: {
       color: colors.textDark,
-      fontSize: 28,
-      fontWeight: "800",
+      ...typography.title,
       letterSpacing: -0.5,
     },
 
     subtitle: {
       color: colors.textMuted,
-      fontSize: 15,
-      lineHeight: 22,
-      marginTop: 8,
+      ...typography.body,
+      marginTop: spacing.sm,
     },
   });
 }
