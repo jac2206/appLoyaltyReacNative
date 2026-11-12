@@ -11,6 +11,6 @@ Loyalty utiliza los tokens semánticos JAC en `src/styles/colors.ts` y la escala
 - Conserva los estados de carga, error, éxito, permisos y prevención de doble envío; no comuniques estados solamente mediante color.
 - Para Android y iOS utiliza componentes nativos, áreas seguras, texto escalable y comprueba ambos temas. El objetivo de accesibilidad es WCAG 2.2 AA donde corresponda; requiere pruebas reales para evaluar conformidad.
 
-La referencia JAC recomienda Montserrat para títulos e Inter para texto. La aplicación todavía utiliza las fuentes nativas: no se incluyeron archivos de fuente ni dependencias nuevas. La aplicación no incorpora logotipos JAC adicionales; la referencia disponible no identifica todos los originales maestros aprobados.
+La referencia JAC recomienda Montserrat para títulos e Inter para texto. La aplicación todavía utiliza las fuentes nativas: no se incluyeron archivos de fuente ni dependencias nuevas. La aplicación utiliza las imágenes raster JAC suministradas en `assets/jac-isotype.png` y `assets/jac-app-icon.png` para la marca y los iconos de la app. La referencia no identifica todos los originales maestros aprobados; las imágenes no deben presentarse como vectores maestros. Los iconos funcionales conservan la familia Ionicons.
 
 El nombre de carpeta `desing/` se mantiene por compatibilidad con las rutas existentes.
