@@ -1,10 +1,11 @@
-﻿import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Switch, Text, View } from "react-native";
 
 import { CustomButton } from "../components/CustomButtom";
 import { JacMark } from "../components/JacMark";
+import { ScreenHeader } from "../components/ScreenHeader";
+import { ScreenLayout } from "../components/ScreenLayout";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useBalance } from "../hooks/useBalance";
@@ -24,7 +25,7 @@ export function ProfileScreen({ navigation }: Props) {
     user,
     logout,
   } = useAuth();
-  const { balance } = useBalance();
+  const { balance, loading } = useBalance();
 
   const { colors, isDark, toggleTheme } = useTheme();
 
@@ -48,121 +49,125 @@ export function ProfileScreen({ navigation }: Props) {
   };
 
   return (
-    <SafeAreaView edges={["top"]} style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Volver"
-          onPress={() => navigation.goBack()}
-          style={styles.back}
-        >
-          <Ionicons name="arrow-back" size={21} color={colors.primary} />
-        </Pressable>
+    <ScreenLayout>
+      <ScreenHeader
+        onBack={() => navigation.goBack()}
+        eyebrow="Tu cuenta"
+        title="Mi perfil"
+      />
 
-        <View style={styles.profile}>
-          <View style={styles.avatar}>
-            <JacMark size={88} />
+      <View style={styles.profile}>
+        <View style={styles.avatar}>
+          <JacMark size={88} />
+        </View>
+
+        <Text style={styles.name}>{user?.userName}</Text>
+
+        <Text style={styles.email}>{user?.userEmail}</Text>
+      </View>
+
+      <View style={styles.pointsCard}>
+        <Text style={styles.pointsLabel}>Puntos disponibles</Text>
+
+        <Text accessibilityLiveRegion="polite" style={styles.points}>
+          {loading ? "Consultando saldo…" : `${balance.toLocaleString("es-CO")} pts`}
+        </Text>
+      </View>
+
+      <Text style={styles.section}>Información personal</Text>
+
+      <View style={styles.details}>
+        <Detail
+          icon="call-outline"
+          label="Teléfono"
+          value={user?.phone ?? "—"}
+          colors={colors}
+        />
+
+        <Detail
+          icon="card-outline"
+          label="Documento"
+          value={`${user?.documentType ?? ""} ${user?.documentNumber ?? ""}`}
+          colors={colors}
+        />
+      </View>
+
+      {/* Apariencia */}
+
+      <Text style={styles.section}>Apariencia</Text>
+
+      <View style={styles.themeRow}>
+        <View style={styles.themeInfo}>
+          <View style={styles.themeIcon}>
+            <Ionicons
+              name={isDark ? "moon-outline" : "sunny-outline"}
+              size={20}
+              color={colors.primary}
+            />
           </View>
 
-          <Text style={styles.name}>{user?.userName}</Text>
+          <View style={styles.themeText}>
+            <Text style={styles.themeTitle}>Tema</Text>
 
-          <Text style={styles.email}>{user?.userEmail}</Text>
+            <Text style={styles.themeSubtitle}>
+              {isDark ? "Modo oscuro" : "Modo claro"}
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.pointsCard}>
-          <Text style={styles.pointsLabel}>Puntos disponibles</Text>
+        <Switch
+          accessibilityLabel="Usar tema oscuro"
+          value={isDark}
+          onValueChange={toggleTheme}
+          trackColor={{
+            false: colors.controlBorder,
+            true: colors.primary,
+          }}
+          thumbColor={isDark ? colors.onPrimary : colors.white}
+        />
+      </View>
 
-          <Text style={styles.points}>{balance.toLocaleString("es-CO")} pts</Text>
-        </View>
+      <Text style={styles.section}>Seguridad</Text>
 
-        <Text style={styles.section}>Información personal</Text>
-
-        <View style={styles.details}>
-          <Detail
-            icon="call-outline"
-            label="Teléfono"
-            value={user?.phone ?? "—"}
-            colors={colors}
-          />
-
-          <Detail
-            icon="card-outline"
-            label="Documento"
-            value={`${user?.documentType ?? ""} ${user?.documentNumber ?? ""}`}
-            colors={colors}
-          />
-        </View>
-
-        {/* Apariencia */}
-
-        <Text style={styles.section}>Apariencia</Text>
-
-        <View style={styles.themeRow}>
-          <View style={styles.themeInfo}>
-            <View style={styles.themeIcon}>
-              <Ionicons
-                name={isDark ? "moon-outline" : "sunny-outline"}
-                size={20}
-                color={colors.primary}
-              />
-            </View>
-
-            <View style={styles.themeText}>
-              <Text style={styles.themeTitle}>Tema</Text>
-
-              <Text style={styles.themeSubtitle}>
-                {isDark ? "Modo oscuro" : "Modo claro"}
-              </Text>
-            </View>
+      <View style={styles.themeRow}>
+        <View style={styles.themeInfo}>
+          <View style={styles.themeIcon}>
+            <Ionicons name="finger-print-outline" size={20} color={colors.primary} />
           </View>
 
-          <Switch
-            value={isDark}
-            onValueChange={toggleTheme}
-            trackColor={{
-              false: colors.border,
-              true: colors.primary,
-            }}
-            thumbColor={colors.white}
-          />
-        </View>
+          <View style={styles.themeText}>
+            <Text style={styles.themeTitle}>Acceso biométrico</Text>
 
-        <Text style={styles.section}>Seguridad</Text>
-
-        <View style={styles.themeRow}>
-          <View style={styles.themeInfo}>
-            <View style={styles.themeIcon}>
-              <Ionicons name="finger-print-outline" size={20} color={colors.primary} />
-            </View>
-
-            <View style={styles.themeText}>
-              <Text style={styles.themeTitle}>Acceso biométrico</Text>
-
-              <Text style={styles.themeSubtitle}>
-                {biometricAvailable
-                  ? biometricEnabled
-                    ? `Activado con ${biometricLabel}`
-                    : "Actívalo para iniciar sesión más rápido"
-                  : "Configura huella o Face ID en tu dispositivo"}
-              </Text>
-            </View>
+            <Text style={styles.themeSubtitle}>
+              {biometricAvailable
+                ? biometricEnabled
+                  ? `Activado con ${biometricLabel}`
+                  : "Actívalo para iniciar sesión más rápido"
+                : "Configura huella o Face ID en tu dispositivo"}
+            </Text>
           </View>
-
-          <Switch
-            value={biometricEnabled}
-            onValueChange={handleBiometricChange}
-            disabled={!biometricAvailable}
-            trackColor={{
-              false: colors.border,
-              true: colors.primary,
-            }}
-            thumbColor={colors.white}
-          />
         </View>
 
-        <CustomButton title="Cerrar sesión" variant="outline" onPress={logout} />
-      </ScrollView>
-    </SafeAreaView>
+        <Switch
+          accessibilityLabel={`Acceso biométrico con ${biometricLabel}`}
+          value={biometricEnabled}
+          onValueChange={handleBiometricChange}
+          disabled={!biometricAvailable}
+          trackColor={{
+            false: colors.controlBorder,
+            true: colors.primary,
+          }}
+          thumbColor={isDark && biometricEnabled ? colors.onPrimary : colors.white}
+        />
+      </View>
+
+      <CustomButton
+        title="Cerrar sesión"
+        variant="outline"
+        icon="log-out-outline"
+        onPress={logout}
+      />
+    </ScreenLayout>
   );
 }
 
@@ -185,7 +190,7 @@ function Detail({
         <Ionicons name={icon} size={19} color={colors.primary} />
       </View>
 
-      <View>
+      <View style={styles.detailText}>
         <Text style={styles.detailLabel}>{label}</Text>
 
         <Text style={styles.detailValue}>{value}</Text>

@@ -1,9 +1,10 @@
-﻿import { StyleSheet } from "react-native";
-
+import { StyleSheet } from "react-native";
 import type { Colors } from "./colors";
+import { typography } from "./tokens";
 
 export function createQrScannerStyles(colors: Colors) {
   return StyleSheet.create({
+    scanHeading: { flex: 1, minWidth: 0 },
     camera: { flex: 1, backgroundColor: colors.cameraBackground },
     cameraFill: {
       bottom: 0,
@@ -29,14 +30,8 @@ export function createQrScannerStyles(colors: Colors) {
       justifyContent: "center",
       width: 44,
     },
-    closeText: {
-      color: colors.textDark,
-      fontSize: 28,
-      fontWeight: "300",
-      lineHeight: 30,
-    },
-    scanTitle: { color: colors.white, fontSize: 18, fontWeight: "800" },
-    scanCopy: { color: colors.white, fontSize: 13, marginTop: 3 },
+    scanTitle: { color: colors.white, ...typography.heading },
+    scanCopy: { color: colors.white, ...typography.small, marginTop: 3 },
     frame: {
       alignSelf: "center",
       borderColor: colors.white,
@@ -50,51 +45,11 @@ export function createQrScannerStyles(colors: Colors) {
       backgroundColor: colors.overlay,
       borderRadius: 18,
       color: colors.white,
-      fontSize: 13,
+      ...typography.small,
       marginBottom: 20,
       overflow: "hidden",
       paddingHorizontal: 14,
       paddingVertical: 9,
     },
-    state: {
-      alignItems: "center",
-      backgroundColor: colors.background,
-      flex: 1,
-      justifyContent: "center",
-      padding: 30,
-    },
-    stateIcon: {
-      alignItems: "center",
-      backgroundColor: colors.surfaceMuted,
-      borderRadius: 35,
-      height: 70,
-      justifyContent: "center",
-      width: 70,
-    },
-    stateIconText: { color: colors.primaryText, fontSize: 36 },
-    stateTitle: {
-      color: colors.textDark,
-      fontSize: 22,
-      fontWeight: "800",
-      marginTop: 20,
-      textAlign: "center",
-    },
-    stateCopy: {
-      color: colors.textMuted,
-      fontSize: 15,
-      lineHeight: 22,
-      marginTop: 10,
-      textAlign: "center",
-    },
-    permissionButton: {
-      backgroundColor: colors.primary,
-      borderRadius: 12,
-      marginTop: 26,
-      paddingHorizontal: 22,
-      paddingVertical: 15,
-    },
-    permissionText: { color: colors.onPrimary, fontSize: 15, fontWeight: "800" },
-    cancel: { marginTop: 20, padding: 10 },
-    cancelText: { color: colors.primaryText, fontSize: 14, fontWeight: "800" },
   });
 }

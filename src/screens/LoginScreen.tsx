@@ -1,17 +1,12 @@
-﻿import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useRef, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 
 import { CustomButton } from "../components/CustomButtom";
 import { InputField } from "../components/CustomInputField";
+import { InlineNotice } from "../components/InlineNotice";
 import { JacMark } from "../components/JacMark";
+import { ScreenLayout } from "../components/ScreenLayout";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useLogin } from "../hooks/useLogin";
@@ -35,18 +30,31 @@ export function LoginScreen({ navigation }: Props) {
   const { colors } = useTheme();
 
   const styles = createStyles(colors);
+  const [submitting, setSubmitting] = useState(false);
+  const submissionLock = useRef(false);
 
   const handleLogin = async () => {
+    if (submissionLock.current) return;
     setError(null);
 
     if (validate()) {
+      submissionLock.current = true;
+      setSubmitting(true);
       try {
         await login(userEmail, password);
-      } catch {}
+      } catch {
+        setError("No pudimos iniciar sesión. Verifica tus datos y tu conexión.");
+      } finally {
+        submissionLock.current = false;
+        setSubmitting(false);
+      }
     }
   };
 
   const handleBiometricLogin = async () => {
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    setSubmitting(true);
     setError(null);
 
     try {
@@ -57,88 +65,98 @@ export function LoginScreen({ navigation }: Props) {
           ? biometricLoginError.message
           : "No se pudo iniciar sesión con biometría.",
       );
+    } finally {
+      submissionLock.current = false;
+      setSubmitting(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView
-        style={styles.keyboard}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.container}>
-            {/* Marca */}
+    <ScreenLayout centered>
+      <View style={styles.container}>
+        {/* Marca */}
 
-            <View style={styles.brand}>
-              <View style={styles.brandIcon}>
-                <JacMark size={64} />
-              </View>
-
-              <Text style={styles.eyebrow}>LOYALTY JAC APP</Text>
-
-              <Text style={styles.title}>Tus puntos te esperan.</Text>
-
-              <Text style={styles.copy}>
-                Ingresa para consultar tu saldo y disfrutar tus recompensas.
-              </Text>
-            </View>
-
-            {/* Formulario */}
-
-            <View style={styles.form}>
-              <InputField
-                placeholder="Correo electrónico"
-                value={userEmail}
-                onChangeText={setEmail}
-              />
-
-              <InputField
-                placeholder="Contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-
-              {error && (
-                <Text accessibilityRole="alert" style={styles.error}>
-                  {error}
-                </Text>
-              )}
-
-              <CustomButton title="Iniciar sesión" onPress={handleLogin} />
-
-              {biometricAvailable && biometricEnabled && (
-                <CustomButton
-                  title={`Ingresar con ${biometricLabel}`}
-                  onPress={handleBiometricLogin}
-                  variant="outline"
-                  icon={
-                    biometricLabel.includes("Face")
-                      ? "scan-outline"
-                      : "finger-print-outline"
-                  }
-                  accessibilityHint="Autentica tu identidad con la biometría del dispositivo"
-                />
-              )}
-
-              <Pressable
-                accessibilityRole="button"
-                onPress={() => navigation.navigate("Register")}
-                style={styles.link}
-              >
-                <Text style={styles.linkText}>
-                  ¿No tienes cuenta? <Text style={styles.linkStrong}>Regístrate</Text>
-                </Text>
-              </Pressable>
-            </View>
+        <View style={styles.brand}>
+          <View style={styles.brandIcon}>
+            <JacMark size={64} />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+
+          <Text style={styles.eyebrow}>LOYALTY JAC APP</Text>
+
+          <Text style={styles.title}>Tus puntos te esperan.</Text>
+
+          <Text style={styles.copy}>
+            Ingresa para consultar tu saldo y disfrutar tus recompensas.
+          </Text>
+        </View>
+
+        {/* Formulario */}
+
+        <View style={styles.form}>
+          <Text accessibilityRole="header" style={styles.formTitle}>
+            Inicia sesión
+          </Text>
+          <Text style={styles.formCopy}>Accede a tu cuenta de recompensas.</Text>
+          <InputField
+            label="Correo electrónico"
+            placeholder="nombre@correo.com"
+            icon="mail-outline"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="email"
+            editable={!submitting}
+            value={userEmail}
+            onChangeText={setEmail}
+          />
+
+          <InputField
+            label="Contraseña"
+            placeholder="Escribe tu contraseña"
+            icon="lock-closed-outline"
+            autoComplete="current-password"
+            editable={!submitting}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+
+          {error && <InlineNotice tone="error" message={error} />}
+
+          <CustomButton
+            title="Iniciar sesión"
+            onPress={handleLogin}
+            loading={submitting}
+            icon="arrow-forward-outline"
+          />
+
+          {biometricAvailable && biometricEnabled && (
+            <CustomButton
+              title={`Ingresar con ${biometricLabel}`}
+              onPress={handleBiometricLogin}
+              disabled={submitting}
+              variant="outline"
+              icon={
+                biometricLabel.includes("Face")
+                  ? "scan-outline"
+                  : "finger-print-outline"
+              }
+              accessibilityHint="Autentica tu identidad con la biometría del dispositivo"
+            />
+          )}
+
+          <Pressable
+            accessibilityRole="button"
+            disabled={submitting}
+            onPress={() => navigation.navigate("Register")}
+            style={styles.link}
+          >
+            <Text style={styles.linkText}>
+              ¿No tienes cuenta? <Text style={styles.linkStrong}>Regístrate</Text>
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+    </ScreenLayout>
   );
 }

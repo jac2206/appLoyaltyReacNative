@@ -1,50 +1,49 @@
 import { StyleSheet } from "react-native";
-
 import type { Colors } from "./colors";
+import { typography } from "./tokens";
 
 export function createTransactionsStyles(colors: Colors) {
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: colors.background },
-    container: { padding: 20, paddingBottom: 36 },
     filters: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
       borderRadius: 16,
       borderWidth: 1,
       flexDirection: "row",
+      flexWrap: "wrap",
       marginBottom: 18,
       padding: 4,
     },
     filter: {
       alignItems: "center",
       borderRadius: 12,
-      flex: 1,
+      flexGrow: 1,
       justifyContent: "center",
+      maxWidth: "100%",
       minHeight: 44,
-      paddingHorizontal: 8,
+      paddingHorizontal: 6,
     },
     activeFilter: { backgroundColor: colors.primary },
-    filterText: { color: colors.textMuted, fontSize: 13, fontWeight: "700" },
+    filterText: { color: colors.textMuted, ...typography.label, textAlign: "center" },
     activeFilterText: { color: colors.onPrimary },
-    loading: { alignItems: "center", paddingVertical: 48 },
-    stateText: {
-      color: colors.textMuted,
-      fontSize: 15,
-      lineHeight: 22,
-      marginTop: 12,
-      textAlign: "center",
+    transactionList: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
+      overflow: "hidden",
     },
-    transactionList: { gap: 12 },
     transactionCard: {
       backgroundColor: colors.surface,
       borderColor: colors.border,
-      borderRadius: 16,
-      borderWidth: 1,
+      borderBottomWidth: 1,
       padding: 16,
     },
     transactionHeader: {
       alignItems: "center",
       flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 8,
       justifyContent: "space-between",
     },
     transactionType: { alignItems: "center", flexDirection: "row", gap: 8 },
@@ -58,23 +57,12 @@ export function createTransactionsStyles(colors: Colors) {
     },
     transactionTitle: {
       color: colors.textDark,
-      fontSize: 15,
-      fontWeight: "800",
+      ...typography.label,
     },
-    points: { fontSize: 16, fontWeight: "800" },
+    points: { ...typography.subheading },
     positive: { color: colors.success },
     negative: { color: colors.textDark },
-    reference: { color: colors.textMuted, fontSize: 13, marginTop: 13 },
-    details: { color: colors.textMuted, fontSize: 12, marginTop: 6 },
-    moreButton: {
-      alignItems: "center",
-      borderColor: colors.primary,
-      borderRadius: 12,
-      borderWidth: 1,
-      justifyContent: "center",
-      marginTop: 18,
-      minHeight: 48,
-    },
-    moreText: { color: colors.primaryText, fontSize: 15, fontWeight: "800" },
+    reference: { color: colors.textMuted, ...typography.small, marginTop: 13 },
+    details: { color: colors.textMuted, ...typography.caption, marginTop: 6 },
   });
 }

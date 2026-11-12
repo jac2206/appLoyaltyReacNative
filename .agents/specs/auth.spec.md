@@ -35,6 +35,7 @@ Registro, inicio/cierre y restauración de sesión de una persona usuaria.
 - Si el token es inválido, expira o la API retorna 401, se elimina la sesión y se informa que debe iniciar nuevamente.
 - Registro exige tipo/número de documento, nombres, apellidos, email, teléfono y contraseña antes de invocar la API.
 - Cerrar sesión elimina usuario, token en memoria y token persistido.
+- Al enfocar el correo o la contraseña, el campo permanece visible sobre el teclado y el formulario se puede desplazar sin perder sus valores.
 
 ## Reglas técnicas
 

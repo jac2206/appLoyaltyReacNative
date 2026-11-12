@@ -19,6 +19,8 @@ La aplicación permite a los usuarios:
 Las instrucciones de colaboración están en [AGENTS.md](AGENTS.md). El flujo de
 cambios guiados por especificaciones está en [.agents/specs/workflow.md](.agents/specs/workflow.md).
 La interfaz utiliza los temas JAC documentados en [.agents/desing/design.system.md](.agents/desing/design.system.md).
+Las [referencias y comprobaciones de diseño](docs/design/README.md) orientan la
+revisión de la interfaz móvil y sus componentes.
 
 ---
 

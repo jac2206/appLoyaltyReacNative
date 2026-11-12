@@ -1,36 +1,33 @@
-﻿import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import type { Colors } from "./colors";
-import { radius, spacing } from "./tokens";
+import { radius, spacing, typography } from "./tokens";
 
 export function createStyles(colors: Colors) {
   return StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-
-    container: {
-      padding: spacing.xl,
-      paddingBottom: spacing.xxxl,
-    },
-
     topRow: {
       alignItems: "center",
       flexDirection: "row",
       justifyContent: "space-between",
       marginBottom: 24,
     },
+    greetingBlock: { flex: 1, minWidth: 0, marginRight: spacing.lg },
+    eyebrow: {
+      ...typography.caption,
+      color: colors.primaryText,
+      letterSpacing: 1,
+      marginBottom: spacing.xs,
+    },
+    balanceValue: { flex: 1, minWidth: 0 },
 
     greeting: {
       color: colors.textDark,
-      fontSize: 27,
-      fontWeight: "800",
+      ...typography.title,
     },
 
     caption: {
       color: colors.textMuted,
-      fontSize: 14,
+      ...typography.small,
       marginTop: 4,
     },
 
@@ -43,9 +40,9 @@ export function createStyles(colors: Colors) {
     },
 
     balanceCard: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceMuted,
       borderColor: colors.border,
-      borderRadius: radius.lg,
+      borderRadius: radius.xl,
       borderWidth: 1,
       padding: spacing.xl,
 
@@ -57,7 +54,7 @@ export function createStyles(colors: Colors) {
       shadowOpacity: 0.06,
       shadowRadius: 16,
 
-      elevation: 2,
+      elevation: 0,
     },
 
     balanceTop: {
@@ -68,13 +65,13 @@ export function createStyles(colors: Colors) {
 
     balanceLabel: {
       color: colors.textMuted,
-      fontSize: 14,
+      ...typography.small,
     },
 
     balance: {
       color: colors.textDark,
-      fontSize: 36,
-      fontWeight: "800",
+      ...typography.display,
+
       marginTop: 5,
     },
 
@@ -87,7 +84,7 @@ export function createStyles(colors: Colors) {
     },
 
     progressTrack: {
-      backgroundColor: colors.surfaceMuted,
+      backgroundColor: colors.border,
       borderRadius: 6,
       height: 8,
       marginTop: 20,
@@ -102,26 +99,28 @@ export function createStyles(colors: Colors) {
 
     progressLabels: {
       flexDirection: "row",
+      flexWrap: "wrap",
+      gap: spacing.sm,
       justifyContent: "space-between",
       marginTop: 9,
     },
 
     progressText: {
       color: colors.textMuted,
-      fontSize: 12,
-      fontWeight: "600",
+      ...typography.caption,
     },
 
     sectionTitle: {
       color: colors.textDark,
-      fontSize: 18,
-      fontWeight: "800",
+      ...typography.heading,
+
       marginBottom: 12,
       marginTop: 28,
     },
 
     actions: {
       flexDirection: "row",
+      flexWrap: "wrap",
       gap: 12,
     },
 
@@ -131,16 +130,17 @@ export function createStyles(colors: Colors) {
       borderRadius: radius.lg,
       borderWidth: 1,
       flex: 1,
-      minHeight: 156,
+      flexBasis: 140,
+      minHeight: 164,
       padding: 16,
     },
 
     actionIcon: {
       alignItems: "center",
-      borderRadius: 18,
-      height: 36,
+      borderRadius: radius.md,
+      height: 44,
       justifyContent: "center",
-      width: 36,
+      width: 44,
     },
 
     accumulateIcon: {
@@ -153,15 +153,15 @@ export function createStyles(colors: Colors) {
 
     actionTitle: {
       color: colors.textDark,
-      fontSize: 16,
-      fontWeight: "800",
+      ...typography.subheading,
+
       marginTop: 16,
     },
 
     actionCopy: {
       color: colors.textMuted,
-      fontSize: 12,
-      lineHeight: 17,
+      ...typography.small,
+      lineHeight: 21,
       marginTop: 5,
     },
 
@@ -190,12 +190,12 @@ export function createStyles(colors: Colors) {
     historyText: {
       color: colors.primaryText,
       flex: 1,
-      fontSize: 14,
-      fontWeight: "800",
+      ...typography.label,
     },
 
     partners: {
       flexDirection: "row",
+      flexWrap: "wrap",
       gap: 10,
     },
 
@@ -204,16 +204,16 @@ export function createStyles(colors: Colors) {
       backgroundColor: colors.surface,
       borderColor: colors.border,
       borderRadius: radius.md,
-      borderWidth: 1,
+      borderWidth: 0,
       flex: 1,
+      minWidth: 80,
       gap: 7,
       paddingVertical: 13,
     },
 
     partnerText: {
       color: colors.textDark,
-      fontSize: 11,
-      fontWeight: "700",
+      ...typography.small,
     },
   });
 }
