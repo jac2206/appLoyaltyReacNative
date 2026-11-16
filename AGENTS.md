@@ -8,6 +8,8 @@ Lee [.agents/AGENTS.md](.agents/AGENTS.md) y [.agents/context.md](.agents/contex
 
 Para cambios guiados por especificaciones consulta [.agents/specs/workflow.md](.agents/specs/workflow.md). Las skills locales son [loyalty-mobile](.agents/skills/loyalty-mobile/SKILL.md) para implementación móvil, [loyalty-ui](.agents/skills/loyalty-ui/SKILL.md) para interfaz y [loyalty-testing](.agents/skills/loyalty-testing/SKILL.md) para pruebas. Úsalas según el trabajo; los archivos `*.skill.md` anteriores son guías históricas y no son puntos de entrada de skills.
 
+Para ingeniería frontend móvil, lee la definición portable [frontend-engineer](.agents/agents/frontend-engineer/AGENT.md) junto con estas instrucciones y las skills locales aplicables. Esta referencia no registra ni activa un subagente automáticamente; depende de las capacidades del entorno.
+
 ## Verificación y límites
 
 - `package.json`, `biome.json` y el código son las fuentes para versiones, comandos y comportamiento existente; contrasta las especificaciones con la implementación y comunica discrepancias.
