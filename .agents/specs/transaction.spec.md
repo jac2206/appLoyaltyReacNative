@@ -35,6 +35,9 @@ Registrar una operación de puntos iniciada manualmente o desde un QR.
   10 sin solicitar paginación al backend.
 - La pantalla muestra estados de carga, error, vacío y permite reintentar una
   consulta fallida.
+- Si cambia el filtro, la sesión o se solicita de nuevo el historial, solo la
+  consulta más reciente puede actualizar los movimientos, el error y la carga.
+  Al salir de la pantalla se ignoran las respuestas pendientes.
 
 ## Contrato de consulta
 

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useAuth } from "../context/AuthContext";
 import { getTransactionsRequest } from "../services/transaction.service";
-import { TransactionRecord, TransactionType } from "../types/transaction";
+import type { TransactionRecord, TransactionType } from "../types/transaction";
 
 export type TransactionFilter = "ALL" | TransactionType;
 
@@ -11,10 +11,13 @@ export function useTransactions(filter: TransactionFilter) {
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const requestVersion = useRef(0);
 
   const loadTransactions = useCallback(async () => {
+    const version = ++requestVersion.current;
     if (!user) {
       setTransactions([]);
+      setError(false);
       setLoading(false);
       return;
     }
@@ -36,17 +39,22 @@ export function useTransactions(filter: TransactionFilter) {
             new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
         );
 
-      setTransactions(nextTransactions);
+      if (version === requestVersion.current) setTransactions(nextTransactions);
     } catch {
-      setTransactions([]);
-      setError(true);
+      if (version === requestVersion.current) {
+        setTransactions([]);
+        setError(true);
+      }
     } finally {
-      setLoading(false);
+      if (version === requestVersion.current) setLoading(false);
     }
   }, [filter, user]);
 
   useEffect(() => {
-    loadTransactions();
+    void loadTransactions();
+    return () => {
+      requestVersion.current += 1;
+    };
   }, [loadTransactions]);
 
   return { transactions, loading, error, reload: loadTransactions };
